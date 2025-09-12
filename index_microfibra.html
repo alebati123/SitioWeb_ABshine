@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_productos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+          <div class="logo">
+            <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
+          </div>
+          <h1 class="site-title">ABshine</h1>
+          <nav class="main-nav">
+            <ul class="menu-horizontal">
+              <li><a href="index.html">HOME</a></li>
+              <li class="has-submenu">
+                <a href="#">PRODUCTOS</a>
+                <ul class="menu-vertical">
+                  <li><a href="index_Cera.html">CERA</a></li>
+                  <li><a href="index_Microfibra.html">MICROFIBRA</a></li>
+                  <li><a href="index_Shampoo.html">SHAMPOO</a></li>
+                  <li><a href="index_Desengrasante.html">DESENGRASANTE</a></li>
+                  <li><a href="index_Silicona.html">SILICONA</a></li>
+                </ul>
+              </li>
+              <li class="has-submenu">
+                <a href="#">CONTACTOS</a>
+                <ul class="menu-vertical">
+                  <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+                  <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+                  <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
+                </ul>
+              </li>
+              <li><a href="index_informacion.html">INFORMACIÓN</a></li>
+            </ul>
+          </nav>
+          <div class="user-actions">
+                <button id="cart-toggle" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-count">0</span>
+                </button>
+                
+                <div id="auth-buttons" class="auth-buttons">
+                    <button id="login-btn" class="login-btn">Iniciar Sesión</button>
+                    <button id="register-btn" class="register-btn">Registrarse</button>
+                </div>
+                
+                <div id="user-profile" class="user-profile" style="display: none;">
+                    <button id="profile-toggle" class="profile-link">
+                        <i class="fas fa-user"></i>
+                        <span id="user-name">Usuario</span>
+                    </button>
+                    <div id="user-dropdown" class="user-dropdown">
+                        <div class="user-info">
+                            <p id="display-name" class="user-name">Usuario</p>
+                            <p id="display-email" class="user-email">user@test.com</p>
+                        </div>
+                        <a href="#" class="dropdown-item">Mi Perfil</a>
+                        <a href="#" class="dropdown-item">Mis Pedidos</a>
+                        <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
+                          <i class="fas fa-cogs"></i> Panel Admin
+                        </a>                        
+                        <button id="logout-btn" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                                      <script type="module">
+                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+                    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+                    import { auth } from "./firebase-config.js";
+
+                    onAuthStateChanged(auth, async (user) => {
+                      const adminLink = document.getElementById("admin-link");
+                      if (!user) {
+                        adminLink.style.display = "none";
+                        return;
+                      }
+
+                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
+                      if (docSnap.exists() && docSnap.data().role === "admin") {
+                        adminLink.style.display = "block";
+                      } else {
+                        adminLink.style.display = "none";
+                      }
+                    });
+                  </script>
+                </div>
+            </div>
+        </div>
+    </header>
+      <section class="productos-novedades">
+        
+          <div class="productos-grid">
+            <div class="caja">
+              
+              <section class="productos-novedades">
+                <div class="contenedor mas-vendidos">
+                  <h2>Microfibra</h2>
+                  <div class="productos-grid">
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_30x30.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra Laffitte</h3>
+                          <p class="producto-detalles">30x30</p>
+                          <p class="producto-precio">$1600</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_Oregon_70x30.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra Oregon</h3>
+                          <p class="producto-detalles">70x30</p>
+                          <p class="producto-precio">$4600</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_40x40_IAEL.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra IAEL</h3>
+                          <p class="producto-detalles">40x40</p>
+                          <p class="producto-precio">$3000</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_60x40.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra Laffitte</h3>
+                          <p class="producto-detalles">60x40</p>
+                          <p class="producto-precio">$4300</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_Premium_40x35.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra Tipo Coral Premium Oregon</h3>
+                          <p class="producto-detalles">40x35</p>
+                          <p class="producto-precio">$7100</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Paño_Sintetico.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Paño Humedo Absorbente Chamois</h3>
+                          <p class="producto-detalles">43x32</p>
+                          <p class="producto-precio">$4500</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_TIpoToalla_90x60.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra Tipo Toalla IAEL</h3>
+                          <p class="producto-detalles">90x60</p>
+                          <p class="producto-precio">$6500</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_60x40_tipo Wafle.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra Laffitte Absorbente</h3>
+                          <p class="producto-detalles">60x40</p>
+                          <p class="producto-precio">$5000</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_40x40.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra Laffitte</h3>
+                          <p class="producto-detalles">40x40</p>
+                          <p class="producto-precio">$3600</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_VidrioEspejo_30x35.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra para Vidrios y Espejos</h3>
+                          <p class="producto-detalles">30x35</p>
+                          <p class="producto-precio">$2600</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Paño_Lustre.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Paño Lupa Siliconado Match1</h3>
+                          <p class="producto-detalles">1 paño</p>
+                          <p class="producto-precio">$4500</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caja">
+                      <div class="imagen-marco">
+                        <img src="./imagenes/Microfibra/Microfibra_Absorbente_40x60.jpeg" alt="Microfibra">
+                        <div class="producto-info">
+                          <h3>Microfibra IAEL Absorbente</h3>
+                          <p class="producto-detalles">40x60</p>
+                          <p class="producto-precio">$7700</p>
+                          <a href="index_informacion.html" class="btn-como-comprar">Cómo comprar</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              </div>
+            </div>
+        </div>
+        <div class="contenedor novedades">
+          <h2>Relacionados</h2>
+          <div class="productos-grid">
+            <div class="caja">
+              <div class="imagen-marco">
+                <img src="./imagenes/Recomendados/R_1.jpeg" alt="Escape 1">
+              </div>
+            </div>
+            <div class="caja">
+              <div class="imagen-marco">
+                <img src="./imagenes/Recomendados/R_3.jpeg" alt="Escape 2">
+              </div>
+            </div>
+            <div class="caja">
+              <div class="imagen-marco">
+                <img src="./imagenes/Recomendados/R_4.jpeg" alt="Escape 3">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="cart-container">
+            <div class="cart-header">
+                <h2>Carrito de Compras</h2>
+                <button id="cart-close" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be populated by JavaScript -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total" class="total-price">$0</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn">Proceder al Pago</button>
+                <button id="continue-shopping" class="continue-shopping">Continuar Comprando</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Iniciar Sesión</h2>
+                <button class="close-btn" onclick="closeModal('login-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Ingresa tu email" required>
+                    <span class="error-message" id="login-email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <div class="password-input">
+                        <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-message" id="login-password-error"></span>
+                </div>
+                <button type="submit" class="auth-btn">Iniciar Sesión</button>
+                <div class="test-credentials">
+                    <p>Credenciales de prueba:</p>
+                    <p>Admin: admin@abshine.com / admin123</p>
+                    <p>Usuario: user@test.com / user123</p>
+                </div>
+            </form>
+            <div class="auth-footer">
+                <p>¿No tienes una cuenta? <button class="link-btn" onclick="switchToRegister()">Regístrate</button></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal-overlay">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Registrarse</h2>
+                <button class="close-btn" onclick="closeModal('register-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-name">Nombre Completo</label>
+                    <input type="text" id="register-name" placeholder="Ingresa tu nombre completo" required>
+                    <span class="error-message" id="register-name-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="Ingresa tu email" required>
+                    <span class="error-message" id="register-email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <div class="password-input">
+                        <input type="password" id="register-password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('register-password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-message" id="register-password-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm-password" placeholder="Confirma tu contraseña" required>
+                    <span class="error-message" id="register-confirm-error"></span>
+                </div>
+                <button type="submit" class="auth-btn">Registrarse</button>
+            </form>
+            <div class="auth-footer">
+                <p>¿Ya tienes una cuenta? <button class="link-btn" onclick="switchToLogin()">Inicia sesión</button></p>
+            </div>
+        </div>
+    </div>
+
+      <footer class="site-footer">
+        <div class="footer-container">
+          <h2>CONTACTOS:</h2>
+          <ul class="contact-list">
+            <li><a href="https://wa.me/3464566408"><i class="fab fa-whatsapp"></i> 3464-566408</a></li>
+            <li><a href="mailto:alejandrobatistoni08@gmail.com"><i class="far fa-envelope"></i> alejandrobatistoni08@gmail.com</a></li>
+            <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
+            <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
+            <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
+            <p>©Copyright Alejandro Batistoni - Denis Leandro Borri - 2024. Todos los derechos reservados.</p>
+          </ul>
+        </div>
+      </footer>
+      <script type="module" src="firebase-config.js"></script>
+      <script type="module" src="carrito-autenticacion.js"></script>
+      <script type="module">
+      import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { auth } from "./firebase-config.js";
+
+      onAuthStateChanged(auth, user => {
+        const adminLink = document.getElementById("admin-link");
+        if (user && user.email === "admin@abshine.com") {
+          adminLink.style.display = "block";
+        } else {
+          adminLink.style.display = "none";
+        }
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - ABshine</title>
+    <link rel="stylesheet" href="style_productos.css">
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
+            </div>
+            <h1 class="site-title">ABshine</h1>
+            <nav class="main-nav">
+                <ul class="menu-horizontal">
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="index_Cera.html">PRODUCTOS</a></li>
+                    <li><a href="admin.html">ADMIN</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <button id="cart-toggle" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-count">0</span>
+                </button>
+                
+                <div id="auth-buttons" class="auth-buttons">
+                    <button id="login-btn" class="login-btn">Iniciar Sesión</button>
+                    <button id="register-btn" class="register-btn">Registrarse</button>
+                </div>
+                
+                <div id="user-profile" class="user-profile" style="display: none;">
+                    <button id="profile-toggle" class="profile-link">
+                        <i class="fas fa-user"></i>
+                        <span id="user-name">Usuario</span>
+                    </button>
+                    <div id="user-dropdown" class="user-dropdown">
+                        <div class="user-info">
+                            <p id="display-name" class="user-name">Usuario</p>
+                            <p id="display-email" class="user-email">user@test.com</p>
+                        </div>
+                        <a href="#" class="dropdown-item">Mi Perfil</a>
+                        <a href="#" class="dropdown-item">Mis Pedidos</a>
+                        <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
+                        <i class="fas fa-cogs"></i> Panel Admin
+                        </a>                        
+                        <button id="logout-btn" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                                      <script type="module">
+                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+                    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+                    import { auth } from "./firebase-config.js";
+
+                    onAuthStateChanged(auth, async (user) => {
+                      const adminLink = document.getElementById("admin-link");
+                      if (!user) {
+                        adminLink.style.display = "none";
+                        return;
+                      }
+
+                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
+                      if (docSnap.exists() && docSnap.data().role === "admin") {
+                        adminLink.style.display = "block";
+                      } else {
+                        adminLink.style.display = "none";
+                      }
+                    });
+                  </script>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <h1><i class="fas fa-cogs"></i> Panel de Administración</h1>
+            <p>Gestiona productos, precios y catálogo de ABshine</p>
+        </div>
+
+        <!-- Access Control -->
+        <div id="access-denied" style="display: none;">
+            <div class="stat-card" style="text-align: center; padding: 3rem;">
+                <div class="stat-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2>Acceso Restringido</h2>
+                <p>Necesitas permisos de administrador para acceder a esta sección.</p>
+                <p><strong>Credenciales de admin:</strong> admin@abshine.com / admin123</p>
+            </div>
+        </div>
+
+        <!-- Admin Content -->
+        <div id="admin-content" style="display: none;">
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="products">
+                    <i class="fas fa-box"></i> Productos
+                </button>
+                <button class="admin-tab" data-tab="stats">
+                    <i class="fas fa-chart-bar"></i> Estadísticas
+                </button>
+                <button class="admin-tab" data-tab="catalog">
+                    <i class="fas fa-eye"></i> Vista Previa
+                </button>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="products-tab" class="tab-content active">
+                <div class="products-header">
+                    <div>
+                        <h2>Gestión de Productos</h2>
+                        <p>Administra tu catálogo de productos</p>
+                    </div>
+                    <button class="add-product-btn" id="add-product-btn">
+                        <i class="fas fa-plus"></i> Agregar Producto
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-container">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="form-label">Buscar productos</label>
+                            <input type="text" id="search-products" class="search-input" placeholder="Buscar por nombre...">
+                        </div>
+                        <div class="filter-group">
+                            <label class="form-label">Categoría</label>
+                            <select id="filter-category" class="form-select">
+                                <option value="">Todas las categorías</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="products-grid" class="products-grid-admin">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Stats Tab -->
+            <div id="stats-tab" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-number" id="total-products">0</div>
+                        <div class="stat-label">Total Productos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="stat-number" id="total-categories">0</div>
+                        <div class="stat-label">Categorías</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-number" id="avg-price">$0</div>
+                        <div class="stat-label">Precio Promedio</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div id="products-grid" class="products-list-admin"></div>
+                        <div class="stat-label">En Carrito</div>
+                    </div>
+                </div>
+
+                <!-- Categories Breakdown -->
+                <div class="stat-card">
+                    <h3>Productos por Categoría</h3>
+                    <div id="categories-breakdown"></div>
+                </div>
+            </div>
+
+            <!-- Catalog Preview Tab -->
+            <div id="catalog-tab" class="tab-content">
+                <div class="products-header">
+                    <div>
+                        <h2>Vista Previa del Catálogo</h2>
+                        <p>Así ven los clientes tus productos</p>
+                    </div>
+                </div>
+                <div id="catalog-preview" class="productos-grid">
+                    <!-- Catalog preview will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Agregar Producto</h2>
+                <button class="close-modal" id="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="product-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre del Producto *</label>
+                    <input type="text" id="product-name" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Categoría *</label>
+                    <select id="product-category" class="form-select" required>
+                        <option value="">Seleccionar categoría</option>
+                        <option value="Cera">Cera</option>
+                        <option value="Microfibra">Microfibra</option>
+                        <option value="Shampoo">Shampoo</option>
+                        <option value="Desengrasante">Desengrasante</option>
+                        <option value="Silicona">Silicona</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Precio *</label>
+                    <input type="number" id="product-price" class="form-input" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Detalles</label>
+                    <textarea id="product-details" class="form-textarea" placeholder="Ej: 500ml - Protección duradera"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">URL de Imagen</label>
+                    <input type="url" id="product-image" class="form-input" placeholder="https://ejemplo.com/imagen.jpg">
+                    <small style="color: #666; font-size: 0.8rem;">Deja vacío para generar imagen automáticamente</small>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancel-btn">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Include existing modals -->
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="cart-container">
+            <div class="cart-header">
+                <h2>Carrito de Compras</h2>
+                <button id="cart-close" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be populated by JavaScript -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total" class="total-price">$0</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn">Proceder al Pago</button>
+                <button id="continue-shopping" class="continue-shopping">Continuar Comprando</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Iniciar Sesión</h2>
+                <button class="close-btn" onclick="closeModal('login-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Ingresa tu email" required>
+                    <span class="error-message" id="login-email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <div class="password-input">
+                        <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-message" id="login-password-error"></span>
+                </div>
+                <button type="submit" class="auth-btn">Iniciar Sesión</button>
+                <div class="test-credentials">
+                    <p>Credenciales de prueba:</p>
+                    <p>Admin: admin@abshine.com / admin123</p>
+                    <p>Usuario: user@test.com / user123</p>
+                </div>
+            </form>
+            <div class="auth-footer">
+                <p>¿No tienes una cuenta? <button class="link-btn" onclick="switchToRegister()">Regístrate</button></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal-overlay">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Registrarse</h2>
+                <button class="close-btn" onclick="closeModal('register-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-name">Nombre Completo</label>
+                    <input type="text" id="register-name" placeholder="Ingresa tu nombre completo" required>
+                    <span class="error-message" id="register-name-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="Ingresa tu email" required>
+                    <span class="error-message" id="register-email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <div class="password-input">
+                        <input type="password" id="register-password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('register-password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-message" id="register-password-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm-password" placeholder="Confirma tu contraseña" required>
+                    <span class="error-message" id="register-confirm-error"></span>
+                </div>
+                <button type="submit" class="auth-btn">Registrarse</button>
+            </form>
+            <div class="auth-footer">
+                <p>¿Ya tienes una cuenta? <button class="link-btn" onclick="switchToLogin()">Inicia sesión</button></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="carrito-autenticacion.js"></script>
+  
+
+    <!-- Admin Login Modal -->
+<div id="admin-login-modal" class="modal-overlay">
+  <div class="auth-container">
+    <div class="auth-header">
+      <h2>Login Administrador</h2>
+      <button class="close-btn" onclick="document.getElementById('admin-login-modal').classList.remove('show')">✖</button>
+    </div>
+    <form id="admin-login-form" class="auth-form">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="admin-email" required />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="admin-password" required />
+      </div>
+      <button type="submit" class="auth-btn">Ingresar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="admin.js"></script>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="carrito-autenticacion.js"></script>
+<script type="module">
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { auth } from "./firebase-config.js";
+
+  onAuthStateChanged(auth, user => {
+    const adminLink = document.getElementById("admin-link");
+    if (user && user.email === "admin@abshine.com") {
+      adminLink.style.display = "block";
+    } else {
+      adminLink.style.display = "none";
+    }
+  });
+</script>
+</body>
+</html>
