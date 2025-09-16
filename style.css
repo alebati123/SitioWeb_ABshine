@@ -880,14 +880,14 @@ carousel-container {
   color: white;
 }
 
-/* Notification */
+/* =====  NOTIFICACIONES  ===== */
 .notification {
   position: fixed;
-  top: 20px;
+  top: 90px;              /* bajado para no tapar el perfil */
   right: 20px;
-  background-color: #cc117b;
+  background: #cc117b;
   color: white;
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 10000;
@@ -895,6 +895,8 @@ carousel-container {
   align-items: center;
   gap: 0.5rem;
   max-width: 400px;
+  font-weight: 500;
+  animation: slideInRight 0.3s ease;
 }
 
 .notification-close {
@@ -904,10 +906,14 @@ carousel-container {
   cursor: pointer;
   padding: 0.25rem;
   margin-left: auto;
+  line-height: 1;
+  font-size: 1.1rem;
 }
 
-.notification-close:hover {
-  opacity: 0.8;
+/* animación suave */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
 }
 
 /* Responsive */
