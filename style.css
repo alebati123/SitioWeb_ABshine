@@ -881,33 +881,38 @@ carousel-container {
 }
 
 /* =====  NOTIFICACIONES  ===== */
+/* =====  NOTIFICACIONES  ===== */
 .notification {
-  position: fixed;
-  top: 90px;              /* bajado para no tapar el perfil */
-  right: 20px;
-  background: #cc117b;
-  color: white;
-  padding: 1rem 1.25rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  max-width: 400px;
-  font-weight: 500;
-  animation: slideInRight 0.3s ease;
+  position: fixed !important;
+  top: 100px !important;   /* <-- forzado más abajo */
+  right: 20px !important;
+  background: #cc117b !important;
+  color: white !important;
+  padding: 1rem 1.25rem !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  max-width: 400px !important;
+  font-weight: 500 !important;
+  animation: slideInRight 0.3s ease !important;
 }
 
 .notification-close {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 0.25rem;
-  margin-left: auto;
-  line-height: 1;
-  font-size: 1.1rem;
+  background: none !important;
+  border: none !important;
+  color: white !important;
+  cursor: pointer !important;
+  padding: 0.25rem !important;
+  margin-left: auto !important;
+  font-size: 1.1rem !important;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
 }
 
 /* animación suave */
