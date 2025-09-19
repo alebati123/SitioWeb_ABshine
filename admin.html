@@ -111,6 +111,9 @@
                 <button class="admin-tab" data-tab="catalog">
                     <i class="fas fa-eye"></i> Vista Previa
                 </button>
+                <button class="admin-tab" data-tab="categories">
+                <i class="fas fa-tags"></i> Categorías
+                </button>
             </div>
 
             <!-- Products Tab -->
@@ -199,6 +202,19 @@
                     <!-- Catalog preview will be loaded here -->
                 </div>
             </div>
+            <!-- Categories Tab -->
+            <div id="categories-tab" class="tab-content">
+            <div class="products-header">
+                <div>
+                <h2>Gestión de Categorías</h2>
+                <p>Agregá o eliminá categorías del menú</p>
+                </div>
+                <button class="add-product-btn" id="add-category-btn">
+                <i class="fas fa-plus"></i> Agregar Categoría
+                </button>
+            </div>
+            <div id="categories-list" class="products-list-admin"></div>
+            </div>
         </div>
     </div>
 
@@ -219,16 +235,14 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Categoría *</label>
+                <label class="form-label">Categoría *</label>
+                <div style="display:flex; gap:0.5rem;">
                     <select id="product-category" class="form-select" required>
-                        <option value="">Seleccionar categoría</option>
-                        <option value="Cera">Cera</option>
-                        <option value="Microfibra">Microfibra</option>
-                        <option value="Shampoo">Shampoo</option>
-                        <option value="Desengrasante">Desengrasante</option>
-                        <option value="Silicona">Silicona</option>
-                        <option value="Otros">Otros</option>
+                    <option value="">Seleccionar o escribir nueva</option>
                     </select>
+                    <input type="text" id="new-category-input" class="form-input" placeholder="Nueva categoría" style="display:none;">
+                    <button type="button" id="toggle-new-category" class="btn-secondary" style="white-space:nowrap;">+ Nueva</button>
+                </div>
                 </div>
                 
                 <div class="form-group">
@@ -402,5 +416,65 @@
     }
   });
 </script>
+
+<script type="module">
+  import { db, collection, getDocs } from "./firebase-config.js";
+  async function loadMenuCategories() {
+    const container = document.getElementById("menu-categorias");
+    if (!container) return;
+    const snap = await getDocs(collection(db, "categorias"));
+    container.innerHTML = "";
+    snap.forEach(d => {
+      const c = d.data();
+      if (!c.activa) return;
+      container.innerHTML += `<li><a href="index_${c.slug}.html">${c.nombre.toUpperCase()}</a></li>`;
+    });
+  }
+  document.addEventListener("DOMContentLoaded", loadMenuCategories);
+</script>
+
+<!-- Modal Agregar Categoría -->
+<div id="category-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Agregar Categoría</h2>
+      <button class="close-modal" onclick="cerrarModalCategoria()">&times;</button>
+    </div>
+    <form id="category-form">
+      <div class="form-group">
+        <label class="form-label">Nombre *</label>
+        <input type="text" id="category-name" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Orden (opcional)</label>
+        <input type="number" id="category-order" class="form-input" value="99">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="cerrarModalCategoria()">Cancelar</button>
+        <button type="submit" class="btn-save">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { db } from "./firebase-config.js";
+
+  async function loadMenuCategories() {
+    const container = document.getElementById("menu-categorias");
+    if (!container) return;
+    const snap = await getDocs(collection(db, "categorias"));
+    container.innerHTML = "";
+    snap.forEach(d => {
+      const c = d.data();
+      if (!c.activa) return;
+      // link a la plantilla única
+      container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+    });
+  }
+  document.addEventListener("DOMContentLoaded", loadMenuCategories);
+</script>
+
 </body>
 </html>

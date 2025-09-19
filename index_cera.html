@@ -20,13 +20,7 @@
               <li><a href="index.html">HOME</a></li>
               <li class="has-submenu">
                 <a href="#">PRODUCTOS</a>
-                <ul class="menu-vertical">
-                  <li><a href="index_cera.html">CERA</a></li>
-                  <li><a href="index_microfibra.html">MICROFIBRA</a></li>
-                  <li><a href="index_shampoo.html">SHAMPOO</a></li>
-                  <li><a href="index_desengrasante.html">DESENGRASANTE</a></li>
-                  <li><a href="index_Silicona.html">SILICONA</a></li>
-                </ul>
+                <ul class="menu-vertical" id="menu-categorias"></ul>
               </li>
               <li class="has-submenu">
                 <a href="#">CONTACTOS</a>
@@ -283,6 +277,43 @@
 
   cargarProductos();
 </script>
+
+<script type="module">
+  import { db, collection, getDocs } from "./firebase-config.js";
+  async function loadMenuCategories() {
+    const container = document.getElementById("menu-categorias");
+    if (!container) return;
+    const snap = await getDocs(collection(db, "categorias"));
+    container.innerHTML = "";
+    snap.forEach(d => {
+      const c = d.data();
+      if (!c.activa) return;
+      container.innerHTML += `<li><a href="index_${c.slug}.html">${c.nombre.toUpperCase()}</a></li>`;
+    });
+  }
+  document.addEventListener("DOMContentLoaded", loadMenuCategories);
+</script>
+
+<script type="module">
+  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { db } from "./firebase-config.js";
+
+  async function loadMenuCategories() {
+    const container = document.getElementById("menu-categorias");
+    if (!container) return;
+    const snap = await getDocs(collection(db, "categorias"));
+    container.innerHTML = "";
+    snap.forEach(d => {
+      const c = d.data();
+      if (!c.activa) return;
+      // link a la plantilla única
+      container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+    });
+  }
+  document.addEventListener("DOMContentLoaded", loadMenuCategories);
+</script>
+
+
 
 </body>
 </html>
