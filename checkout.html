@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style_productos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Finalizar Compra - ABshine</title>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <div class="logo"><img src="./imagenes/Logotipo.png" alt="Logo de ABshine"></div>
+      <h1 class="site-title">ABshine</h1>
+      <nav class="main-nav">
+        <ul class="menu-horizontal">
+          <li><a href="index.html">HOME</a></li>
+          <li class="has-submenu">
+            <a href="#">PRODUCTOS</a>
+            <ul class="menu-vertical" id="menu-categorias"></ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#">CONTACTOS</a>
+            <ul class="menu-vertical">
+              <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+              <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+              <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
+            </ul>
+          </li>
+          <li><a href="index_informacion.html">INFORMACIÓN</a></li>
+        </ul>
+      </nav>
+      <div class="user-actions">
+        <button id="cart-toggle" class="cart-icon"><i class="fas fa-shopping-cart"></i><span id="cart-count" class="cart-count">0</span></button>
+        <div id="auth-buttons" class="auth-buttons">
+          <button id="login-btn" class="login-btn">Iniciar Sesión</button>
+          <button id="register-btn" class="register-btn">Registrarse</button>
+        </div>
+        <div id="user-profile" class="user-profile" style="display: none;">
+          <button id="profile-toggle" class="profile-link"><i class="fas fa-user"></i><span id="user-name">Usuario</span></button>
+          <div id="user-dropdown" class="user-dropdown">
+            <div class="user-info"><p id="display-name" class="user-name">Usuario</p><p id="display-email" class="user-email">user@test.com</p></div>
+            <a href="#" class="dropdown-item">Mi Perfil</a>
+            <a href="#" class="dropdown-item">Mis Pedidos</a>
+            <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;"><i class="fas fa-cogs"></i> Panel Admin</a>
+            <button id="logout-btn" class="dropdown-item logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="checkout-section">
+    <div class="checkout-container">
+      <h2>Finalizar Compra</h2>
+      <div id="checkout-items" class="checkout-items"></div>
+      <div class="checkout-total">
+        <span>Total:</span>
+        <span id="checkout-total" class="total-price">$0</span>
+      </div>
+      <button id="confirm-purchase" class="checkout-btn">Confirmar Compra</button>
+      <button id="back-to-cart" class="continue-shopping">Volver al Carrito</button>
+    </div>
+  </section>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="carrito-autenticacion.js"></script>
+  <script type="module">
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { db } from "./firebase-config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { auth } from "./firebase-config.js";
+
+    // Cargar carrito desde localStorage
+    let cart = JSON.parse(localStorage.getItem("abshine_cart")) || [];
+
+    // Mostrar productos en checkout
+    function loadCheckout() {
+      const container = document.getElementById("checkout-items");
+      const total = document.getElementById("checkout-total");
+      if (cart.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:#888;">Tu carrito está vacío.</p>`;
+        total.textContent = "$0";
+        return;
+      }
+
+      let html = "";
+      let totalPrice = 0;
+      cart.forEach(item => {
+        html += `
+          <div class="checkout-item">
+            <img src="${item.image}" alt="${item.name}" onerror="this.src='./imagenes/placeholder.jpg'">
+            <div class="item-details">
+              <h3>${item.name}</h3>
+              <p class="details">${item.details}</p>
+              <p class="price">$${item.price.toLocaleString()} c/u</p>
+              <p class="quantity">Cantidad: ${item.quantity}</p>
+            </div>
+            <div class="item-total">$${(item.price * item.quantity).toLocaleString()}</div>
+          </div>
+        `;
+        totalPrice += item.price * item.quantity;
+      });
+
+      container.innerHTML = html;
+      total.textContent = "$" + totalPrice.toLocaleString();
+    }
+
+    // Volver al carrito
+    document.getElementById("back-to-cart").onclick = () => {
+      window.history.back();
+    };
+
+    // Confirmar compra
+    document.getElementById("confirm-purchase").onclick = () => {
+      if (!cart.length) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+      if (!auth.currentUser) {
+        alert("Debes iniciar sesión para finalizar la compra.");
+        return;
+      }
+      alert("¡Compra realizada con éxito! Te contactaremos por WhatsApp para coordinar el pago y envío.");
+      localStorage.removeItem("abshine_cart");
+      window.location.href = "index.html";
+    };
+
+    // Cargar categorías en menú
+    async function loadMenuCategories() {
+      const container = document.getElementById("menu-categorias");
+      if (!container) return;
+      const snap = await getDocs(collection(db, "categorias"));
+      container.innerHTML = "";
+      snap.forEach(d => {
+        const c = d.data();
+        if (!c.activa) return;
+        container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+      });
+    }
+
+    // Mostrar/ocultar menú de usuario
+    const profileToggle = document.getElementById("profile-toggle");
+    const userDropdown = document.getElementById("user-dropdown");
+    if (profileToggle && userDropdown) {
+      profileToggle.addEventListener("click", e => {
+        e.stopPropagation();
+        userDropdown.classList.toggle("show");
+      });
+      document.addEventListener("click", e => {
+        if (!userDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
+          userDropdown.classList.remove("show");
+        }
+      });
+    }
+
+    // Mostrar link de admin si corresponde
+    onAuthStateChanged(auth, user => {
+      const adminLink = document.getElementById("admin-link");
+      if (!user) { adminLink.style.display = "none"; return; }
+      import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js").then(
+        ({ getDoc, doc }) => {
+          getDoc(doc(db, "usuarios", user.email)).then(snap => {
+            adminLink.style.display = (snap.exists() && snap.data().role === "admin") ? "block" : "none";
+          });
+        }
+      );
+    });
+
+    // Ejecutar al cargar
+    loadCheckout();
+    loadMenuCategories();
+  </script>
+</body>
+</html>

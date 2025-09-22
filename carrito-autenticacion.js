@@ -155,6 +155,12 @@ class ABShineSystem {
       this.updateAuthUI();
       this.closeModal("login-modal");
       this.showNotification("¡Bienvenido, " + this.user.name + "!", "success");
+      // Redirigir al checkout si viene del carrito
+    if (window.location.pathname.includes("index_categoria") && this.cart.length > 0) {
+      setTimeout(() => {
+        window.location.href = "checkout.html";
+      }, 1000);
+    }
       return { success: true };
     } catch (error) {
       this.showFormErrors("login", { email: "Credenciales incorrectas" });
