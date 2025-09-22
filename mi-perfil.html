@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Perfil - ABshine</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    .perfil-container {
+      max-width: 600px;
+      margin: 3rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.15);
+    }
+    .perfil-container h2 {
+      color: #cc117b;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .perfil-container label {
+      display: block;
+      margin: .75rem 0 .25rem;
+      font-weight: 500;
+    }
+    .perfil-container input,
+    .perfil-container select {
+      width: 100%;
+      padding: .6rem .75rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    .perfil-container button {
+      margin-top: 1.2rem;
+      width: 100%;
+      padding: .75rem;
+      background: #cc117b;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .perfil-container button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .msg {
+      text-align: center;
+      margin-top: .75rem;
+      font-size: .9rem;
+    }
+    .msg.ok  { color: green; }
+    .msg.err { color: #dc3545; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER (copiá el que ya tenés de index.html) -->
+<header class="site-header"> ... </header>
+
+<main class="perfil-container">
+  <h2><i class="fas fa-user-edit"></i> Mis datos de envío</h2>
+
+  <form id="perfil-form">
+    <label>Nombre</label>
+    <input type="text" name="nombre" required />
+
+    <label>Apellido</label>
+    <input type="text" name="apellido" required />
+
+    <label>Provincia</label>
+    <select name="provincia" required>
+      <option value="">Cargando provincias...</option>
+    </select>
+
+    <label>Localidad</label>
+    <input type="text" name="localidad" required />
+
+    <label>Código Postal</label>
+    <input type="text" name="cp" pattern="\d{4}" title="4 dígitos" required />
+
+    <label>Dirección (calle y número)</label>
+    <input type="text" name="direccion" required />
+
+    <label>Teléfono</label>
+    <input type="tel" name="telefono" required />
+
+    <label>DNI</label>
+    <input type="text" name="dni" pattern="\d{7,8}" title="Sin puntos ni espacios" required />
+
+    <label>Email (solo lectura)</label>
+    <input type="email" id="email" readonly />
+
+    <button type="submit">Guardar cambios</button>
+  </form>
+
+  <div id="msg" class="msg"></div>
+</main>
+
+<!-- FOOTER (copiá el que ya tenés) -->
+<footer class="site-footer"> ... </footer>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="mi-perfil.js"></script>
+</body>
+</html>
