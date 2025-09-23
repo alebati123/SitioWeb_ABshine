@@ -150,46 +150,117 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="header-container">
-      <div class="logo"><img src="./imagenes/Logotipo.png" alt="Logo de ABshine"></div>
-      <h1 class="site-title">ABshine</h1>
-      <nav class="main-nav">
-        <ul class="menu-horizontal">
-          <li><a href="index.html">HOME</a></li>
-          <li class="has-submenu">
-            <a href="#">PRODUCTOS</a>
-            <ul class="menu-vertical" id="menu-categorias"></ul>
-          </li>
-          <li class="has-submenu">
-            <a href="#">CONTACTOS</a>
-            <ul class="menu-vertical">
-              <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
-              <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
-              <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
-            </ul>
-          </li>
-          <li><a href="index_informacion.html">INFORMACIÓN</a></li>
-        </ul>
-      </nav>
-      <div class="user-actions">
-        <button id="cart-toggle" class="cart-icon"><i class="fas fa-shopping-cart"></i><span id="cart-count" class="cart-count">0</span></button>
-        <div id="auth-buttons" class="auth-buttons">
-          <button id="login-btn" class="login-btn">Iniciar Sesión</button>
-          <button id="register-btn" class="register-btn">Registrarse</button>
-        </div>
-        <div id="user-profile" class="user-profile" style="display: none;">
-          <button id="profile-toggle" class="profile-link"><i class="fas fa-user"></i><span id="user-name">Usuario</span></button>
-          <div id="user-dropdown" class="user-dropdown">
-            <div class="user-info"><p id="display-name" class="user-name">Usuario</p><p id="display-email" class="user-email">user@test.com</p></div>
-            <a href="#" class="dropdown-item">Mi Perfil</a>
-            <a href="#" class="dropdown-item">Mis Pedidos</a>
-            <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;"><i class="fas fa-cogs"></i> Panel Admin</a>
-            <button id="logout-btn" class="dropdown-item logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        <div class="header-container">
+          <div class="logo">
+            <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
           </div>
+          <h1 class="site-title">ABshine</h1>
+          <nav class="main-nav">
+            <ul class="menu-horizontal">
+              <li><a href="index.html">HOME</a></li>
+              <li class="has-submenu">
+                <a href="#">PRODUCTOS</a>
+                <ul class="menu-vertical" id="menu-categorias"></ul>
+              </li>
+              <li class="has-submenu">
+                <a href="#">CONTACTOS</a>
+                <ul class="menu-vertical">
+                  <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+                  <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+                  <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
+                </ul>
+              </li>
+              <li><a href="index_informacion.html">INFORMACIÓN</a></li>
+            </ul>
+          </nav>
+          <div class="user-actions">
+                <button id="cart-toggle" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-count">0</span>
+                </button>
+                
+                <div id="auth-buttons" class="auth-buttons">
+                    <button id="login-btn" class="login-btn">Iniciar Sesión</button>
+                    <button id="register-btn" class="register-btn">Registrarse</button>
+                </div>
+                
+                <div id="user-profile" class="user-profile" style="display: none;">
+                    <button id="profile-toggle" class="profile-link">
+                        <i class="fas fa-user"></i>
+                        <span id="user-name">Usuario</span>
+                    </button>
+                  <div id="user-dropdown" class="user-dropdown">
+                    <div class="user-info">
+                      <p id="display-name" class="user-name">Usuario</p>
+                      <p id="display-email" class="user-email">user@test.com</p>
+                    </div>
+                    <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
+                    <a href="#" class="dropdown-item">Mis Pedidos</a>
+                    <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
+                      <i class="fas fa-cogs"></i> Panel Admin
+                    </a>
+                    <button id="logout-btn" class="dropdown-item logout">
+                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                      <!-- 👇 igual que en index.html -->
+<script type="module">
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { auth } from "./firebase-config.js";
+
+  onAuthStateChanged(auth, user => {
+    const adminLink = document.getElementById("admin-link");
+    if (!user) { adminLink.style.display = "none"; return; }
+    import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js").then(
+      ({ getDoc, doc }) => {
+        getDoc(doc(db, "usuarios", user.email)).then(snap => {
+          adminLink.style.display = (snap.exists() && snap.data().role === "admin") ? "block" : "none";
+        });
+      }
+    );
+  });
+
+  // ===== abrir/cerrar dropdown =====
+  const profileToggle = document.getElementById("profile-toggle");
+  const userDropdown   = document.getElementById("user-dropdown");
+  if (profileToggle && userDropdown) {
+    profileToggle.addEventListener("click", e => {
+      e.stopPropagation();
+      userDropdown.classList.toggle("show");
+    });
+    document.addEventListener("click", e => {
+      if (!userDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
+        userDropdown.classList.remove("show");
+      }
+    });
+  }
+</script>
+                  </div>
+
+                  <!-- ✅ Script para mostrar "Panel Admin" solo si es admin -->
+                  <script type="module">
+                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+                    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+                    import { auth } from "./firebase-config.js";
+
+                    onAuthStateChanged(auth, async (user) => {
+                      const adminLink = document.getElementById("admin-link");
+                      if (!user) {
+                        adminLink.style.display = "none";
+                        return;
+                      }
+
+                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
+                      if (docSnap.exists() && docSnap.data().role === "admin") {
+                        adminLink.style.display = "block";
+                      } else {
+                        adminLink.style.display = "none";
+                      }
+                    });
+                  </script>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </header>
 
   <section class="checkout-section">
     <div class="checkout-container">
@@ -203,6 +274,111 @@
       <button id="back-to-cart" class="continue-shopping">Volver al Carrito</button>
     </div>
   </section>
+
+<!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="cart-container">
+            <div class="cart-header">
+                <h2>Carrito de Compras</h2>
+                <button id="cart-close" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be populated by JavaScript -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total" class="total-price">$0</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn">Proceder al Pago</button>
+                <button id="continue-shopping" class="continue-shopping">Continuar Comprando</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Iniciar Sesión</h2>
+                <button class="close-btn" onclick="closeModal('login-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Ingresa tu email" required>
+                    <span class="error-message" id="login-email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <div class="password-input">
+                        <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-message" id="login-password-error"></span>
+                </div>
+                <button type="submit" class="auth-btn">Iniciar Sesión</button>
+                <div class="test-credentials">
+                    <p>Credenciales de prueba:</p>
+                    <p>Admin: admin@abshine.com / admin123</p>
+                    <p>Usuario: user@test.com / user123</p>
+                </div>
+            </form>
+            <div class="auth-footer">
+                <p>¿No tienes una cuenta? <button class="link-btn" onclick="switchToRegister()">Regístrate</button></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal-overlay">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Registrarse</h2>
+                <button class="close-btn" onclick="closeModal('register-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-name">Nombre Completo</label>
+                    <input type="text" id="register-name" placeholder="Ingresa tu nombre completo" required>
+                    <span class="error-message" id="register-name-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="Ingresa tu email" required>
+                    <span class="error-message" id="register-email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <div class="password-input">
+                        <input type="password" id="register-password" placeholder="Ingresa tu contraseña" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('register-password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-message" id="register-password-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm-password" placeholder="Confirma tu contraseña" required>
+                    <span class="error-message" id="register-confirm-error"></span>
+                </div>
+                <button type="submit" class="auth-btn">Registrarse</button>
+            </form>
+            <div class="auth-footer">
+                <p>¿Ya tienes una cuenta? <button class="link-btn" onclick="switchToLogin()">Inicia sesión</button></p>
+            </div>
+        </div>
+    </div>
+
   <footer class="site-footer">
       <div class="footer-container">
         <h2>CONTACTOS:</h2>
@@ -325,7 +501,25 @@
     loadCheckout();
     loadMenuCategories();
   </script>
-  
+  <!-- ÚNICO SCRIPT PARA MENÚ + CARRITO -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="carrito-autenticacion.js"></script>
+<script type="module">
+  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { db, collection, getDocs } from "./firebase-config.js";
+  async function loadMenuCategories() {
+    const container = document.getElementById("menu-categorias");
+    if (!container) return;
+    const snap = await getDocs(collection(db, "categorias"));
+    container.innerHTML = "";
+    snap.forEach(d => {
+      const c = d.data();
+      if (!c.activa) return;
+      container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+    });
+  }
+  document.addEventListener("DOMContentLoaded", loadMenuCategories);
+</script>
   <script>
   // 🔁 Delegación de eventos para botones dinámicos
   document.addEventListener("click", e => {
@@ -390,6 +584,5 @@
     }
   });
 </script>
-
 </body>
 </html>

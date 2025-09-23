@@ -181,45 +181,45 @@ async loadProductsFromFirebase() {
     return this.cart.reduce((total, item) => total + item.quantity, 0);
   }
 
-  updateCartUI() {
-    const cartCount = document.getElementById("cart-count");
-    if (cartCount) {
-      const count = this.getCartItemCount();
-      cartCount.textContent = count;
-      cartCount.style.display = count > 0 ? "flex" : "none";
-    }
-
-    const cartItemsContainer = document.getElementById("cart-items");
-    if (!cartItemsContainer) return;
-
-    if (this.cart.length === 0) {
-      cartItemsContainer.innerHTML = `
-        <div class="empty-cart">
-          <i class="fas fa-shopping-cart"></i>
-          <p>Tu carrito está vacío</p>
-        </div>`;
-      return;
-    }
-
-    cartItemsContainer.innerHTML = this.cart.map(item => `
-      <div class="cart-item" data-id="${item.id}">
-        <img src="${item.image}" alt="${item.name}" onerror="this.src='./imagenes/placeholder.jpg'">
-        <div class="item-details">
-          <h3>${item.name}</h3>
-          <p class="price">$${item.price.toLocaleString()}</p>
-          <p class="details">${item.details}</p>
-        </div>
-        <div class="quantity-controls">
-        <button class="quantity-btn" title="Restar"><i class="fas fa-minus"></i></button>
-        <span class="quantity">${item.quantity}</span>
-        <button class="quantity-btn" title="Sumar"><i class="fas fa-plus"></i></button>
-      </div>
-      <button class="remove-btn" title="Eliminar"><i class="fas fa-trash"></i></button>
-      </div>`).join("");
-
-    const cartTotal = document.getElementById("cart-total");
-    if (cartTotal) cartTotal.textContent = `$${this.getCartTotal().toLocaleString()}`;
+updateCartUI() {
+  const cartCount = document.getElementById("cart-count");
+  if (cartCount) {
+    const count = this.getCartItemCount();
+    cartCount.textContent = count;
+    cartCount.style.display = count > 0 ? "flex" : "none";
   }
+
+  const cartItemsContainer = document.getElementById("cart-items");
+  if (!cartItemsContainer) return;
+
+  if (this.cart.length === 0) {
+    cartItemsContainer.innerHTML = `
+      <div class="empty-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <p>Tu carrito está vacío</p>
+      </div>`;
+    return;
+  }
+
+  cartItemsContainer.innerHTML = this.cart.map(item => `
+    <div class="cart-item" data-id="${item.id}">
+      <img src="${item.image}" alt="${item.name}" onerror="this.src='./imagenes/placeholder.jpg'">
+      <div class="item-details">
+        <h3>${item.name}</h3>
+        <p class="price">$${item.price.toLocaleString()}</p>
+        <p class="details">${item.details}</p>
+      </div>
+      <div class="quantity-controls">
+        <button class="quantity-btn" data-action="minus" title="Restar"><i class="fas fa-minus"></i></button>
+        <span class="quantity">${item.quantity}</span>
+        <button class="quantity-btn" data-action="plus" title="Sumar"><i class="fas fa-plus"></i></button>
+      </div>
+      <button class="remove-btn" data-action="remove" title="Eliminar"><i class="fas fa-trash"></i></button>
+    </div>`).join("");
+
+  const cartTotal = document.getElementById("cart-total");
+  if (cartTotal) cartTotal.textContent = `$${this.getCartTotal().toLocaleString()}`;
+}
 
   updateAuthUI() {
     const authButtons = document.getElementById("auth-buttons");
@@ -442,3 +442,25 @@ window.switchToLogin = function () {
 window.addProductToCart = function (productId) {
   abshineSystem.addToCart(productId);
 };
+// ===== Delegación de eventos para +, – y 🗑️ dentro del modal =====
+document.addEventListener("click", e => {
+  const cartItem = e.target.closest(".cart-item");
+  if (!cartItem) return;
+
+  const id = cartItem.dataset.id;
+  const action = e.target.closest("[data-action]")?.dataset.action;
+  if (!action) return;
+
+  switch (action) {
+    case "plus":
+      abshineSystem.updateQuantity(id, parseInt(cartItem.querySelector(".quantity").textContent) + 1);
+      break;
+    case "minus":
+      const qty = parseInt(cartItem.querySelector(".quantity").textContent);
+      if (qty > 1) abshineSystem.updateQuantity(id, qty - 1);
+      break;
+    case "remove":
+      abshineSystem.removeFromCart(id);
+      break;
+  }
+});
