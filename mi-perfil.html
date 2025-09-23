@@ -59,7 +59,86 @@
 <body>
 
 <!-- HEADER (copiá el que ya tenés de index.html) -->
-<header class="site-header"> ... </header>
+ <header class="site-header">
+        <div class="header-container">
+          <div class="logo">
+            <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
+          </div>
+          <h1 class="site-title">ABshine</h1>
+          <nav class="main-nav">
+            <ul class="menu-horizontal">
+              <li><a href="index.html">HOME</a></li>
+              <li class="has-submenu">
+                <a href="#">PRODUCTOS</a>
+                <ul class="menu-vertical" id="menu-categorias"></ul>
+              </li>
+              <li class="has-submenu">
+                <a href="#">CONTACTOS</a>
+                <ul class="menu-vertical">
+                  <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+                  <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+                  <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
+                </ul>
+              </li>
+              <li><a href="index_informacion.html">INFORMACIÓN</a></li>
+            </ul>
+          </nav>
+          <div class="user-actions">
+                <button id="cart-toggle" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-count">0</span>
+                </button>
+                
+                <div id="auth-buttons" class="auth-buttons">
+                    <button id="login-btn" class="login-btn">Iniciar Sesión</button>
+                    <button id="register-btn" class="register-btn">Registrarse</button>
+                </div>
+                
+                <div id="user-profile" class="user-profile" style="display: none;">
+                    <button id="profile-toggle" class="profile-link">
+                        <i class="fas fa-user"></i>
+                        <span id="user-name">Usuario</span>
+                    </button>
+                  <div id="user-dropdown" class="user-dropdown">
+                    <div class="user-info">
+                      <p id="display-name" class="user-name">Usuario</p>
+                      <p id="display-email" class="user-email">user@test.com</p>
+                    </div>
+                    <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
+                    <a href="#" class="dropdown-item">Mis Pedidos</a>
+                    <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
+                      <i class="fas fa-cogs"></i> Panel Admin
+                    </a>
+                    <button id="logout-btn" class="dropdown-item logout">
+                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                  </div>
+
+                  <!-- ✅ Script para mostrar "Panel Admin" solo si es admin -->
+                  <script type="module">
+                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+                    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+                    import { auth } from "./firebase-config.js";
+
+                    onAuthStateChanged(auth, async (user) => {
+                      const adminLink = document.getElementById("admin-link");
+                      if (!user) {
+                        adminLink.style.display = "none";
+                        return;
+                      }
+
+                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
+                      if (docSnap.exists() && docSnap.data().role === "admin") {
+                        adminLink.style.display = "block";
+                      } else {
+                        adminLink.style.display = "none";
+                      }
+                    });
+                  </script>
+                </div>
+            </div>
+        </div>
+    </header>
 
 <main class="perfil-container">
   <h2><i class="fas fa-user-edit"></i> Mis datos de envío</h2>
@@ -101,7 +180,19 @@
 </main>
 
 <!-- FOOTER (copiá el que ya tenés) -->
-<footer class="site-footer"> ... </footer>
+<footer class="site-footer">
+    <div class="footer-container">
+      <h2>CONTACTOS:</h2>
+      <ul class="contact-list">
+        <li><a href="https://wa.me/3464566408"><i class="fab fa-whatsapp"></i> 3464-566408</a></li>
+        <li><a href="mailto:alejandrobatistoni08@gmail.com"><i class="far fa-envelope"></i> alejandrobatistoni08@gmail.com</a></li>
+        <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
+        <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
+        <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
+        <p>©Copyright Alejandro Batistoni - Denis Leandro Borri - 2024. Todos los derechos reservados.</p>
+      </ul>
+    </div>
+  </footer>
 
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="mi-perfil.js"></script>

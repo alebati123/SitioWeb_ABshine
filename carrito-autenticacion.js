@@ -6,76 +6,28 @@ let abshineSystem;
 
 class ABShineSystem {
   constructor() {
-    this.cart = this.loadFromStorage("abshine_cart") || [];
-    this.user = this.loadFromStorage("abshine_user") || null;
-    this.products = {
-      "cera-liquida": {
-        id: "cera-liquida",
-        name: "Cera liquida",
-        price: 3900,
-        details: "500ml",
-        image: "./imagenes/Cera/Cera_1.jpeg",
-      },
-      "Cera-liquida-carnauba": {
-        id: "Cera-liquida-carnauba",
-        name: "Cera liquida carnauba",
-        price: 6000,
-        details: "500ml - Protección duradera",
-        image: "./imagenes/Cera/Cera_2.jpeg",
-      },
-      "Cera-liquida-grafeno": {
-        id: "Cera-liquida-grafeno",
-        name: "Cera liquida con grafeno",
-        price: 17000,
-        details: "500ml - Protección duradera",
-        image: "./imagenes/Cera/Cera_3.jpeg",
-      },
-      "Cera-liquida-carnauba1L": {
-        id: "Cera-liquida-carnauba1L",
-        name: "Cera liquida carnauba 1L",
-        price: 10500,
-        details: "1L - Protección duradera",
-        image: "./imagenes/Cera/Cera_7.jpeg",
-      },
-      "cera-liquida1L": {
-        id: "cera-liquida1L",
-        name: "Cera liquida 1L",
-        price: 6000,
-        details: "1L",
-        image: "./imagenes/Cera/Cera_8.jpeg",
-      },
-      "Cera-en-crema": {
-        id: "Cera-en-crema",
-        name: "Cera en crema",
-        price: 6700,
-        details: "300ml - Protección duradera",
-        image: "./imagenes/Cera/Cera_6.jpeg",
-      },
-      "Cera-oneshine": {
-        id: "Cera-oneshine",
-        name: "Cera-oneshine",
-        price: 7000,
-        details: "500ml - Protección duradera",
-        image: "./imagenes/Cera/Cera_4.jpeg",
-      },
-      "Cera-pasta-carnauba": {
-        id: "Cera-pasta-carnauba",
-        name: "Cera en pasta carnauba",
-        price: 14500,
-        details: "100g - Protección duradera",
-        image: "./imagenes/Cera/Cera_5.jpeg",
-      },
-    };
-    this.init();
-  }
+  this.cart = this.loadFromStorage("abshine_cart") || [];
+  this.user = this.loadFromStorage("abshine_user") || null;
+  this.products = {}; // vacío al principio
+  this.init();
+}
 
-  init() {
-    this.setupEventListeners();
-    this.updateCartUI();
-    this.updateAuthUI();
-    this.checkUserSession();
-  }
+async init() {
+  await this.loadProductsFromFirebase(); // 🔥 Esperá a que carguen
+  this.setupEventListeners();
+  this.updateCartUI();
+  this.updateAuthUI();
+  this.checkUserSession();
+}
 
+async loadProductsFromFirebase() {
+  const { collection, getDocs } = await import("./firebase-config.js");
+  const snap = await getDocs(collection(db, "productos"));
+  snap.forEach(d => {
+    const p = d.data();
+    this.products[d.id] = { id: d.id, ...p };
+  });
+}
   loadFromStorage(key) {
     try {
       const data = localStorage.getItem(key);
@@ -408,26 +360,24 @@ class ABShineSystem {
     setTimeout(() => notification.remove(), 5000);
   }
 
-  handleCheckout() {
-    if (this.cart.length === 0) {
-      this.showNotification("Tu carrito está vacío", "warning");
-      return;
-    }
-    if (!this.user) {
-      this.closeModal("cart-modal");
-      this.showModal("login-modal");
-      this.showNotification("Debes iniciar sesión para comprar", "info");
-      return;
-    }
-    this.showNotification("Procesando compra...", "info");
-    setTimeout(() => {
-      this.cart = [];
-      this.saveToStorage("abshine_cart", this.cart);
-      this.updateCartUI();
-      this.closeModal("cart-modal");
-      this.showNotification("¡Compra realizada con éxito!", "success");
-    }, 2000);
+handleCheckout() {
+  if (this.cart.length === 0) {
+    this.showNotification("Tu carrito está vacío", "warning");
+    return;
   }
+  if (!this.user) {
+    this.closeModal("cart-modal");
+    this.showModal("login-modal");
+    this.showNotification("Debes iniciar sesión para comprar", "info");
+    return;
+  }
+
+  // ✅ Guardar carrito antes de redirigir
+  this.saveToStorage("abshine_cart", this.cart);
+
+  // ✅ Ir al checkout
+  window.location.href = "checkout.html";
+}
 
   checkUserSession() {
     if (this.user) {
