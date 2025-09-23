@@ -210,11 +210,11 @@ async loadProductsFromFirebase() {
           <p class="details">${item.details}</p>
         </div>
         <div class="quantity-controls">
-          <button class="quantity-btn" onclick="abshineSystem.updateQuantity('${item.id}', ${item.quantity - 1})"><i class="fas fa-minus"></i></button>
-          <span class="quantity">${item.quantity}</span>
-          <button class="quantity-btn" onclick="abshineSystem.updateQuantity('${item.id}', ${item.quantity + 1})"><i class="fas fa-plus"></i></button>
-        </div>
-        <button class="remove-btn" onclick="abshineSystem.removeFromCart('${item.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
+        <button class="quantity-btn" title="Restar"><i class="fas fa-minus"></i></button>
+        <span class="quantity">${item.quantity}</span>
+        <button class="quantity-btn" title="Sumar"><i class="fas fa-plus"></i></button>
+      </div>
+      <button class="remove-btn" title="Eliminar"><i class="fas fa-trash"></i></button>
       </div>`).join("");
 
     const cartTotal = document.getElementById("cart-total");

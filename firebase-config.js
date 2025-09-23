@@ -1,4 +1,3 @@
-// Firebase v10.7.1 - CDN correcto
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -13,6 +12,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged };
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+export { db, auth, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged };
