@@ -2,6 +2,8 @@ import { db, auth, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, onAut
 
 let productos = [];
 let editandoId = null;
+let paginaActual = 1;
+const productosPorPagina = 12;   // 3×4
 
 // Cargar categorías
 async function loadCategories() {
@@ -33,7 +35,8 @@ async function cargarComboCategorias() {
 const cargarProductos = async () => {
   const snapshot = await getDocs(collection(db, "productos"));
   productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  renderizarProductos();
+  paginaActual = 1;        // siempre empezar en página 1
+  renderizarPagina();      // pintar solo 12 productos
   await cargarComboCategorias(); // ← nueva
 };
 
@@ -281,3 +284,58 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("search-products")?.addEventListener("input", filtrarYRenderizar);
   document.getElementById("filter-category")?.addEventListener("change", filtrarYRenderizar);
 });
+function renderizarPagina() {
+  const inicio = (paginaActual - 1) * productosPorPagina;
+  const fin    = inicio + productosPorPagina;
+  const visibles = productos.slice(inicio, fin);
+
+  const contenedor = document.getElementById("products-grid");
+  contenedor.innerHTML = visibles.map(p => `
+    <div class="product-card-admin">
+      <img src="${p.image}" alt="${p.name}" class="product-image-admin">
+      <div class="product-info-admin">
+        <span class="product-category">${p.category}</span>
+        <h3 class="product-name-admin">${p.name}</h3>
+        <p class="product-details-admin">${p.details}</p>
+        <p class="product-price-admin">$${p.price}</p>
+        <div class="product-actions">
+          <button class="edit-btn" onclick="editarProducto('${p.id}')">Editar</button>
+          <button class="delete-btn" onclick="eliminarProducto('${p.id}')">Eliminar</button>
+        </div>
+      </div>
+    </div>`).join("");
+
+  pintarBotonesPaginacion();
+}
+function pintarBotonesPaginacion() {
+  const totalPaginas = Math.ceil(productos.length / productosPorPagina);
+  const div = document.getElementById("pagination");
+  div.innerHTML = "";
+
+  // Botón "Anterior"
+  const btnAnt = document.createElement("button");
+  btnAnt.className = "btn-pagination";
+  btnAnt.innerHTML = '<i class="fas fa-chevron-left"></i>';
+  btnAnt.disabled = paginaActual === 1;
+  btnAnt.onclick = () => { paginaActual--; renderizarPagina(); };
+  div.appendChild(btnAnt);
+
+  // Números de página (máx. 5 visibles)
+  const inicio = Math.max(1, paginaActual - 2);
+  const fin    = Math.min(totalPaginas, inicio + 4);
+  for (let i = inicio; i <= fin; i++) {
+    const btn = document.createElement("button");
+    btn.className = "btn-pagination" + (i === paginaActual ? " active" : "");
+    btn.textContent = i;
+    btn.onclick = () => { paginaActual = i; renderizarPagina(); };
+    div.appendChild(btn);
+  }
+
+  // Botón "Siguiente"
+  const btnSig = document.createElement("button");
+  btnSig.className = "btn-pagination";
+  btnSig.innerHTML = '<i class="fas fa-chevron-right"></i>';
+  btnSig.disabled = paginaActual === totalPaginas;
+  btnSig.onclick = () => { paginaActual++; renderizarPagina(); };
+  div.appendChild(btnSig);
+}

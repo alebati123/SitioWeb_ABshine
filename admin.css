@@ -485,3 +485,43 @@
     flex-direction: column;
   }
 }
+/* ===== GRILLA PAGINADA ===== */
+.products-grid-admin {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* 3 por fila */
+  grid-auto-rows: auto;                    /* altura natural */
+  gap: 1.2rem;
+  max-height: calc(4 * 160px + 3 * 1.2rem); /* 4 filas visibles */
+  overflow: hidden;                         /* oculta el resto */
+}
+
+/* tarjeta de producto */
+.product-card-admin {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+/* ===== BOTONES DE PAGINACIÓN ===== */
+.btn-pagination {
+  background: #cc117b;
+  color: #fff;
+  border: none;
+  padding: .4rem .8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: .9rem;
+  transition: background .3s;
+}
+.btn-pagination:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.btn-pagination.active {
+  background: #a00e62;
+}
+.btn-pagination:hover:not(:disabled) {
+  background: #a00e62;
+}
