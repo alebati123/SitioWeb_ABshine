@@ -149,17 +149,15 @@ async loadProductsFromFirebase() {
     this.saveToStorage("abshine_cart", this.cart);
     this.updateCartUI();
   }
+removeFromCart(productId) {
+  const item = this.cart.find(item => item.id === productId);
+  if (!item) return;
 
-  removeFromCart(productId) {
-    const item = this.cart.find(item => item.id === productId);
-    if (item) {
-      this.cart = this.cart.filter(item => item.id !== productId);
-      this.saveToStorage("abshine_cart", this.cart);
-      this.updateCartUI();
-      this.showNotification(`${item.name} eliminado del carrito`, "info");
-    }
-  }
-
+  this.cart = this.cart.filter(item => item.id !== productId);
+  this.saveToStorage("abshine_cart", this.cart);
+  this.updateCartUI();
+  this.showNotification(`${item.name} eliminado del carrito`, "info");
+}
   updateQuantity(productId, newQuantity) {
     if (newQuantity <= 0) {
       this.removeFromCart(productId);
@@ -190,6 +188,7 @@ updateCartUI() {
   }
 
   const cartItemsContainer = document.getElementById("cart-items");
+  const cartFooter = document.querySelector(".cart-footer");   // ← agregado
   if (!cartItemsContainer) return;
 
   if (this.cart.length === 0) {
@@ -198,8 +197,11 @@ updateCartUI() {
         <i class="fas fa-shopping-cart"></i>
         <p>Tu carrito está vacío</p>
       </div>`;
+    if (cartFooter) cartFooter.style.display = "none";         // ← ocultar
     return;
   }
+
+  if (cartFooter) cartFooter.style.display = "block";          // ← mostrar
 
   cartItemsContainer.innerHTML = this.cart.map(item => `
     <div class="cart-item" data-id="${item.id}">
