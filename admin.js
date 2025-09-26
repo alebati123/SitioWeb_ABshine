@@ -16,12 +16,25 @@ async function loadCategories() {
     select.appendChild(opt);
   });
 }
-
+// ===== Cargar combo de filtros =====
+async function cargarComboCategorias() {
+  const snapshot = await getDocs(collection(db, "categorias"));
+  const select = document.getElementById("filter-category");
+  select.innerHTML = '<option value="">Todas las categorías</option>';
+  snapshot.forEach(d => {
+    const c = d.data();
+    const opt = document.createElement("option");
+    opt.value = c.slug;
+    opt.textContent = c.nombre;
+    select.appendChild(opt);
+  });
+}
 // Cargar productos
 const cargarProductos = async () => {
   const snapshot = await getDocs(collection(db, "productos"));
   productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   renderizarProductos();
+  await cargarComboCategorias(); // ← nueva
 };
 
 const renderizarProductos = () => {
@@ -227,4 +240,44 @@ document.getElementById("category-form").onsubmit = async (e) => {
   loadMenuCategories(); // actualiza menú
 };
 
+});
+// ========= FILTRADO =========
+function filtrarYRenderizar() {
+  const texto = document.getElementById("search-products").value.trim().toLowerCase();
+  const cat   = document.getElementById("filter-category").value;
+
+  const filtrados = productos.filter(p =>
+    p.name.toLowerCase().includes(texto) &&
+    (cat === "" || p.category === cat)
+  );
+
+  const contenedor = document.getElementById("products-grid");
+  contenedor.innerHTML = filtrados.map(p => `
+    <div class="product-card-admin">
+      <img src="${p.image}" alt="${p.name}" class="product-image-admin">
+      <div class="product-info-admin">
+        <span class="product-category">${p.category}</span>
+        <h3 class="product-name-admin">${p.name}</h3>
+        <p class="product-details-admin">${p.details}</p>
+        <p class="product-price-admin">$${p.price}</p>
+        <div class="product-actions">
+          <button class="edit-btn" onclick="editarProducto('${p.id}')">Editar</button>
+          <button class="delete-btn" onclick="eliminarProducto('${p.id}')">Eliminar</button>
+        </div>
+      </div>
+    </div>`).join("");
+}
+// ===== DEBUG: verificá valores =====
+function debugFiltro() {
+  const cat = document.getElementById("filter-category").value;
+  console.log("Categoría seleccionada:", cat);
+  console.log("Productos disponibles:", productos.map(p => ({name: p.name, category: p.category})));
+  const filtrados = productos.filter(p => cat === "" || p.category === cat);
+  console.log("Productos después del filtro:", filtrados);
+}
+document.getElementById("filter-category").addEventListener("change", debugFiltro);
+// ===== FILTROS: conectamos después de que existan los elementos =====
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("search-products")?.addEventListener("input", filtrarYRenderizar);
+  document.getElementById("filter-category")?.addEventListener("change", filtrarYRenderizar);
 });
