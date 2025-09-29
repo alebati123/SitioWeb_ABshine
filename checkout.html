@@ -7,506 +7,480 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <title>Finalizar Compra - ABshine</title>
 
-<style>
-  /* ---------- ESTILOS CHECKOUT PROFESIONAL ---------- */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 0;
-  }
+  <style>
+    .checkout-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
 
-  .checkout-section {
-    padding: 2rem 1rem;
-  }
+    .checkout-container h2 {
+      text-align: center;
+      color: #cc117b;
+      margin-bottom: 1.5rem;
+    }
 
-  .checkout-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 2rem;
-  }
-
-  .checkout-container h2 {
-    text-align: center;
-    color: #cc117b;
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .checkout-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid #eee;
-  }
-
-  .checkout-item img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    flex-shrink: 0;
-  }
-
-  .item-details {
-    flex: 1;
-  }
-
-  .item-details h3 {
-    margin: 0 0 0.3rem;
-    font-size: 1.1rem;
-    color: #333;
-  }
-
-  .item-details .details {
-    font-size: 0.9rem;
-    color: #666;
-  }
-
-  .item-details .price {
-    font-weight: 600;
-    color: #cc117b;
-  }
-
-  .item-details .quantity {
-    font-size: 0.9rem;
-    color: #444;
-  }
-
-  .item-total {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #222;
-  }
-
-  .checkout-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #cc117b;
-    margin-top: 1.5rem;
-  }
-
-  .checkout-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .checkout-btn,
-  .continue-shopping {
-    flex: 1;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-
-  .checkout-btn {
-    background: #cc117b;
-    color: white;
-  }
-
-  .checkout-btn:hover {
-    background: #a00e62;
-  }
-
-  .continue-shopping {
-    background: #f0f0f0;
-    color: #333;
-  }
-
-  .continue-shopping:hover {
-    background: #e0e0e0;
-  }
-
-  @media (max-width: 600px) {
     .checkout-item {
-      flex-direction: column;
-      align-items: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
     }
 
     .checkout-item img {
-      width: 100%;
-      height: 150px;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-details h3 {
+      margin: 0 0 0.3rem;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .item-details .details {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .item-details .price {
+      font-weight: 600;
+      color: #cc117b;
+    }
+
+    .item-details .quantity {
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .item-total {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #222;
+    }
+
+    .checkout-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #cc117b;
+      margin-top: 1.5rem;
     }
 
     .checkout-actions {
-      flex-direction: column;
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
     }
-  }
-</style>
 
+    .checkout-btn,
+    .continue-shopping {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
 
+    .checkout-btn {
+      background: #cc117b;
+      color: white;
+    }
+
+    .checkout-btn:hover {
+      background: #a00e62;
+    }
+
+    .continue-shopping {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .continue-shopping:hover {
+      background: #e0e0e0;
+    }
+
+    /* NUEVOS ESTILOS */
+    #opciones-entrega {
+      margin-top: 2rem;
+    }
+
+    #datos-retiro, #datos-envio {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    #datos-retiro a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #25D366;
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .checkout-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .checkout-item img {
+        width: 100%;
+        height: 150px;
+      }
+
+      .checkout-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-        <div class="header-container">
-          <div class="logo">
-            <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
-          </div>
-          <h1 class="site-title">ABshine</h1>
-          <nav class="main-nav">
-            <ul class="menu-horizontal">
-              <li><a href="index.html">HOME</a></li>
-              <li class="has-submenu">
-                <a href="#">PRODUCTOS</a>
-                <ul class="menu-vertical" id="menu-categorias"></ul>
-              </li>
-              <li class="has-submenu">
-                <a href="#">CONTACTOS</a>
-                <ul class="menu-vertical">
-                  <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
-                  <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
-                  <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
-                </ul>
-              </li>
-              <li><a href="index_informacion.html">INFORMACIÓN</a></li>
-            </ul>
-          </nav>
-          <div class="user-actions">
-                <button id="cart-toggle" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count" class="cart-count">0</span>
-                </button>
-                
-                <div id="auth-buttons" class="auth-buttons">
-                    <button id="login-btn" class="login-btn">Iniciar Sesión</button>
-                    <button id="register-btn" class="register-btn">Registrarse</button>
-                </div>
-                
-                <div id="user-profile" class="user-profile" style="display: none;">
-                    <button id="profile-toggle" class="profile-link">
-                        <i class="fas fa-user"></i>
-                        <span id="user-name">Usuario</span>
-                    </button>
-                  <div id="user-dropdown" class="user-dropdown">
-                    <div class="user-info">
-                      <p id="display-name" class="user-name">Usuario</p>
-                      <p id="display-email" class="user-email">user@test.com</p>
-                    </div>
-                    <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
-                    <a href="#" class="dropdown-item">Mis Pedidos</a>
-                    <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
-                      <i class="fas fa-cogs"></i> Panel Admin
-                    </a>
-                    <button id="logout-btn" class="dropdown-item logout">
-                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </button>
-                      <!-- 👇 igual que en index.html -->
-<script type="module">
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { auth } from "./firebase-config.js";
 
-  onAuthStateChanged(auth, user => {
-    const adminLink = document.getElementById("admin-link");
-    if (!user) { adminLink.style.display = "none"; return; }
-    import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js").then(
-      ({ getDoc, doc }) => {
-        getDoc(doc(db, "usuarios", user.email)).then(snap => {
-          adminLink.style.display = (snap.exists() && snap.data().role === "admin") ? "block" : "none";
-        });
-      }
-    );
-  });
+<header class="site-header">
+  <div class="header-container">
+    <div class="logo">
+      <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
+    </div>
+    <h1 class="site-title">ABshine</h1>
+    <nav class="main-nav">
+      <ul class="menu-horizontal">
+        <li><a href="index.html">HOME</a></li>
+        <li class="has-submenu">
+          <a href="#">PRODUCTOS</a>
+          <ul class="menu-vertical" id="menu-categorias"></ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#">CONTACTOS</a>
+          <ul class="menu-vertical">
+            <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+            <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+            <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
+          </ul>
+        </li>
+        <li><a href="index_informacion.html">INFORMACIÓN</a></li>
+      </ul>
+    </nav>
+    <div class="user-actions">
+      <button id="cart-toggle" class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count" class="cart-count">0</span>
+      </button>
 
-  // ===== abrir/cerrar dropdown =====
-  const profileToggle = document.getElementById("profile-toggle");
-  const userDropdown   = document.getElementById("user-dropdown");
-  if (profileToggle && userDropdown) {
-    profileToggle.addEventListener("click", e => {
-      e.stopPropagation();
-      userDropdown.classList.toggle("show");
-    });
-    document.addEventListener("click", e => {
-      if (!userDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
-        userDropdown.classList.remove("show");
-      }
-    });
-  }
-</script>
-                  </div>
-
-                  <!-- ✅ Script para mostrar "Panel Admin" solo si es admin -->
-                  <script type="module">
-                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-                    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-                    import { auth } from "./firebase-config.js";
-
-                    onAuthStateChanged(auth, async (user) => {
-                      const adminLink = document.getElementById("admin-link");
-                      if (!user) {
-                        adminLink.style.display = "none";
-                        return;
-                      }
-
-                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
-                      if (docSnap.exists() && docSnap.data().role === "admin") {
-                        adminLink.style.display = "block";
-                      } else {
-                        adminLink.style.display = "none";
-                      }
-                    });
-                  </script>
-                </div>
-            </div>
-        </div>
-    </header>
-
-  <section class="checkout-section">
-    <div class="checkout-container">
-      <h2>Finalizar Compra</h2>
-      <div id="checkout-items" class="checkout-items"></div>
-      <div class="checkout-total">
-        <span>Total:</span>
-        <span id="checkout-total" class="total-price">$0</span>
+      <div id="auth-buttons" class="auth-buttons">
+        <button id="login-btn" class="login-btn">Iniciar Sesión</button>
+        <button id="register-btn" class="register-btn">Registrarse</button>
       </div>
-      <button id="confirm-purchase" class="checkout-btn">Confirmar Compra</button>
-      <button id="back-to-cart" class="continue-shopping">Volver al Carrito</button>
-    </div>
-  </section>
 
-<!-- Shopping Cart Modal -->
-    <div id="cart-modal" class="modal-overlay">
-        <div class="cart-container">
-            <div class="cart-header">
-                <h2>Carrito de Compras</h2>
-                <button id="cart-close" class="close-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="cart-items" class="cart-items">
-                <!-- Cart items will be populated by JavaScript -->
-            </div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cart-total" class="total-price">$0</span>
-                </div>
-                <button id="checkout-btn" class="checkout-btn">Proceder al Pago</button>
-                <button id="continue-shopping" class="continue-shopping">Continuar Comprando</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal-overlay">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h2>Iniciar Sesión</h2>
-                <button class="close-btn" onclick="closeModal('login-modal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="login-form" class="auth-form">
-                <div class="form-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" placeholder="Ingresa tu email" required>
-                    <span class="error-message" id="login-email-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Contraseña</label>
-                    <div class="password-input">
-                        <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <span class="error-message" id="login-password-error"></span>
-                </div>
-                <button type="submit" class="auth-btn">Iniciar Sesión</button>
-                <div class="test-credentials">
-                    <p>Credenciales de prueba:</p>
-                    <p>Admin: admin@abshine.com / admin123</p>
-                    <p>Usuario: user@test.com / user123</p>
-                </div>
-            </form>
-            <div class="auth-footer">
-                <p>¿No tienes una cuenta? <button class="link-btn" onclick="switchToRegister()">Regístrate</button></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div id="register-modal" class="modal-overlay">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h2>Registrarse</h2>
-                <button class="close-btn" onclick="closeModal('register-modal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="register-form" class="auth-form">
-                <div class="form-group">
-                    <label for="register-name">Nombre Completo</label>
-                    <input type="text" id="register-name" placeholder="Ingresa tu nombre completo" required>
-                    <span class="error-message" id="register-name-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="register-email">Email</label>
-                    <input type="email" id="register-email" placeholder="Ingresa tu email" required>
-                    <span class="error-message" id="register-email-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="register-password">Contraseña</label>
-                    <div class="password-input">
-                        <input type="password" id="register-password" placeholder="Ingresa tu contraseña" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('register-password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <span class="error-message" id="register-password-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="register-confirm-password">Confirmar Contraseña</label>
-                    <input type="password" id="register-confirm-password" placeholder="Confirma tu contraseña" required>
-                    <span class="error-message" id="register-confirm-error"></span>
-                </div>
-                <button type="submit" class="auth-btn">Registrarse</button>
-            </form>
-            <div class="auth-footer">
-                <p>¿Ya tienes una cuenta? <button class="link-btn" onclick="switchToLogin()">Inicia sesión</button></p>
-            </div>
-        </div>
-    </div>
-
-  <footer class="site-footer">
-      <div class="footer-container">
-        <h2>CONTACTOS:</h2>
-        <ul class="contact-list">
-          <li><a href="https://wa.me/3464566408"><i class="fab fa-whatsapp"></i> 3464-566408</a></li>
-          <li><a href="mailto:alejandrobatistoni08@gmail.com"><i class="far fa-envelope"></i> alejandrobatistoni08@gmail.com</a></li>
-          <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
-          <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
-          <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
-          <p>©Copyright Alejandro Batistoni - Denis Leandro Borri - 2024. Todos los derechos reservados.</p>
-        </ul>
-      </div>
-    </footer>
-  <!-- ===== SCRIPTS ===== -->
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="carrito-autenticacion.js"></script>
-  <script type="module">
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { db } from "./firebase-config.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { auth } from "./firebase-config.js";
-
-    // Cargar carrito desde localStorage
-    let cart = JSON.parse(localStorage.getItem("abshine_cart")) || [];
-
-    // Mostrar productos en checkout
-    function loadCheckout() {
-      const container = document.getElementById("checkout-items");
-      const total = document.getElementById("checkout-total");
-      if (cart.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#888;">Tu carrito está vacío.</p>`;
-        total.textContent = "$0";
-        return;
-      }
-
-      let html = "";
-      let totalPrice = 0;
-      cart.forEach(item => {
-        html += `
-          <div class="checkout-item">
-            <img src="${item.image}" alt="${item.name}" onerror="this.src='./imagenes/placeholder.jpg'">
-            <div class="item-details">
-              <h3>${item.name}</h3>
-              <p class="details">${item.details}</p>
-              <p class="price">$${item.price.toLocaleString()} c/u</p>
-              <p class="quantity">Cantidad: ${item.quantity}</p>
-            </div>
-            <div class="item-total">$${(item.price * item.quantity).toLocaleString()}</div>
+      <div id="user-profile" class="user-profile" style="display: none;">
+        <button id="profile-toggle" class="profile-link">
+          <i class="fas fa-user"></i>
+          <span id="user-name">Usuario</span>
+        </button>
+        <div id="user-dropdown" class="user-dropdown">
+          <div class="user-info">
+            <p id="display-name" class="user-name">Usuario</p>
+            <p id="display-email" class="user-email">user@test.com</p>
           </div>
-        `;
-        totalPrice += item.price * item.quantity;
-      });
-
-      container.innerHTML = html;
-      total.textContent = "$" + totalPrice.toLocaleString();
-    }
-
-    // Volver al carrito
-    document.getElementById("back-to-cart").onclick = () => {
-      window.history.back();
-    };
-
-    // Confirmar compra
-    document.getElementById("confirm-purchase").onclick = () => {
-      if (!cart.length) {
-        alert("Tu carrito está vacío.");
-        return;
-      }
-      if (!auth.currentUser) {
-        alert("Debes iniciar sesión para finalizar la compra.");
-        return;
-      }
-      alert("¡Compra realizada con éxito! Te contactaremos por WhatsApp para coordinar el pago y envío.");
-      localStorage.removeItem("abshine_cart");
-      window.location.href = "index.html";
-    };
-
-    // Cargar categorías en menú
-    async function loadMenuCategories() {
-      const container = document.getElementById("menu-categorias");
-      if (!container) return;
-      const snap = await getDocs(collection(db, "categorias"));
-      container.innerHTML = "";
-      snap.forEach(d => {
-        const c = d.data();
-        if (!c.activa) return;
-        container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
-      });
-    }
-
-    // Mostrar/ocultar menú de usuario
-    const profileToggle = document.getElementById("profile-toggle");
-    const userDropdown = document.getElementById("user-dropdown");
-    if (profileToggle && userDropdown) {
-      profileToggle.addEventListener("click", e => {
-        e.stopPropagation();
-        userDropdown.classList.toggle("show");
-      });
-      document.addEventListener("click", e => {
-        if (!userDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
-          userDropdown.classList.remove("show");
-        }
-      });
-    }
-
-    // Mostrar link de admin si corresponde
-    onAuthStateChanged(auth, user => {
-      const adminLink = document.getElementById("admin-link");
-      if (!user) { adminLink.style.display = "none"; return; }
-      import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js").then(
-        ({ getDoc, doc }) => {
-          getDoc(doc(db, "usuarios", user.email)).then(snap => {
-            adminLink.style.display = (snap.exists() && snap.data().role === "admin") ? "block" : "none";
+          <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
+          <a href="#" class="dropdown-item">Mis Pedidos</a>
+          <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
+            <i class="fas fa-cogs"></i> Panel Admin
+          </a>
+          <button id="logout-btn" class="dropdown-item logout">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </button>
+        </div>
+        <script type="module">
+          import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+          import { auth } from "./firebase-config.js";
+          onAuthStateChanged(auth, user => {
+            const adminLink = document.getElementById("admin-link");
+            if (user && user.email === "admin@abshine.com") {
+              adminLink.style.display = "block";
+            } else {
+              adminLink.style.display = "none";
+            }
           });
-        }
-      );
-    });
+        </script>
+      </div>
+    </div>
+  </div>
+</header>
 
-    // Ejecutar al cargar
-    loadCheckout();
-    loadMenuCategories();
-  </script>
-  <!-- ÚNICO SCRIPT PARA MENÚ + CARRITO -->
+<section class="checkout-section">
+  <div class="checkout-container">
+    <h2>Finalizar Compra</h2>
+    <div id="checkout-items" class="checkout-items"></div>
+    <div class="checkout-total">
+      <span>Total:</span>
+      <span id="checkout-total" class="total-price">$0</span>
+    </div>
+
+    <!-- =====  OPCIONES DE ENTREGA  ===== -->
+    <div id="opciones-entrega" style="margin-top: 2rem;">
+      <h3>¿Cómo querés recibir tu pedido?</h3>
+
+      <label style="display:flex; align-items:center; gap:.5rem; margin:.8rem 0;">
+        <input type="radio" name="entrega" value="retiro" onchange="mostrarRetiro()">
+        Retiro en domicilio (Arequito)
+      </label>
+
+      <label style="display:flex; align-items:center; gap:.5rem; margin:.8rem 0;">
+        <input type="radio" name="entrega" value="envio" onchange="mostrarEnvio()">
+        Envío a domicilio
+      </label>
+    </div>
+
+    <!-- =====  DATOS DE RETIRO  ===== -->
+    <div id="datos-retiro" style="display:none; margin-top:1.5rem;">
+      <h4>Retirá por nuestra dirección:</h4>
+      <p><strong>Dirección:</strong> Lisandro de la torre 1555, Arequito (Santa Fe)</p>
+      <p><strong>Horario:</strong> Lunes a Viernes 8:30-22:00hs</p>
+      <a href="https://wa.me/3464566408?text=Hola,%20quiero%20retirar%20mi%20pedido%20de%20$..."
+         target="_blank" style="display:inline-flex; align-items:center; gap:.5rem; background:#25D366;color:#fff;padding:.75rem 1rem;border-radius:6px;text-decoration:none;">
+        <i class="fab fa-whatsapp"></i> Enviar WhatsApp
+      </a>
+    </div>
+
+    <!-- =====  DATOS DE ENVÍO / TRANSFERENCIA  ===== -->
+    <div id="datos-envio" style="display:none; margin-top:1.5rem;">
+  <h4>Datos para transferir</h4>
+  <p><strong>CBU:</strong> 4530000800016997302236</p>
+  <p><strong>Alias:</strong> ABSHINE</p>
+  <p><strong>Titular:</strong> Alejandro Batistoni</p>
+  <hr>
+  <h4>Envío a:</h4>
+  <p id="envio-datos-usuario"></p>
+  <hr>
+  <h4>Costo de envío:</h4>
+  <p id="envio-costo">Calculando...</p>
+  <hr>
+  <h4>Total final:</h4>
+  <p id="total-final" style="font-weight:bold;color:#cc117b;font-size:1.3rem;"></p>
+</div>
+
+    <!-- =====  BOTONES FINALES  ===== -->
+    <div class="checkout-actions" style="margin-top:2rem;">
+      <button id="confirm-purchase" class="checkout-btn" style="display:none;" onclick="finalizarCompra()">
+        Confirmar Compra
+      </button>
+      <button id="back-to-cart" class="continue-shopping" onclick="window.history.back()">
+        Volver al Carrito
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <h2>CONTACTOS:</h2>
+    <ul class="contact-list">
+      <li><a href="https://wa.me/3464566408"><i class="fab fa-whatsapp"></i> 3464-566408</a></li>
+      <li><a href="mailto:alejandrobatistoni08@gmail.com"><i class="far fa-envelope"></i> alejandrobatistoni08@gmail.com</a></li>
+      <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
+      <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
+      <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
+      <p>©Copyright Alejandro Batistoni - Denis Leandro Borri - 2024. Todos los derechos reservados.</p>
+    </ul>
+  </div>
+</footer>
+
+<!-- ===== MODALES COMUNES ===== -->
+<!-- Shopping Cart -->
+<div id="cart-modal" class="modal-overlay">
+  <div class="cart-container">
+    <div class="cart-header">
+      <h2>Carrito de Compras</h2>
+      <button id="cart-close" class="close-btn">&times;</button>
+    </div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total"><span>Total:</span><span id="cart-total" class="total-price">$0</span></div>
+      <button id="checkout-btn" class="checkout-btn">Proceder al Pago</button>
+      <button id="continue-shopping" class="continue-shopping">Continuar Comprando</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login -->
+<div id="login-modal" class="modal-overlay">
+  <div class="auth-container">
+    <div class="auth-header"><h2>Iniciar Sesión</h2><button class="close-btn" onclick="closeModal('login-modal')">&times;</button></div>
+    <form id="login-form" class="auth-form">
+      <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email" placeholder="Ingresa tu email" required><span class="error-message" id="login-email-error"></span></div>
+      <div class="form-group"><label for="login-password">Contraseña</label><div class="password-input"><input type="password" id="login-password" placeholder="Ingresa tu contraseña" required><button type="button" class="toggle-password" onclick="togglePassword('login-password')"><i class="fas fa-eye"></i></button></div><span class="error-message" id="login-password-error"></span></div>
+      <button type="submit" class="auth-btn">Iniciar Sesión</button>
+      <div class="test-credentials"><p>Credenciales de prueba:</p><p>Admin: admin@abshine.com / admin123</p><p>Usuario: user@test.com / user123</p></div>
+    </form>
+    <div class="auth-footer"><p>¿No tienes una cuenta? <button class="link-btn" onclick="switchToRegister()">Regístrate</button></p></div>
+  </div>
+</div>
+
+<!-- Register -->
+<div id="register-modal" class="modal-overlay">
+  <div class="auth-container">
+    <div class="auth-header"><h2>Registrarse</h2><button class="close-btn" onclick="closeModal('register-modal')">&times;</button></div>
+    <form id="register-form" class="auth-form">
+      <div class="form-group"><label for="register-name">Nombre Completo</label><input type="text" id="register-name" placeholder="Ingresa tu nombre completo" required><span class="error-message" id="register-name-error"></span></div>
+      <div class="form-group"><label for="register-email">Email</label><input type="email" id="register-email" placeholder="Ingresa tu email" required><span class="error-message" id="register-email-error"></span></div>
+      <div class="form-group"><label for="register-password">Contraseña</label><div class="password-input"><input type="password" id="register-password" placeholder="Ingresa tu contraseña" required><button type="button" class="toggle-password" onclick="togglePassword('register-password')"><i class="fas fa-eye"></i></button></div><span class="error-message" id="register-password-error"></span></div>
+      <div class="form-group"><label for="register-confirm-password">Confirmar Contraseña</label><input type="password" id="register-confirm-password" placeholder="Confirma tu contraseña" required><span class="error-message" id="register-confirm-error"></span></div>
+      <button type="submit" class="auth-btn">Registrarse</button>
+    </form>
+    <div class="auth-footer"><p>¿Ya tienes una cuenta? <button class="link-btn" onclick="switchToLogin()">Inicia sesión</button></p></div>
+  </div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="carrito-autenticacion.js"></script>
 <script type="module">
   import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { db, collection, getDocs } from "./firebase-config.js";
+  import { db } from "./firebase-config.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { auth } from "./firebase-config.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  let cart = JSON.parse(localStorage.getItem("abshine_cart")) || [];
+  let usuarioLogueado = null;
+
+  function loadCheckout() {
+    const container = document.getElementById("checkout-items");
+    const total = document.getElementById("checkout-total");
+    if (cart.length === 0) {
+      container.innerHTML = `<p style="text-align:center; color:#888;">Tu carrito está vacío.</p>`;
+      total.textContent = "$0";
+      return;
+    }
+
+    let html = "";
+    let totalPrice = 0;
+    cart.forEach(item => {
+      html += `
+        <div class="checkout-item">
+          <img src="${item.image}" alt="${item.name}" onerror="this.src='./imagenes/placeholder.jpg'">
+          <div class="item-details">
+            <h3>${item.name}</h3>
+            <p class="details">${item.details}</p>
+            <p class="price">$${item.price.toLocaleString()} c/u</p>
+            <p class="quantity">Cantidad: ${item.quantity}</p>
+          </div>
+          <div class="item-total">$${(item.price * item.quantity).toLocaleString()}</div>
+        </div>
+      `;
+      totalPrice += item.price * item.quantity;
+    });
+
+    container.innerHTML = html;
+    total.textContent = "$" + totalPrice.toLocaleString();
+  }
+
+  onAuthStateChanged(auth, user => {
+    if (!user) return;
+    usuarioLogueado = user;
+  });
+
+  window.mostrarRetiro = () => {
+    document.getElementById('datos-retiro').style.display = 'block';
+    document.getElementById('datos-envio').style.display = 'none';
+    document.getElementById('confirm-purchase').style.display = 'inline-block';
+  };
+
+  window.mostrarEnvio = async () => {
+    document.getElementById('datos-retiro').style.display = 'none';
+    document.getElementById('datos-envio').style.display = 'block';
+
+    if (!usuarioLogueado) {
+      alert('Debes iniciar sesión para solicitar envío.');
+      return;
+    }
+
+    const snap = await getDoc(doc(db, 'clientes', usuarioLogueado.email));
+    if (!snap.exists()) {
+      alert('Por favor, completá tus datos de envío en "Mi Perfil" antes de continuar.');
+      window.location.href = 'mi-perfil.html';
+      return;
+    }
+
+    const datos = snap.data();
+
+    // Cargar datos sin pisar el HTML
+    document.getElementById('envio-datos-usuario').innerHTML = `
+      <p><strong>${datos.nombre} ${datos.apellido}</strong></p>
+      <p>${datos.direccion}, ${datos.localidad} (${datos.cp})</p>
+      <p>${datos.provincia}</p>
+      <p>Tel: ${datos.telefono}</p>
+    `;
+
+    // Calcular envío
+    await calcularEnvio(datos.cp.trim());
+
+    // Mostrar botón final
+    document.getElementById('confirm-purchase').style.display = 'inline-block';
+  };
+
+async function calcularEnvio(codigoPostalDestino) {
+  console.log('Modo demo: envío fijo a $5000');
+
+  const costo = 5000;
+  const totalActual = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalFinal = totalActual + costo;
+
+  document.getElementById('envio-costo').textContent = `$${costo.toLocaleString()}`;
+  document.getElementById('total-final').textContent = `$${totalFinal.toLocaleString()}`;
+}
+
+  window.finalizarCompra = () => {
+    alert('¡Compra registrada! Te contactaremos por WhatsApp para coordinar.');
+    localStorage.removeItem('abshine_cart');
+    window.location.href = 'index.html';
+  };
+
+  // Cargar categorías en menú
+  async function loadMenuCategories() {
+    const container = document.getElementById("menu-categorias");
+    if (!container) return;
+    const snap = await getDocs(collection(db, "categorias"));
+    container.innerHTML = "";
+    snap.forEach(d => {
+      const c = d.data();
+      if (!c.activa) return;
+      container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+    });
+  }
+
+  // Inicializar
+  loadCheckout();
+  loadMenuCategories();
+</script>
+
+<!-- ÚNICO SCRIPT PARA MENÚ + CARRITO -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="carrito-autenticacion.js"></script>
+<script type="module">
+  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { db } from "./firebase-config.js";
   async function loadMenuCategories() {
     const container = document.getElementById("menu-categorias");
     if (!container) return;
@@ -520,69 +494,6 @@
   }
   document.addEventListener("DOMContentLoaded", loadMenuCategories);
 </script>
-  <script>
-  // 🔁 Delegación de eventos para botones dinámicos
-  document.addEventListener("click", e => {
-    const item = e.target.closest(".checkout-item");
-    if (!item) return;
 
-    const id = item.dataset.id;
-
-    if (e.target.closest(".btn-increase")) {
-      // ➕ Aumentar cantidad
-      const qty = parseInt(item.querySelector(".quantity").textContent);
-      actualizarCantidad(id, qty + 1);
-    } else if (e.target.closest(".btn-decrease")) {
-      // ➖ Disminuir cantidad
-      const qty = parseInt(item.querySelector(".quantity").textContent);
-      if (qty > 1) actualizarCantidad(id, qty - 1);
-    } else if (e.target.closest(".btn-remove")) {
-      // 🗑️ Eliminar producto
-      eliminarProducto(id);
-    }
-  });
-
-  function actualizarCantidad(id, nuevaCantidad) {
-    const cart = JSON.parse(localStorage.getItem("abshine_cart")) || [];
-    const item = cart.find(p => p.id === id);
-    if (item) {
-      item.quantity = nuevaCantidad;
-      localStorage.setItem("abshine_cart", JSON.stringify(cart));
-      location.reload(); // Recargar para ver cambios
-    }
-  }
-
-  function eliminarProducto(id) {
-    let cart = JSON.parse(localStorage.getItem("abshine_cart")) || [];
-    cart = cart.filter(p => p.id !== id);
-    localStorage.setItem("abshine_cart", JSON.stringify(cart));
-    location.reload(); // Recargar para ver cambios
-  }
-</script>
-
-<script>
-  // ✅ Botones +, –, 🗑️ dentro del modal del carrito
-  document.addEventListener("click", e => {
-    const cartItem = e.target.closest(".cart-item");
-    if (!cartItem) return;
-
-    const id = cartItem.dataset.id;
-    const action = e.target.closest("[data-action]")?.dataset.action;
-    if (!action) return;
-
-    switch (action) {
-      case "plus":
-        abshineSystem.updateQuantity(id, parseInt(cartItem.querySelector(".quantity").textContent) + 1);
-        break;
-      case "minus":
-        const qty = parseInt(cartItem.querySelector(".quantity").textContent);
-        if (qty > 1) abshineSystem.updateQuantity(id, qty - 1);
-        break;
-      case "remove":
-        abshineSystem.removeFromCart(id);
-        break;
-    }
-  });
-</script>
 </body>
 </html>
