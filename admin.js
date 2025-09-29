@@ -3,7 +3,7 @@ import { db, auth, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, onAut
 let productos = [];
 let editandoId = null;
 let paginaActual = 1;
-const productosPorPagina = 12;   // 3×4
+const productosPorPagina = 6;   // 
 
 // Cargar categorías
 async function loadCategories() {
