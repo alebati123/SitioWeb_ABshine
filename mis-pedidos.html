@@ -67,6 +67,13 @@
 }
 .estado.finalizado { color: #28a745; } /* verde */
 .estado.finalizado i { margin-right: .3rem; }
+
+.satisfaccion-badge {
+  margin-left: auto;
+  font-size: 1.3rem;
+  color: #ffc107;
+  letter-spacing: 2px;
+}
   </style>
 </head>
 <body>
@@ -170,26 +177,38 @@
     orderBy("fecha", "desc")
   );
 
-  onSnapshot(q, snap => {
+onSnapshot(q, snap => {
   console.log("📡 onSnapshot ejecutado, docs:", snap.size);
   const html = snap.docs.map(doc => {
     const p = doc.data();
+
+    /* ----- ⭐ satisfacción ----- */
+    const stars = '★'.repeat(p.satisfaccion || 0) + '☆'.repeat(5 - (p.satisfaccion || 0));
+    const satHtml = p.satisfaccion
+      ? `<span class="satisfaccion-badge" title="Satisfacción">${stars}</span>`
+      : '';
+
     return `
       <div class="pedido-card">
         <p><strong>Fecha:</strong> ${p.fecha?.toDate().toLocaleString()}</p>
         <p><strong>Total:</strong> $${p.totalFinal.toLocaleString()}</p>
         <p><strong>Entrega:</strong> ${p.tipoEntrega === "retiro" ? "Retiro en Arequito" : "Envío a domicilio"}</p>
-        <p>
-        <strong>Estado:</strong><span class="estado finalizado" title="Finalizado"><i class="fas fa-check-circle"></i> Finalizado</span></p>
-        ${p.trackingNumber ? `<p><strong>Tracking:</strong> ${p.trackingNumber}</p>` : ""}
+        <p style="display:flex;justify-content:space-between;align-items:center">
+          <strong>Estado:</strong>
+          <span class="estado finalizado" title="Finalizado">
+            <i class="fas fa-check-circle"></i> Finalizado
+          </span>
+          ${satHtml}
+        </p>
+        ${p.trackingNumber ? `<p><strong>Tracking:</strong> ${p.trackingNumber}</p>` : ''}
         ${p.items.map(prod => `
-        <div class="prod-item">
+          <div class="prod-item">
             <img src="${prod.image}" alt="${prod.name}" onerror="this.src='./imagenes/placeholder.jpg'">
             <div>
-            <div class="prod-name">${prod.name}</div>
-            <div class="prod-qty">Cantidad: ${prod.quantity}</div>
+              <div class="prod-name">${prod.name}</div>
+              <div class="prod-qty">Cantidad: ${prod.quantity}</div>
             </div>
-        </div>
+          </div>
         `).join('')}
       </div>`;
   }).join("");
