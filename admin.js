@@ -113,45 +113,57 @@ async function cargarVentas() {
         orderBy("fecha", "desc") // Order by most recent sales
     );
 
-    onSnapshot(q, (snapshot) => {
-        if (snapshot.empty) {
-            lista.innerHTML = "<p>Aún no se ha realizado ninguna venta.</p>";
-            return;
-        }
+  onSnapshot(q, (snapshot) => {
+    if (snapshot.empty) {
+        lista.innerHTML = "<p>Aún no se ha realizado ninguna venta.</p>";
+        return;
+    }
 
-        const ventasHtml = snapshot.docs.map(doc => {
-            const pedido = doc.data();
-            const fecha = pedido.fecha ? pedido.fecha.toDate().toLocaleString('es-AR') : 'Fecha no disponible';
+    const ventasHtml = snapshot.docs.map(doc => {
+        const pedido = doc.data();
+        const fecha = pedido.fecha ? pedido.fecha.toDate().toLocaleString('es-AR') : 'Fecha no disponible';
 
-            const itemsHtml = (pedido.items || []).map(item => `
-                <div class="prod-item">
-                    <img src="${item.image || './imagenes/placeholder.jpg'}" alt="${item.name}">
-                    <div>
-                        <div class="prod-name">${item.name}</div>
-                        <div class="prod-qty">Cantidad: ${item.quantity} | Precio: $${(item.price || 0).toLocaleString()}</div>
-                    </div>
+        // ----- ⭐ Encuesta de satisfacción -----
+        const satisfaccion = pedido.satisfaccion || 0;
+        const starsHtml = satisfaccion
+          ? `<span class="satisfaccion-badge" title="Satisfacción del cliente">
+               ${'★'.repeat(satisfaccion)}${'☆'.repeat(5 - satisfaccion)}
+             </span>`
+          : '<span class="satisfaccion-badge" style="opacity:.4">Sin calificar</span>';
+
+        const itemsHtml = (pedido.items || []).map(item => `
+            <div class="prod-item">
+                <img src="${item.image || './imagenes/placeholder.jpg'}" alt="${item.name}">
+                <div>
+                    <div class="prod-name">${item.name}</div>
+                    <div class="prod-qty">Cantidad: ${item.quantity} | Precio: $${(item.price || 0).toLocaleString()}</div>
                 </div>
-            `).join('');
+            </div>
+        `).join('');
 
-            return `
-                <div class="pedido-card">
-                    <p><strong>ID Pedido:</strong> ${doc.id}</p>
-                    <p><strong>Fecha:</strong> ${fecha}</p>
-                    <p><strong>Cliente:</strong> ${pedido.usuario || 'No especificado'}</p>
-                    <p><strong>Total:</strong> $${(pedido.totalFinal || 0).toLocaleString()}</p>
-                    <p><strong>Entrega:</strong> ${pedido.tipoEntrega === 'retiro' ? 'Retiro en local' : 'Envío a domicilio'}</p>
-                    <p><strong>Estado:</strong> <span class="estado finalizado"><i class="fas fa-check-circle"></i></span></p>
-                    ${itemsHtml ? `<h4>Productos:</h4>${itemsHtml}` : ''}
-                </div>
-            `;
-        }).join('');
+        return `
+            <div class="pedido-card">
+                <p><strong>ID Pedido:</strong> ${doc.id}</p>
+                <p><strong>Fecha:</strong> ${fecha}</p>
+                <p><strong>Cliente:</strong> ${pedido.usuario || 'No especificado'}</p>
+                <p><strong>Total:</strong> $${(pedido.totalFinal || 0).toLocaleString()}</p>
+                <p><strong>Entrega:</strong> ${pedido.tipoEntrega === 'retiro' ? 'Retiro en local' : 'Envío a domicilio'}</p>
+                <p style="display:flex;justify-content:space-between;align-items:center">
+                  <strong>Estado:</strong>
+                  <span class="estado finalizado"><i class="fas fa-check-circle"></i> Finalizado</span>
+                  ${starsHtml}
+                </p>
+                ${itemsHtml ? `<h4>Productos:</h4>${itemsHtml}` : ''}
+            </div>
+        `;
+    }).join('');
 
-        lista.innerHTML = ventasHtml;
+    lista.innerHTML = ventasHtml;
 
-    }, (error) => {
-        console.error("Error al cargar las ventas: ", error);
-        lista.innerHTML = "<p>Ocurrió un error al cargar las ventas. Revisa la consola para más detalles.</p>";
-    });
+}, (error) => {
+    console.error("Error al cargar las ventas: ", error);
+    lista.innerHTML = "<p>Ocurrió un error al cargar las ventas. Revisa la consola para más detalles.</p>";
+});
 }
 
 // --- PRODUCTS TAB ---

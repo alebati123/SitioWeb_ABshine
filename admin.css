@@ -273,4 +273,10 @@
         grid-template-columns: 1fr;
     }
 }
-
+/* ----- Satisfacción en panel admin ----- */
+.satisfaccion-badge {
+  margin-left: auto;
+  font-size: 1.2rem;
+  color: #ffc107; /* amarillo estrella */
+  letter-spacing: 1px;
+}
