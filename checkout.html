@@ -16,13 +16,11 @@
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
-
     .checkout-container h2 {
       text-align: center;
       color: #cc117b;
       margin-bottom: 1.5rem;
     }
-
     .checkout-item {
       display: flex;
       align-items: center;
@@ -30,45 +28,35 @@
       padding: 1rem 0;
       border-bottom: 1px solid #eee;
     }
-
     .checkout-item img {
       width: 80px;
       height: 80px;
       object-fit: cover;
       border-radius: 8px;
     }
-
-    .item-details {
-      flex: 1;
-    }
-
+    .item-details { flex: 1; }
     .item-details h3 {
       margin: 0 0 0.3rem;
       font-size: 1.1rem;
       color: #333;
     }
-
     .item-details .details {
       font-size: 0.9rem;
       color: #666;
     }
-
     .item-details .price {
       font-weight: 600;
       color: #cc117b;
     }
-
     .item-details .quantity {
       font-size: 0.9rem;
       color: #444;
     }
-
     .item-total {
       font-weight: bold;
       font-size: 1.1rem;
       color: #222;
     }
-
     .checkout-total {
       display: flex;
       justify-content: space-between;
@@ -78,13 +66,11 @@
       color: #cc117b;
       margin-top: 1.5rem;
     }
-
     .checkout-actions {
       display: flex;
       gap: 1rem;
       margin-top: 2rem;
     }
-
     .checkout-btn,
     .continue-shopping {
       flex: 1;
@@ -96,37 +82,27 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
     .checkout-btn {
       background: #cc117b;
       color: white;
     }
-
     .checkout-btn:hover {
       background: #a00e62;
     }
-
     .continue-shopping {
       background: #f0f0f0;
       color: #333;
     }
-
     .continue-shopping:hover {
       background: #e0e0e0;
     }
-
-    /* NUEVOS ESTILOS */
-    #opciones-entrega {
-      margin-top: 2rem;
-    }
-
+    #opciones-entrega { margin-top: 2rem; }
     #datos-retiro, #datos-envio {
       margin-top: 1.5rem;
       padding: 1rem;
       background: #f9f9f9;
       border-radius: 8px;
     }
-
     #datos-retiro a {
       display: inline-flex;
       align-items: center;
@@ -137,21 +113,77 @@
       border-radius: 6px;
       text-decoration: none;
     }
-
     @media (max-width: 600px) {
       .checkout-item {
         flex-direction: column;
         align-items: flex-start;
       }
-
       .checkout-item img {
         width: 100%;
         height: 150px;
       }
-
       .checkout-actions {
         flex-direction: column;
       }
+    }
+
+    /* ===== Modal encuesta ===== */
+    #encuesta-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .encuesta-box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+    }
+    .encuesta-box h3 {
+      color: #cc117b;
+      margin-top: 0;
+    }
+    .estrellas {
+      font-size: 2.2rem;
+      cursor: pointer;
+      margin: .5rem 0;
+    }
+    .estrellas span {
+      margin: 0 .3rem;
+      opacity: .4;
+      transition: .2s;
+    }
+    .estrellas span:hover,
+    .estrellas span.selected {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    .btn-primary {
+      background: #cc117b;
+      color: #fff;
+      border: none;
+      padding: .6rem 1.4rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    .close-btn {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #666;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -265,20 +297,20 @@
 
     <!-- =====  DATOS DE ENVÍO / TRANSFERENCIA  ===== -->
     <div id="datos-envio" style="display:none; margin-top:1.5rem;">
-  <h4>Datos para transferir</h4>
-  <p><strong>CBU:</strong> 4530000800016997302236</p>
-  <p><strong>Alias:</strong> ABSHINE</p>
-  <p><strong>Titular:</strong> Alejandro Batistoni</p>
-  <hr>
-  <h4>Envío a:</h4>
-  <p id="envio-datos-usuario"></p>
-  <hr>
-  <h4>Costo de envío:</h4>
-  <p id="envio-costo">Calculando...</p>
-  <hr>
-  <h4>Total final:</h4>
-  <p id="total-final" style="font-weight:bold;color:#cc117b;font-size:1.3rem;"></p>
-</div>
+      <h4>Datos para transferir</h4>
+      <p><strong>CBU:</strong> 4530000800016997302236</p>
+      <p><strong>Alias:</strong> ABSHINE</p>
+      <p><strong>Titular:</strong> Alejandro Batistoni</p>
+      <hr>
+      <h4>Envío a:</h4>
+      <p id="envio-datos-usuario"></p>
+      <hr>
+      <h4>Costo de envío:</h4>
+      <p id="envio-costo">Calculando...</p>
+      <hr>
+      <h4>Total final:</h4>
+      <p id="total-final" style="font-weight:bold;color:#cc117b;font-size:1.3rem;"></p>
+    </div>
 
     <!-- =====  BOTONES FINALES  ===== -->
     <div class="checkout-actions" style="margin-top:2rem;">
@@ -356,27 +388,25 @@
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="carrito-autenticacion.js"></script>
 <script type="module">
-  import { collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { collection, getDocs, addDoc, serverTimestamp, query, where, orderBy, limit, updateDoc, doc, getDoc }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   import { db } from "./firebase-config.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { auth } from "./firebase-config.js";
-  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  
 
   let cart = JSON.parse(localStorage.getItem("abshine_cart")) || [];
   let usuarioLogueado = null;
 
+  /* ---------- CARGAR CHECKOUT ---------- */
   function loadCheckout() {
     const container = document.getElementById("checkout-items");
-    const total = document.getElementById("checkout-total");
-    if (cart.length === 0) {
-      container.innerHTML = `<p style="text-align:center; color:#888;">Tu carrito está vacío.</p>`;
-      total.textContent = "$0";
+    const totalEl   = document.getElementById("checkout-total");
+    if (!cart.length) {
+      container.innerHTML = `<p style="text-align:center;color:#888;">Tu carrito está vacío.</p>`;
+      totalEl.textContent = "$0";
       return;
     }
-
-    let html = "";
-    let totalPrice = 0;
+    let html = "", total = 0;
     cart.forEach(item => {
       html += `
         <div class="checkout-item">
@@ -388,160 +418,151 @@
             <p class="quantity">Cantidad: ${item.quantity}</p>
           </div>
           <div class="item-total">$${(item.price * item.quantity).toLocaleString()}</div>
-        </div>
-      `;
-      totalPrice += item.price * item.quantity;
+        </div>`;
+      total += item.price * item.quantity;
     });
-
     container.innerHTML = html;
-    total.textContent = "$" + totalPrice.toLocaleString();
+    totalEl.textContent = "$" + total.toLocaleString();
   }
 
-  onAuthStateChanged(auth, user => {
-    if (!user) return;
-    usuarioLogueado = user;
-  });
+  /* ---------- FINALIZAR COMPRA ---------- */
+  window.finalizarCompra = async function () {
+    const user = usuarioLogueado;
+    if (!user) { alert("Iniciá sesión para finalizar la compra."); return; }
 
-  window.mostrarRetiro = () => {
-    document.getElementById('datos-retiro').style.display = 'block';
-    document.getElementById('datos-envio').style.display = 'none';
-    document.getElementById('confirm-purchase').style.display = 'inline-block';
+    const tipoEntrega = document.querySelector('input[name="entrega"]:checked')?.value;
+    if (!tipoEntrega) { alert("Elegí cómo querés recibir el pedido."); return; }
+
+    const totalCarrito = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    const envio = 5000;
+    const totalFinal = totalCarrito + (tipoEntrega === "envio" ? envio : 0);
+
+    let direccion = null;
+    if (tipoEntrega === "envio") {
+      const snap = await getDoc(doc(db, "clientes", user.email));
+      if (!snap.exists()) {
+        alert("Completá tus datos de envío en 'Mi Perfil' antes de continuar.");
+        location.href = "mi-perfil.html";
+        return;
+      }
+      direccion = snap.data();
+    }
+
+    const pedido = {
+      usuario: user.email.toLowerCase(),
+      items: cart,
+      totalCarrito,
+      envio: tipoEntrega === "envio" ? envio : 0,
+      totalFinal,
+      tipoEntrega,
+      direccion,
+      estado: "pendiente",
+      fecha: serverTimestamp(),
+      formaPago: "transferencia",
+      aliasCBU: "ABSHINE",
+      comentario: "",
+      trackingNumber: ""
+    };
+
+    try {
+      await addDoc(collection(db, "pedidos"), pedido);
+      localStorage.removeItem("abshine_cart");
+      mostrarEncuesta();          // abre la encuesta
+    } catch (e) {
+      console.error(e);
+      alert("Error al registrar el pedido.");
+    }
   };
 
+  /* ---------- ENTREGA ---------- */
+  window.mostrarRetiro = () => {
+    document.getElementById("datos-retiro").style.display = "block";
+    document.getElementById("datos-envio").style.display = "none";
+    document.getElementById("confirm-purchase").style.display = "inline-block";
+  };
   window.mostrarEnvio = async () => {
-    document.getElementById('datos-retiro').style.display = 'none';
-    document.getElementById('datos-envio').style.display = 'block';
-
-    if (!usuarioLogueado) {
-      alert('Debes iniciar sesión para solicitar envío.');
-      return;
-    }
-
-    const snap = await getDoc(doc(db, 'clientes', usuarioLogueado.email));
+    document.getElementById("datos-retiro").style.display = "none";
+    document.getElementById("datos-envio").style.display = "block";
+    if (!usuarioLogueado) { alert("Debes iniciar sesión para solicitar envío."); return; }
+    const snap = await getDoc(doc(db, "clientes", usuarioLogueado.email));
     if (!snap.exists()) {
-      alert('Por favor, completá tus datos de envío en "Mi Perfil" antes de continuar.');
-      window.location.href = 'mi-perfil.html';
+      alert('Completá tus datos de envío en "Mi Perfil" antes de continuar.');
+      location.href = "mi-perfil.html";
       return;
     }
-
     const datos = snap.data();
-
-    // Cargar datos sin pisar el HTML
-    document.getElementById('envio-datos-usuario').innerHTML = `
+    document.getElementById("envio-datos-usuario").innerHTML = `
       <p><strong>${datos.nombre} ${datos.apellido}</strong></p>
       <p>${datos.direccion}, ${datos.localidad} (${datos.cp})</p>
       <p>${datos.provincia}</p>
-      <p>Tel: ${datos.telefono}</p>
-    `;
-
-    // Calcular envío
-    await calcularEnvio(datos.cp.trim());
-
-    // Mostrar botón final
-    document.getElementById('confirm-purchase').style.display = 'inline-block';
+      <p>Tel: ${datos.telefono}</p>`;
+    const costo = 5000;
+    const totalActual = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    document.getElementById("envio-costo").textContent = "$" + costo.toLocaleString();
+    document.getElementById("total-final").textContent = "$" + (totalActual + costo).toLocaleString();
+    document.getElementById("confirm-purchase").style.display = "inline-block";
   };
 
-async function calcularEnvio(codigoPostalDestino) {
-  console.log('Modo demo: envío fijo a $5000');
+  /* ---------- AUTH ---------- */
+  onAuthStateChanged(auth, user => {
+    if (user) usuarioLogueado = user;
+  });
 
-  const costo = 5000;
-  const totalActual = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const totalFinal = totalActual + costo;
-
-  document.getElementById('envio-costo').textContent = `$${costo.toLocaleString()}`;
-  document.getElementById('total-final').textContent = `$${totalFinal.toLocaleString()}`;
-}
-
-window.finalizarCompra = async () => {
-  const user = usuarioLogueado;
-  if (!user) {
-    alert('Iniciá sesión para finalizar la compra.');
-    return;
-  }
-
-  const tipoEntrega = document.querySelector('input[name="entrega"]:checked')?.value;
-  if (!tipoEntrega) {
-    alert('Elegí cómo querés recibir el pedido.');
-    return;
-  }
-
-  const totalCarrito = cart.reduce((s, i) => s + i.price * i.quantity, 0);
-  const envio = 5000;
-  const totalFinal = totalCarrito + envio;
-
-  let direccion = null;
-  if (tipoEntrega === 'envio') {
-    const snap = await getDoc(doc(db, 'clientes', user.email));
-    if (!snap.exists()) {
-      alert('Completá tus datos de envío en "Mi Perfil" antes de continuar.');
-      return;
-    }
-    direccion = snap.data();
-  }
-
-  const pedido = {
-    usuario: user.email,
-    items: cart,
-    totalCarrito,
-    envio,
-    totalFinal,
-    tipoEntrega,
-    direccion,
-    estado: 'pendiente',
-    fecha: serverTimestamp(),
-    formaPago: 'transferencia',
-    aliasCBU: 'ABSHINE',
-    comentario: '',
-    trackingNumber: ''
-  };
-
-  try {
-    await addDoc(collection(db, 'pedidos'), pedido);
-    alert('¡Pedido registrado! Te contactaremos por WhatsApp.');
-    localStorage.removeItem('abshine_cart');
-    location.href = 'mis-pedidos.html';
-  } catch (e) {
-    console.error(e);
-    alert('Error al registrar el pedido.');
-  }
-};
-
-  // Cargar categorías en menú
-  async function loadMenuCategories() {
-    const container = document.getElementById("menu-categorias");
-    if (!container) return;
-    const snap = await getDocs(collection(db, "categorias"));
-    container.innerHTML = "";
-    snap.forEach(d => {
-      const c = d.data();
-      if (!c.activa) return;
-      container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
-    });
-  }
-
-  // Inicializar
+  /* ---------- INIT ---------- */
   loadCheckout();
-  loadMenuCategories();
 </script>
 
-<!-- ÚNICO SCRIPT PARA MENÚ + CARRITO -->
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="carrito-autenticacion.js"></script>
-<script type="module">
-  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { db } from "./firebase-config.js";
-  async function loadMenuCategories() {
-    const container = document.getElementById("menu-categorias");
-    if (!container) return;
-    const snap = await getDocs(collection(db, "categorias"));
-    container.innerHTML = "";
-    snap.forEach(d => {
-      const c = d.data();
-      if (!c.activa) return;
-      container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
-    });
+<!-- ===== MODAL ENCUESTA ===== -->
+<div id="encuesta-modal" class="modal-overlay" style="display:none;">
+  <div class="encuesta-box">
+    <button class="close-btn" onclick="cerrarEncuesta()">✖</button>
+    <h3>¿Qué tan feliz estás con tu compra?</h3>
+    <div id="estrellas" class="estrellas">
+      <span data-val="1">😡</span>
+      <span data-val="2">😕</span>
+      <span data-val="3">😐</span>
+      <span data-val="4">😊</span>
+      <span data-val="5">😍</span>
+    </div>
+    <small id="encuesta-msg"></small>
+    <br>
+    <button class="btn-primary" onclick="guardarEncuesta()">Guardar y ver mis pedidos</button>
+  </div>
+</div>
+
+<!-- ===== SCRIPT GLOBAL (encuesta) ===== -->
+<script>
+  let satisfaccion = 0;
+
+  /* --- funciones que el HTML puede llamar --- */
+  function mostrarEncuesta() {
+    const modal = document.getElementById('encuesta-modal');
+    if (!modal) { console.warn('❌ <div id="encuesta-modal"> no encontrado'); return; }
+    modal.style.display = 'flex';
   }
-  document.addEventListener("DOMContentLoaded", loadMenuCategories);
+  function cerrarEncuesta() {
+    document.getElementById('encuesta-modal').style.display = 'none';
+  }
+  async function guardarEncuesta() {
+    if (satisfaccion === 0) { alert('Por favor calificá tu experiencia.'); return; }
+    /* (si usas Firestore migrá el updateDoc aquí) */
+    cerrarEncuesta();
+    location.href = 'mis-pedidos.html';
+  }
+
+  /* --- listeners de estrellas --- */
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#estrellas span').forEach(star => {
+      star.addEventListener('click', () => {
+        satisfaccion = parseInt(star.dataset.val);
+        document.querySelectorAll('#estrellas span').forEach((s, i) => {
+          s.classList.toggle('selected', i < satisfaccion);
+        });
+        document.getElementById('encuesta-msg').textContent =
+          satisfaccion === 5 ? '¡Nos pone muy felices!' : `Gracias por tu ${satisfaccion} estrella(s)`;
+      });
+    });
+  });
 </script>
 
 </body>
