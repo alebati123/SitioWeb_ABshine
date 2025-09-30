@@ -53,26 +53,19 @@
                             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                         </button>
                     </div>
-                                      <script type="module">
-                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+                    <script type="module">
                     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
                     import { auth } from "./firebase-config.js";
 
-                    onAuthStateChanged(auth, async (user) => {
-                      const adminLink = document.getElementById("admin-link");
-                      if (!user) {
-                        adminLink.style.display = "none";
-                        return;
-                      }
-
-                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
-                      if (docSnap.exists() && docSnap.data().role === "admin") {
+                    onAuthStateChanged(auth, user => {
+                        const adminLink = document.getElementById("admin-link");
+                        if (user && user.email === "admin@abshine.com") {
                         adminLink.style.display = "block";
-                      } else {
+                        } else {
                         adminLink.style.display = "none";
-                      }
+                        }
                     });
-                  </script>
+                    </script>
                 </div>
             </div>
         </div>
@@ -103,16 +96,10 @@
             <!-- Tabs -->
             <div class="admin-tabs">
                 <button class="admin-tab active" data-tab="products">
-                    <i class="fas fa-box"></i> Productos
+                <i class="fas fa-box"></i> Productos
                 </button>
-                <button class="admin-tab" data-tab="stats">
-                    <i class="fas fa-chart-bar"></i> Estadísticas
-                </button>
-                <button class="admin-tab" data-tab="catalog">
-                    <i class="fas fa-eye"></i> Vista Previa
-                </button>
-                <button class="admin-tab" data-tab="categories">
-                <i class="fas fa-tags"></i> Categorías
+                <button class="admin-tab" data-tab="ventas">
+                <i class="fas fa-receipt"></i> Ventas
                 </button>
             </div>
 
@@ -127,7 +114,16 @@
                         <i class="fas fa-plus"></i> Agregar Producto
                     </button>
                 </div>
-
+                 <!-- Ventas Tab -->
+                <div id="ventas-tab" class="tab-content">
+                <div class="products-header">
+                    <div>
+                    <h2>Todos los Pedidos</h2>
+                    <p>Detalle de ventas realizadas</p>
+                    </div>
+                </div>
+                <div id="ventas-list" class="products-list-admin"></div>
+                </div>   
                 <!-- Filters -->
                 <div class="filters-container">
                     <div class="filters-row">
@@ -377,8 +373,7 @@
         </div>
     </div>
 
-    <script src="carrito-autenticacion.js"></script>
-  
+    <script type="module" src="carrito-autenticacion.js"></script>
 
     <!-- Admin Login Modal -->
 <div id="admin-login-modal" class="modal-overlay">
@@ -408,11 +403,17 @@
 <script type="module" src="carrito-autenticacion.js"></script>
 <script type="module">
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { auth } from "./firebase-config.js";
+  import { auth, db } from "./firebase-config.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, async (user) => {
     const adminLink = document.getElementById("admin-link");
-    if (user && user.email === "admin@abshine.com") {
+    if (!user) {
+      adminLink.style.display = "none";
+      return;
+    }
+    const snap = await getDoc(doc(db, "usuarios", user.email));
+    if (snap.exists() && snap.data().role === "admin") {
       adminLink.style.display = "block";
     } else {
       adminLink.style.display = "none";
@@ -482,6 +483,7 @@
         abshineSystem.removeFromCart(id);
         break;
     }
+
   });
 </script>
 

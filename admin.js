@@ -156,7 +156,8 @@ document.getElementById("admin-login-form").onsubmit = async (e) => {
   }
 };
 
-/* ---------- CONTROL ACCESO ---------- */
+
+
 onAuthStateChanged(auth, user => {
   if (!user) {
     document.getElementById("admin-login-modal").classList.add("show");
@@ -170,80 +171,22 @@ onAuthStateChanged(auth, user => {
     cargarProductos();
   }
 
-// Cargar categorías en pestaña
-async function cargarCategorias() {
-  const snap = await getDocs(collection(db, "categorias"));
-  const lista = document.getElementById("categories-list");
-  lista.innerHTML = "";
-  snap.forEach(d => {
-    const c = d.data();
-    const div = document.createElement("div");
-    div.className = "product-card-admin";
-    div.innerHTML = `
-      <div class="product-info-admin" style="flex:1;">
-        <span class="product-category">${c.nombre}</span>
-        <p class="product-details-admin">Slug: ${c.slug} · Orden: ${c.orden}</p>
-      </div>
-      <div class="product-actions">
-        <button class="delete-btn" onclick="eliminarCategoria('${d.id}', '${c.slug}')">Eliminar</button>
-      </div>
-    `;
-    lista.appendChild(div);
-  });
+
+
+ let productos = [];
+let editandoId = null;
+let paginaActual = 1;
+const productosPorPagina = 6;
+
+// ===== FUNCION CAMBIO DE PESTAÑAS =====
+function showTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(tabName + '-tab').classList.add('active');
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
 }
-
-// Eliminar categoría
-window.eliminarCategoria = async (id, slug) => {
-  // Verificar que no haya productos usando esta categoría
-  const prodSnap = await getDocs(collection(db, "productos"));
-  const usada = prodSnap.docs.some(p => p.data().category === slug);
-  if (usada) {
-    alert("No podés eliminar esta categoría porque hay productos que la usan.");
-    return;
-  }
-  if (!confirm("¿Seguro querés eliminar esta categoría?")) return;
-  await deleteDoc(doc(db, "categorias", id));
-  alert("Categoría eliminada");
-  cargarCategorias();
-  loadMenuCategories(); // actualiza menú superior
-};
-
-// Pestaña categorías
-document.querySelector('[data-tab="categories"]').onclick = () => {
-  showTab("categories");
-  cargarCategorias();
-};
-
-// Abrir modal categoría
-document.getElementById("add-category-btn").onclick = () => {
-  document.getElementById("category-modal").classList.add("show");
-};
-
-// Cerrar modal categoría
-function cerrarModalCategoria() {
-  document.getElementById("category-modal").classList.remove("show");
-  document.getElementById("category-form").reset();
-}
-
-// Guardar categoría
-document.getElementById("category-form").onsubmit = async (e) => {
-  e.preventDefault();
-  const nombre = document.getElementById("category-name").value.trim();
-  const orden = parseInt(document.getElementById("category-order").value);
-  const slug = nombre.toLowerCase().replace(/\s+/g, '-');
-  await addDoc(collection(db, "categorias"), {
-    nombre,
-    slug,
-    orden,
-    activa: true
-  });
-  alert("Categoría agregada");
-  cerrarModalCategoria();
-  cargarCategorias();
-  loadMenuCategories(); // actualiza menú
-};
-
 });
+
 // ========= FILTRADO =========
 function filtrarYRenderizar() {
   const texto = document.getElementById("search-products").value.trim().toLowerCase();
@@ -270,6 +213,7 @@ function filtrarYRenderizar() {
       </div>
     </div>`).join("");
 }
+
 // ===== DEBUG: verificá valores =====
 function debugFiltro() {
   const cat = document.getElementById("filter-category").value;
@@ -279,11 +223,32 @@ function debugFiltro() {
   console.log("Productos después del filtro:", filtrados);
 }
 document.getElementById("filter-category").addEventListener("change", debugFiltro);
+
 // ===== FILTROS: conectamos después de que existan los elementos =====
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("search-products")?.addEventListener("input", filtrarYRenderizar);
   document.getElementById("filter-category")?.addEventListener("change", filtrarYRenderizar);
+
+// ===== FUNCIÓN CAMBIO DE PESTAÑAS =====
+function showTab(tabName) {
+  // Oculta todos los contenidos
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  // Quita active de todos los botones
+  document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+  // Muestra solo el tab seleccionado
+  document.getElementById(tabName + '-tab').classList.add('active');
+  // Marca el botón como activo
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+}
+
+// ===== CONECTAR EVENTO VENTAS =====
+document.querySelector('[data-tab="ventas"]').onclick = () => {
+  showTab("ventas");
+  cargarVentas();
+};
+
 });
+
 function renderizarPagina() {
   const inicio = (paginaActual - 1) * productosPorPagina;
   const fin    = inicio + productosPorPagina;
@@ -307,12 +272,12 @@ function renderizarPagina() {
 
   pintarBotonesPaginacion();
 }
+
 function pintarBotonesPaginacion() {
   const totalPaginas = Math.ceil(productos.length / productosPorPagina);
   const div = document.getElementById("pagination");
   div.innerHTML = "";
 
-  // Botón "Anterior"
   const btnAnt = document.createElement("button");
   btnAnt.className = "btn-pagination";
   btnAnt.innerHTML = '<i class="fas fa-chevron-left"></i>';
@@ -320,9 +285,8 @@ function pintarBotonesPaginacion() {
   btnAnt.onclick = () => { paginaActual--; renderizarPagina(); };
   div.appendChild(btnAnt);
 
-  // Números de página (máx. 5 visibles)
   const inicio = Math.max(1, paginaActual - 2);
-  const fin    = Math.min(totalPaginas, inicio + 4);
+  const fin = Math.min(totalPaginas, inicio + 4);
   for (let i = inicio; i <= fin; i++) {
     const btn = document.createElement("button");
     btn.className = "btn-pagination" + (i === paginaActual ? " active" : "");
@@ -331,7 +295,6 @@ function pintarBotonesPaginacion() {
     div.appendChild(btn);
   }
 
-  // Botón "Siguiente"
   const btnSig = document.createElement("button");
   btnSig.className = "btn-pagination";
   btnSig.innerHTML = '<i class="fas fa-chevron-right"></i>';
@@ -339,3 +302,42 @@ function pintarBotonesPaginacion() {
   btnSig.onclick = () => { paginaActual++; renderizarPagina(); };
   div.appendChild(btnSig);
 }
+
+function showTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(tabName + '-tab').classList.add('active');
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+}
+
+async function cargarVentas() {
+  const snap = await getDocs(collection(db, "pedidos"));
+  const lista = document.getElementById("ventas-list");
+  lista.innerHTML = "";
+  if (snap.empty) {
+    lista.innerHTML = "<p style='padding:1rem;'>No hay pedidos aún.</p>";
+    return;
+  }
+  snap.forEach(doc => {
+    const p = doc.data();
+    const fecha = p.fecha?.toDate().toLocaleString() || "Sin fecha";
+    const items = (p.items || []).map(i =>
+      `<li>${i.quantity} × ${i.name} ($${i.price})</li>`
+    ).join("");
+    lista.innerHTML += `
+      <div class="product-card-admin" style="flex-direction:column; align-items:start;">
+        <div><strong>Fecha:</strong> ${fecha}</div>
+        <div><strong>Cliente:</strong> ${p.usuario || "N/A"}</div>
+        <div><strong>Total:</strong> $${p.totalFinal || 0}</div>
+        <div><strong>Estado:</strong> ${p.estado || "pendiente"}</div>
+        <div><strong>Items:</strong><ul style="margin:.5rem 0 0 1.2rem;">${items}</ul></div>
+      </div>`;
+  });
+}
+
+  // ===== EVENTOS PESTAÑAS =====
+document.querySelector('[data-tab="products"]').onclick = () => showTab("products");
+document.querySelector('[data-tab="ventas"]').onclick   = () => {
+  showTab("ventas");
+  cargarVentas();
+};
