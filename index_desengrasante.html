@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style_productos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>ABSHINE</title>
+    <title>ABSHINE - Desengrasante</title>
 </head>
 <body>
 <header class="site-header">
@@ -54,42 +54,22 @@
                             <p id="display-name" class="user-name">Usuario</p>
                             <p id="display-email" class="user-email">user@test.com</p>
                         </div>
-                        <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
-                        <a href="mis-pedidos.html" class="dropdown-item">Mis Pedidos</a>
-                        <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
+                        <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
+                        <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
+                        <a href="admin.html" class="dropdown-item" id="admin-link">
                           <i class="fas fa-cogs"></i> Panel Admin
                         </a>                        
                         <button id="logout-btn" class="dropdown-item logout">
                             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                         </button>
                     </div>
-                                      <script type="module">
-                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-                    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-                    import { auth } from "./firebase-config.js";
-
-                    onAuthStateChanged(auth, async (user) => {
-                      const adminLink = document.getElementById("admin-link");
-                      if (!user) {
-                        adminLink.style.display = "none";
-                        return;
-                      }
-
-                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
-                      if (docSnap.exists() && docSnap.data().role === "admin") {
-                        adminLink.style.display = "block";
-                      } else {
-                        adminLink.style.display = "none";
-                      }
-                    });
-                  </script>
                 </div>
             </div>
         </div>
     </header>
       <section class="productos-novedades">
-  <div id="productos-dinamicos"></div>
-</section>
+        <div id="productos-dinamicos"></div>
+      </section>
       <!-- Shopping Cart Modal -->
     <div id="cart-modal" class="modal-overlay">
         <div class="cart-container">
@@ -113,7 +93,6 @@
         </div>
     </div>
 <!-- Login Modal -->
-    <!-- Login Modal -->
     <div id="login-modal" class="modal-overlay">
         <div class="auth-container">
             <div class="auth-header">
@@ -209,86 +188,117 @@
       </footer>
       <script type="module" src="firebase-config.js"></script>
       <script type="module" src="carrito-autenticacion.js"></script>
-      <script type="module">
-      import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-      import { auth } from "./firebase-config.js";
+      
+    <!-- Script unificado para Header (menú de categorías y dropdown de perfil) -->
+    <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { auth, db } from "./firebase-config.js";
 
-      onAuthStateChanged(auth, user => {
-        const adminLink = document.getElementById("admin-link");
-        if (user && user.email === "admin@abshine.com") {
-          adminLink.style.display = "block";
-        } else {
-          adminLink.style.display = "none";
+        // Función para cargar las categorías del menú de navegación
+        async function loadMenuCategories() {
+            const container = document.getElementById("menu-categorias");
+            if (!container) return;
+            try {
+                const snap = await getDocs(collection(db, "categorias"));
+                let html = "";
+                snap.forEach(d => {
+                    const c = d.data();
+                    if (c.activa) {
+                        html += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+                    }
+                });
+                container.innerHTML = html;
+            } catch (error) {
+                console.error("Error al cargar las categorías del menú:", error);
+            }
         }
-      });
- </script>
-      <script type="module">
-  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { db } from "./firebase-config.js";
 
-  const contenedor = document.getElementById("productos-dinamicos");
+        // Listener para cambios de autenticación y gestión del menú de usuario
+        onAuthStateChanged(auth, async (user) => {
+            const adminLink = document.getElementById("admin-link");
+            const perfilLink = document.getElementById("mi-perfil-link");
+            const pedidosLink = document.getElementById("mis-pedidos-link");
 
-  async function cargarProductos() {
-    const snapshot = await getDocs(collection(db, "productos"));
-    const productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Ocultar todos los enlaces condicionales por defecto
+            if (adminLink) adminLink.style.display = "none";
+            if (perfilLink) perfilLink.style.display = "none";
+            if (pedidosLink) pedidosLink.style.display = "none";
 
-    if (productos.length === 0) {
-      contenedor.innerHTML = `<p style="text-align:center; color:#888;">No hay productos para mostrar.</p>`;
-      return;
-    }
+            if (user) {
+                try {
+                    const docSnap = await getDoc(doc(db, "usuarios", user.email));
+                    if (docSnap.exists() && docSnap.data().role === "admin") {
+                        // Si es Admin, mostrar solo "Panel Admin"
+                        if (adminLink) adminLink.style.display = "block";
+                    } else {
+                        // Si es un usuario normal, mostrar "Mi Perfil" y "Mis Pedidos"
+                        if (perfilLink) perfilLink.style.display = "block";
+                        if (pedidosLink) pedidosLink.style.display = "block";
+                    }
+                } catch (error) {
+                    console.error("Error al verificar el rol del usuario:", error);
+                    // Por seguridad, mostrar la vista de usuario normal en caso de error
+                    if (perfilLink) perfilLink.style.display = "block";
+                    if (pedidosLink) pedidosLink.style.display = "block";
+                }
+            }
+        });
 
-    const filtrados = productos.filter(p => p.category?.toLowerCase() === "desengrasante");
+        // Cargar las categorías cuando el DOM esté listo
+        document.addEventListener("DOMContentLoaded", loadMenuCategories);
+    </script>
+      
+    <script type="module">
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { db } from "./firebase-config.js";
 
-    if (filtrados.length === 0) {
-      contenedor.innerHTML = `<p style="text-align:center; color:#888;">No hay productos en la categoría "Desengrasante".</p>`;
-      return;
-    }
+        async function cargarProductos() {
+            const contenedor = document.getElementById("productos-dinamicos");
+            try {
+                const snapshot = await getDocs(collection(db, "productos"));
+                const productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    contenedor.innerHTML = `
-      <div class="contenedor mas-vendidos">
-        <h2>Desengrasante</h2>
-        <div class="productos-grid">
-          ${filtrados.map(p => `
-            <div class="caja">
-              <div class="imagen-marco">
-                <img src="${p.image}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
-                <div class="producto-info">
-                  <h3>${p.name}</h3>
-                  <p class="producto-detalles">${p.details}</p>
-                  <p class="producto-precio">$${p.price.toLocaleString()}</p>
-                  <button class="add-to-cart-btn" onclick="addProductToCart('${p.id}')">
-                    Agregar al Carrito
-                  </button>
+                const filtrados = productos.filter(p => p.category?.toLowerCase() === "desengrasante");
+
+                if (filtrados.length === 0) {
+                contenedor.innerHTML = `<p style="text-align:center; color:#888;">No hay productos en la categoría "Desengrasante".</p>`;
+                return;
+                }
+
+                contenedor.innerHTML = `
+                <div class="contenedor mas-vendidos">
+                    <h2>Desengrasante</h2>
+                    <div class="productos-grid">
+                    ${filtrados.map(p => `
+                        <div class="caja">
+                        <div class="imagen-marco">
+                            <img src="${p.image}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
+                            <div class="producto-info">
+                            <h3>${p.name}</h3>
+                            <p class="producto-detalles">${p.details || ''}</p>
+                            <p class="producto-precio">$${p.price.toLocaleString()}</p>
+                            <button class="add-to-cart-btn" onclick="addProductToCart('${p.id}')">
+                                Agregar al Carrito
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                    `).join("")}
+                    </div>
                 </div>
-              </div>
-            </div>
-          `).join("")}
-        </div>
-      </div>
-    `;
-  }
+                `;
+            } catch (error) {
+                console.error("Error cargando productos:", error);
+                contenedor.innerHTML = `<p style="text-align:center; color:red;">Error al cargar productos.</p>`;
+            }
+        }
 
-  cargarProductos();
+        cargarProductos();
     </script>
 
-<script type="module">
-  import { db, auth, collection, getDocs } from "./firebase-config.js";
-  async function loadMenuCategories() {
-    const container = document.getElementById("menu-categorias");
-    if (!container) return;
-    const snap = await getDocs(collection(db, "categorias"));
-    container.innerHTML = "";
-    snap.forEach(d => {
-      const c = d.data();
-      if (!c.activa) return;
-      container.innerHTML += `<li><a href="index_${c.slug}.html">${c.nombre.toUpperCase()}</a></li>`;
-    });
-  }
-  document.addEventListener("DOMContentLoaded", loadMenuCategories);
-</script>
-
 <script>
-  // ✅ Botones +, –, 🗑️ dentro del modal del carrito
+  // Script para botones +, –, 🗑️ dentro del modal del carrito
   document.addEventListener("click", e => {
     const cartItem = e.target.closest(".cart-item");
     if (!cartItem) return;
@@ -297,6 +307,7 @@
     const action = e.target.closest("[data-action]")?.dataset.action;
     if (!action) return;
 
+    // Asumiendo que `abshineSystem` está disponible globalmente desde `carrito-autenticacion.js`
     switch (action) {
       case "plus":
         abshineSystem.updateQuantity(id, parseInt(cartItem.querySelector(".quantity").textContent) + 1);
@@ -314,3 +325,4 @@
 
 </body>
 </html>
+

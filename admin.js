@@ -113,25 +113,25 @@ async function cargarVentas() {
         orderBy("fecha", "desc") // Order by most recent sales
     );
 
-  onSnapshot(q, (snapshot) => {
-    if (snapshot.empty) {
-        lista.innerHTML = "<p>Aún no se ha realizado ninguna venta.</p>";
-        return;
-    }
+    onSnapshot(q, (snapshot) => {
+        if (snapshot.empty) {
+            lista.innerHTML = "<p>Aún no se ha realizado ninguna venta.</p>";
+            return;
+        }
 
-    const ventasHtml = snapshot.docs.map(doc => {
-        const pedido = doc.data();
-        const fecha = pedido.fecha ? pedido.fecha.toDate().toLocaleString('es-AR') : 'Fecha no disponible';
+        const ventasHtml = snapshot.docs.map(doc => {
+            const pedido = doc.data();
+            const fecha = pedido.fecha ? pedido.fecha.toDate().toLocaleString('es-AR') : 'Fecha no disponible';
 
-        // ----- ⭐ Encuesta de satisfacción -----
-        const satisfaccion = pedido.satisfaccion || 0;
-        const starsHtml = satisfaccion
-          ? `<span class="satisfaccion-badge" title="Satisfacción del cliente">
+            // ----- ⭐ Encuesta de satisfacción -----
+            const satisfaccion = pedido.satisfaccion || 0;
+            const starsHtml = satisfaccion ?
+                `<span class="satisfaccion-badge" title="Satisfacción del cliente">
                ${'★'.repeat(satisfaccion)}${'☆'.repeat(5 - satisfaccion)}
-             </span>`
-          : '<span class="satisfaccion-badge" style="opacity:.4">Sin calificar</span>';
+             </span>` :
+                '<span class="satisfaccion-badge" style="opacity:.4">Sin calificar</span>';
 
-        const itemsHtml = (pedido.items || []).map(item => `
+            const itemsHtml = (pedido.items || []).map(item => `
             <div class="prod-item">
                 <img src="${item.image || './imagenes/placeholder.jpg'}" alt="${item.name}">
                 <div>
@@ -141,13 +141,48 @@ async function cargarVentas() {
             </div>
         `).join('');
 
-        return `
+            // --- LÓGICA FINAL CORREGIDA ---
+            let entregaHtml = '';
+            if (pedido.tipoEntrega === 'retiro') {
+                entregaHtml = `<p><strong>Entrega:</strong> Retiro en local</p>`;
+            } else {
+                let datosEnvioContent = '<p>Datos de envío no disponibles.</p>';
+                
+                // La información de envío está en el objeto 'direccion' dentro del pedido
+                const datosFuente = pedido.direccion;
+
+                if (datosFuente && typeof datosFuente === 'object') {
+                     datosEnvioContent = `
+                        <p><strong>Recibe:</strong> ${datosFuente.nombre || ''} ${datosFuente.apellido || ''}</p>
+                        <p><strong>Dirección:</strong> ${datosFuente.direccion || 'No especificada'}</p>
+                        <p><strong>Ciudad:</strong> ${datosFuente.localidad || 'No especificada'}</p>
+                        <p><strong>Provincia:</strong> ${datosFuente.provincia || 'No especificada'}</p>
+                        <p><strong>CP:</strong> ${datosFuente.cp || 'No especificado'}</p>
+                        <p><strong>Teléfono:</strong> ${datosFuente.telefono || 'No especificado'}</p>
+                    `;
+                }
+
+                entregaHtml = `
+                    <p><strong>Entrega:</strong> Envío a domicilio</p>
+                    <div class="datos-envio-container">
+                        <button class="btn-ver-envio" data-target="envio-details-${doc.id}">
+                            Ver datos de envío <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="datos-envio-detalles" id="envio-details-${doc.id}">
+                            ${datosEnvioContent}
+                        </div>
+                    </div>
+                `;
+            }
+            // --- FIN de la corrección ---
+
+            return `
             <div class="pedido-card">
                 <p><strong>ID Pedido:</strong> ${doc.id}</p>
                 <p><strong>Fecha:</strong> ${fecha}</p>
                 <p><strong>Cliente:</strong> ${pedido.usuario || 'No especificado'}</p>
                 <p><strong>Total:</strong> $${(pedido.totalFinal || 0).toLocaleString()}</p>
-                <p><strong>Entrega:</strong> ${pedido.tipoEntrega === 'retiro' ? 'Retiro en local' : 'Envío a domicilio'}</p>
+                ${entregaHtml} 
                 <p style="display:flex;justify-content:space-between;align-items:center">
                   <strong>Estado:</strong>
                   <span class="estado finalizado"><i class="fas fa-check-circle"></i> Finalizado</span>
@@ -156,14 +191,29 @@ async function cargarVentas() {
                 ${itemsHtml ? `<h4>Productos:</h4>${itemsHtml}` : ''}
             </div>
         `;
-    }).join('');
+        }).join('');
 
-    lista.innerHTML = ventasHtml;
+        lista.innerHTML = ventasHtml;
 
-}, (error) => {
-    console.error("Error al cargar las ventas: ", error);
-    lista.innerHTML = "<p>Ocurrió un error al cargar las ventas. Revisa la consola para más detalles.</p>";
-});
+        // --- Event listeners para los botones de envío ---
+        document.querySelectorAll('.btn-ver-envio').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                const details = document.getElementById(targetId);
+                const icon = button.querySelector('i');
+                if (details) {
+                    details.classList.toggle('show');
+                    if (icon) {
+                        icon.classList.toggle('rotated');
+                    }
+                }
+            });
+        });
+
+    }, (error) => {
+        console.error("Error al cargar las ventas: ", error);
+        lista.innerHTML = "<p>Ocurrió un error al cargar las ventas. Revisa la consola para más detalles.</p>";
+    });
 }
 
 // --- PRODUCTS TAB ---
@@ -185,14 +235,17 @@ async function loadCategories() {
             filterCategorySelect.appendChild(opt);
         });
     } catch (error) {
-         console.error("Error cargando categorías en el panel:", error);
+        console.error("Error cargando categorías en el panel:", error);
     }
 }
 
 const cargarProductos = async () => {
     try {
         const snapshot = await getDocs(collection(db, "productos"));
-        productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        productos = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
         renderizarProductos();
     } catch (error) {
         console.error("Error cargando productos: ", error);

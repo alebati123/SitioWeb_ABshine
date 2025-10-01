@@ -49,10 +49,10 @@
                             <p id="display-name" class="user-name">Usuario</p>
                             <p id="display-email" class="user-email">user@test.com</p>
                         </div>
-                        <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
-                        <a href="mis-pedidos.html" class="dropdown-item">Mis Pedidos</a>
-                        <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
-                        <i class="fas fa-cogs"></i> Panel Admin
+                        <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
+                        <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
+                        <a href="admin.html" class="dropdown-item" id="admin-link">
+                           <i class="fas fa-cogs"></i> Panel Admin
                         </a>                        
                         <button id="logout-btn" class="dropdown-item logout">
                             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
@@ -219,26 +219,13 @@
     <script type="module" src="admin.js"></script>
     <script type="module" src="carrito-autenticacion.js"></script>
 
-    <!-- Scripts para funcionalidades del Header -->
+    <!-- Script unificado para Header (menú de categorías y dropdown de perfil) -->
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { auth } from "./firebase-config.js";
+        import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { auth, db } from "./firebase-config.js";
 
-        // Muestra el link de admin si el usuario es el administrador
-        onAuthStateChanged(auth, async (user) => {
-            const adminLink = document.getElementById("admin-link");
-            if (user && user.email === 'admin@abshine.com') {
-                adminLink.style.display = "block";
-            } else {
-                adminLink.style.display = "none";
-            }
-        });
-    </script>
-    <script type="module">
-        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { db } from "./firebase-config.js";
-
-        // Carga las categorías en el menú de navegación principal
+        // Función para cargar las categorías del menú de navegación
         async function loadMenuCategories() {
             const container = document.getElementById("menu-categorias");
             if (!container) return;
@@ -248,17 +235,48 @@
                 snap.forEach(d => {
                     const c = d.data();
                     if (c.activa) {
-                       html += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+                        html += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
                     }
                 });
                 container.innerHTML = html;
             } catch (error) {
-                console.error("Error cargando categorías del menú:", error);
+                console.error("Error al cargar las categorías del menú:", error);
             }
         }
+
+        // Listener para cambios de autenticación y gestión del menú de usuario
+        onAuthStateChanged(auth, async (user) => {
+            const adminLink = document.getElementById("admin-link");
+            const perfilLink = document.getElementById("mi-perfil-link");
+            const pedidosLink = document.getElementById("mis-pedidos-link");
+
+            // Ocultar todos los enlaces condicionales por defecto
+            if (adminLink) adminLink.style.display = "none";
+            if (perfilLink) perfilLink.style.display = "none";
+            if (pedidosLink) pedidosLink.style.display = "none";
+
+            if (user) {
+                try {
+                    const docSnap = await getDoc(doc(db, "usuarios", user.email));
+                    if (docSnap.exists() && docSnap.data().role === "admin") {
+                        // Si es Admin, mostrar solo "Panel Admin"
+                        if (adminLink) adminLink.style.display = "block";
+                    } else {
+                        // Si es un usuario normal, mostrar "Mi Perfil" y "Mis Pedidos"
+                        if (perfilLink) perfilLink.style.display = "block";
+                        if (pedidosLink) pedidosLink.style.display = "block";
+                    }
+                } catch (error) {
+                    console.error("Error al verificar el rol del usuario:", error);
+                    // Por seguridad, mostrar la vista de usuario normal en caso de error
+                    if (perfilLink) perfilLink.style.display = "block";
+                    if (pedidosLink) pedidosLink.style.display = "block";
+                }
+            }
+        });
+
+        // Cargar las categorías cuando el DOM esté listo
         document.addEventListener("DOMContentLoaded", loadMenuCategories);
     </script>
-
 </body>
 </html>
-
