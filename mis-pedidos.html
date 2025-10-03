@@ -187,11 +187,12 @@
             return;
         }
 
+        const email = user.email.toLowerCase();
         const q = query(
-      collection(db, "pedidos"),
-      where("uid", "==", user.uid), // <-- CAMBIO CLAVE: Usamos el UID del usuario
-      orderBy("fecha", "desc")
-      );
+            collection(db, "pedidos"),
+            where("usuario", "==", email),
+            orderBy("fecha", "desc")
+        );
 
         onSnapshot(q, snap => {
             const listaPedidos = document.getElementById("lista-pedidos");
