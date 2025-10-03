@@ -246,15 +246,27 @@
             <p id="display-name" class="user-name">Usuario</p>
             <p id="display-email" class="user-email">user@test.com</p>
           </div>
-          <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
-          <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
-          <a href="admin.html" class="dropdown-item" id="admin-link">
+          <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
+          <a href="mis-pedidos.html" class="dropdown-item">Mis Pedidos</a>
+          <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
             <i class="fas fa-cogs"></i> Panel Admin
           </a>
           <button id="logout-btn" class="dropdown-item logout">
             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
           </button>
         </div>
+        <script type="module">
+          import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+          import { auth } from "./firebase-config.js";
+          onAuthStateChanged(auth, user => {
+            const adminLink = document.getElementById("admin-link");
+            if (user && user.email === "admin@abshine.com") {
+              adminLink.style.display = "block";
+            } else {
+              adminLink.style.display = "none";
+            }
+          });
+        </script>
       </div>
     </div>
   </div>
@@ -348,67 +360,6 @@
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="carrito-autenticacion.js"></script>
 
-<!-- Script unificado para Header (menú de categorías y dropdown de perfil) -->
-<script type="module">
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { auth, db } from "./firebase-config.js";
-
-    // Función para cargar las categorías del menú de navegación
-    async function loadMenuCategories() {
-        const container = document.getElementById("menu-categorias");
-        if (!container) return;
-        try {
-            const snap = await getDocs(collection(db, "categorias"));
-            let html = "";
-            snap.forEach(d => {
-                const c = d.data();
-                if (c.activa) {
-                    html += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
-                }
-            });
-            container.innerHTML = html;
-        } catch (error) {
-            console.error("Error al cargar las categorías del menú:", error);
-        }
-    }
-
-    // Listener para cambios de autenticación y gestión del menú de usuario
-    onAuthStateChanged(auth, async (user) => {
-        const adminLink = document.getElementById("admin-link");
-        const perfilLink = document.getElementById("mi-perfil-link");
-        const pedidosLink = document.getElementById("mis-pedidos-link");
-
-        // Ocultar todos los enlaces condicionales por defecto
-        if (adminLink) adminLink.style.display = "none";
-        if (perfilLink) perfilLink.style.display = "none";
-        if (pedidosLink) pedidosLink.style.display = "none";
-
-        if (user) {
-            try {
-                const docSnap = await getDoc(doc(db, "usuarios", user.email));
-                if (docSnap.exists() && docSnap.data().role === "admin") {
-                    // Si es Admin, mostrar solo "Panel Admin"
-                    if (adminLink) adminLink.style.display = "block";
-                } else {
-                    // Si es un usuario normal, mostrar "Mi Perfil" y "Mis Pedidos"
-                    if (perfilLink) perfilLink.style.display = "block";
-                    if (pedidosLink) pedidosLink.style.display = "block";
-                }
-            } catch (error) {
-                console.error("Error al verificar el rol del usuario:", error);
-                // Por seguridad, mostrar la vista de usuario normal en caso de error
-                if (perfilLink) perfilLink.style.display = "block";
-                if (pedidosLink) pedidosLink.style.display = "block";
-            }
-        }
-    });
-
-    // Cargar las categorías cuando el DOM esté listo
-    document.addEventListener("DOMContentLoaded", loadMenuCategories);
-</script>
-
-
 <!-- SCRIPT PRINCIPAL DE LA PÁGINA -->
 <script type="module">
   import { collection, addDoc, serverTimestamp, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -472,10 +423,20 @@
     }
 
     const pedido = {
-      usuario: usuarioLogueado.email.toLowerCase(), items: cart, totalCarrito,
-      envio: tipoEntrega === "envio" ? envio : 0, totalFinal, tipoEntrega, direccion,
-      estado: "pendiente", fecha: serverTimestamp(), formaPago: "transferencia",
-      aliasCBU: "ABSHINE", comentario: "", trackingNumber: ""
+      uid: usuarioLogueado.uid, // <-- CAMBIO CLAVE: Guardamos el UID del usuario
+      usuario: usuarioLogueado.email.toLowerCase(), 
+      items: cart, 
+      totalCarrito,
+      envio: tipoEntrega === "envio" ? envio : 0, 
+      totalFinal, 
+      tipoEntrega, 
+      direccion,
+      estado: "pendiente", 
+      fecha: serverTimestamp(), 
+      formaPago: "transferencia",
+      aliasCBU: "ABSHINE", 
+      comentario: "", 
+      trackingNumber: ""
     };
 
     try {
@@ -538,8 +499,6 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    // onAuthStateChanged se maneja en el script unificado del header,
-    // pero necesitamos `usuarioLogueado` aquí también.
     onAuthStateChanged(auth, user => {
         usuarioLogueado = user;
     });
@@ -563,3 +522,4 @@
 
 </body>
 </html>
+
