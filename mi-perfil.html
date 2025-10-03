@@ -1,358 +1,250 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mi Perfil - ABshine</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  
-  <style>
-    .perfil-container {
-      max-width: 600px;
-      margin: 3rem auto;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.15);
-    }
-    .perfil-container h2 {
-      color: #cc117b;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-    .perfil-container label {
-      display: block;
-      margin: .75rem 0 .25rem;
-      font-weight: 500;
-    }
-    .perfil-container input,
-    .perfil-container select {
-      width: 100%;
-      padding: .6rem .75rem;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-    }
-    .perfil-container button {
-      margin-top: 1.2rem;
-      width: 100%;
-      padding: .75rem;
-      background: #cc117b;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .perfil-container button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-    .msg {
-      text-align: center;
-      margin-top: .75rem;
-      font-size: .9rem;
-    }
-    .msg.ok  { color: green; }
-    .msg.err { color: #dc3545; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - ABshine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.1);
+        }
+        .profile-container h2 {
+            text-align: center;
+            color: #cc117b;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: .5rem;
+            color: #555;
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: .75rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .profile-btn {
+            width: 100%;
+            padding: .8rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #cc117b;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color .3s;
+        }
+        .profile-btn:hover {
+            background-color: #a00e62;
+        }
+        #notification {
+            text-align: center;
+            padding: .75rem;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+            display: none;
+        }
+        #notification.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        #notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
 
-<!-- HEADER (copiá el que ya tenés de index.html) -->
- <header class="site-header">
-        <div class="header-container">
-          <div class="logo">
-            <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
-          </div>
-          <h1 class="site-title">ABshine</h1>
-          <nav class="main-nav">
+<header class="site-header">
+    <div class="header-container">
+        <div class="logo"><img src="./imagenes/Logotipo.png" alt="Logo de ABshine"></div>
+        <h1 class="site-title">ABshine</h1>
+        <nav class="main-nav">
             <ul class="menu-horizontal">
-              <li><a href="index.html">HOME</a></li>
-              <li class="has-submenu">
-                <a href="#">PRODUCTOS</a>
-                <ul class="menu-vertical" id="menu-categorias"></ul>
-              </li>
-              <li class="has-submenu">
-                <a href="#">CONTACTOS</a>
-                <ul class="menu-vertical">
-                  <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
-                  <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
-                  <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
-                </ul>
-              </li>
-              <li><a href="index_informacion.html">INFORMACIÓN</a></li>
+                <li><a href="index.html">HOME</a></li>
+                <li class="has-submenu">
+                    <a href="#">PRODUCTOS</a>
+                    <ul class="menu-vertical" id="menu-categorias"></ul>
+                </li>
+                <li><a href="#">CONTACTOS</a></li>
+                <li><a href="index_informacion.html">INFORMACIÓN</a></li>
             </ul>
-          </nav>
-          <div class="user-actions">
-                <button id="cart-toggle" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count" class="cart-count">0</span>
-                </button>
-                
-                <div id="auth-buttons" class="auth-buttons">
-                    <button id="login-btn" class="login-btn">Iniciar Sesión</button>
-                    <button id="register-btn" class="register-btn">Registrarse</button>
-                </div>
-                
-                <div id="user-profile" class="user-profile" style="display: none;">
-                    <button id="profile-toggle" class="profile-link">
-                        <i class="fas fa-user"></i>
-                        <span id="user-name">Usuario</span>
-                    </button>
-                  <div id="user-dropdown" class="user-dropdown">
-                    <div class="user-info">
-                      <p id="display-name" class="user-name">Usuario</p>
-                      <p id="display-email" class="user-email">user@test.com</p>
-                    </div>
-                    <a href="mi-perfil.html" class="dropdown-item">Mi Perfil</a>
-                    <a href="mis-pedidos.html" class="dropdown-item">Mis Pedidos</a>
-                    <a href="admin.html" class="dropdown-item" id="admin-link" style="display: none;">
-                      <i class="fas fa-cogs"></i> Panel Admin
-                    </a>
-                    <button id="logout-btn" class="dropdown-item logout">
-                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </button>
-                  </div>
-
-                  <!-- ✅ Script para mostrar "Panel Admin" solo si es admin -->
-                  <script type="module">
-                    import { db, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-                    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-                    import { auth } from "./firebase-config.js";
-
-                    onAuthStateChanged(auth, async (user) => {
-                      const adminLink = document.getElementById("admin-link");
-                      if (!user) {
-                        adminLink.style.display = "none";
-                        return;
-                      }
-
-                      const docSnap = await getDoc(doc(db, "usuarios", user.email));
-                      if (docSnap.exists() && docSnap.data().role === "admin") {
-                        adminLink.style.display = "block";
-                      } else {
-                        adminLink.style.display = "none";
-                      }
-                    });
-                  </script>
+        </nav>
+        <div class="user-actions">
+            <div id="user-profile" class="user-profile" style="display: none;">
+                <button id="profile-toggle" class="profile-link"><i class="fas fa-user"></i> <span id="user-name"></span></button>
+                <div id="user-dropdown" class="user-dropdown">
+                    <a href="mi-perfil.html" id="mi-perfil-link" class="dropdown-item">Mi Perfil</a>
+                    <a href="mis-pedidos.html" id="mis-pedidos-link" class="dropdown-item">Mis Pedidos</a>
+                    <a href="admin.html" id="admin-link" class="dropdown-item"><i class="fas fa-cogs"></i> Panel Admin</a>
+                    <button id="logout-btn" class="dropdown-item logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-<main class="perfil-container">
-  <h2><i class="fas fa-user-edit"></i> Mis datos de envío</h2>
-
-  <form id="perfil-form">
-    <label>Nombre</label>
-    <input type="text" name="nombre" required />
-
-    <label>Apellido</label>
-    <input type="text" name="apellido" required />
-
-    <label>Provincia</label>
-    <select name="provincia" required>
-      <option value="">Cargando provincias...</option>
-    </select>
-
-    <label>Localidad</label>
-    <input type="text" name="localidad" required />
-
-    <label>Código Postal</label>
-    <input type="text" name="cp" pattern="\d{4}" title="4 dígitos" required />
-
-    <label>Dirección (calle y número)</label>
-    <input type="text" name="direccion" required />
-
-    <label>Teléfono</label>
-    <input type="tel" name="telefono" required />
-
-    <label>DNI</label>
-    <input type="text" name="dni" pattern="\d{7,8}" title="Sin puntos ni espacios" required />
-
-    <label>Email (solo lectura)</label>
-    <input type="email" id="email" readonly />
-
-    <button type="submit">Guardar cambios</button>
-  </form>
-
-  <div id="msg" class="msg"></div>
+<main class="profile-container">
+    <h2><i class="fas fa-user-edit"></i> Mis Datos</h2>
+    <form id="profile-form">
+        <div class="form-group">
+            <label for="profile-nombre">Nombre</label>
+            <input type="text" id="profile-nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="profile-apellido">Apellido</label>
+            <input type="text" id="profile-apellido" required>
+        </div>
+        <div class="form-group">
+            <label for="profile-direccion">Dirección</label>
+            <input type="text" id="profile-direccion" required>
+        </div>
+        <div class="form-group">
+            <label for="profile-localidad">Localidad</label>
+            <input type="text" id="profile-localidad" required>
+        </div>
+        <div class="form-group">
+            <label for="profile-cp">Código Postal</label>
+            <input type="text" id="profile-cp" required>
+        </div>
+        <div class="form-group">
+            <label for="profile-provincia">Provincia</label>
+            <select id="profile-provincia" required>
+                <option value="">Cargando provincias...</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="profile-telefono">Teléfono</label>
+            <input type="tel" id="profile-telefono" required>
+        </div>
+        <button type="submit" class="profile-btn">Guardar Cambios</button>
+        <div id="notification"></div>
+    </form>
 </main>
 
-<div id="cart-modal" class="modal-overlay">
-        <div class="cart-container">
-            <div class="cart-header">
-                <h2>Carrito de Compras</h2>
-                <button id="cart-close" class="close-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="cart-items" class="cart-items">
-                <!-- Cart items will be populated by JavaScript -->
-            </div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cart-total" class="total-price">$0</span>
-                </div>
-                <button id="checkout-btn" class="checkout-btn">Proceder al Pago</button>
-                <button id="continue-shopping" class="continue-shopping">Continuar Comprando</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal-overlay">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h2>Iniciar Sesión</h2>
-                <button class="close-btn" onclick="closeModal('login-modal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="login-form" class="auth-form">
-                <div class="form-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" placeholder="Ingresa tu email" required>
-                    <span class="error-message" id="login-email-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Contraseña</label>
-                    <div class="password-input">
-                        <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <span class="error-message" id="login-password-error"></span>
-                </div>
-                <button type="submit" class="auth-btn">Iniciar Sesión</button>
-                <div class="test-credentials">
-                    <p>Credenciales de prueba:</p>
-                    <p>Admin: admin@abshine.com / admin123</p>
-                    <p>Usuario: user@test.com / user123</p>
-                </div>
-            </form>
-            <div class="auth-footer">
-                <p>¿No tienes una cuenta? <button class="link-btn" onclick="switchToRegister()">Regístrate</button></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div id="register-modal" class="modal-overlay">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h2>Registrarse</h2>
-                <button class="close-btn" onclick="closeModal('register-modal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="register-form" class="auth-form">
-                <div class="form-group">
-                    <label for="register-name">Nombre Completo</label>
-                    <input type="text" id="register-name" placeholder="Ingresa tu nombre completo" required>
-                    <span class="error-message" id="register-name-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="register-email">Email</label>
-                    <input type="email" id="register-email" placeholder="Ingresa tu email" required>
-                    <span class="error-message" id="register-email-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="register-password">Contraseña</label>
-                    <div class="password-input">
-                        <input type="password" id="register-password" placeholder="Ingresa tu contraseña" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('register-password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <span class="error-message" id="register-password-error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="register-confirm-password">Confirmar Contraseña</label>
-                    <input type="password" id="register-confirm-password" placeholder="Confirma tu contraseña" required>
-                    <span class="error-message" id="register-confirm-error"></span>
-                </div>
-                <button type="submit" class="auth-btn">Registrarse</button>
-            </form>
-            <div class="auth-footer">
-                <p>¿Ya tienes una cuenta? <button class="link-btn" onclick="switchToLogin()">Inicia sesión</button></p>
-            </div>
-        </div>
-    </div>
-
-<!-- FOOTER (copiá el que ya tenés) -->
-<footer class="site-footer">
-    <div class="footer-container">
-      <h2>CONTACTOS:</h2>
-      <ul class="contact-list">
-        <li><a href="https://wa.me/3464566408"><i class="fab fa-whatsapp"></i> 3464-566408</a></li>
-        <li><a href="mailto:alejandrobatistoni08@gmail.com"><i class="far fa-envelope"></i> alejandrobatistoni08@gmail.com</a></li>
-        <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
-        <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
-        <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
-        <p>©Copyright Alejandro Batistoni - Denis Leandro Borri - 2024. Todos los derechos reservados.</p>
-      </ul>
-    </div>
-  </footer>
-  
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="carrito-autenticacion.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script type="module">
-  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { auth } from "./firebase-config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { auth, db } from "./firebase-config.js";
 
-  onAuthStateChanged(auth, user => {
-    const adminLink = document.getElementById("admin-link");
-    if (user && user.email === "admin@abshine.com") {
-      adminLink.style.display = "block";
-    } else {
-      adminLink.style.display = "none";
+    const provinciaSelect = document.getElementById('profile-provincia');
+    const profileForm = document.getElementById('profile-form');
+    const notificationDiv = document.getElementById('notification');
+    let currentUserEmail = null;
+    let provinciasCargadas = false;
+
+    // Cargar Provincias desde una API pública de Argentina
+    async function cargarProvincias() {
+        if (provinciasCargadas) return; // Evita recargar si ya están
+        try {
+            const response = await fetch('https://apis.datos.gob.ar/georef/api/provincias?campos=nombre&orden=nombre');
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            
+            provinciaSelect.innerHTML = '<option value="">Selecciona una provincia</option>'; // Limpiar y poner placeholder
+            data.provincias.forEach(prov => {
+                const option = new Option(prov.nombre, prov.nombre);
+                provinciaSelect.add(option);
+            });
+            provinciasCargadas = true;
+        } catch (error) {
+            console.error("Error al cargar provincias:", error);
+            provinciaSelect.innerHTML = '<option value="">Error al cargar</option>';
+        }
     }
-  });
-</script>
 
-<script type="module">
-  import { db, auth, collection, getDocs } from "./firebase-config.js";
-  async function loadMenuCategories() {
-    const container = document.getElementById("menu-categorias");
-    if (!container) return;
-    const snap = await getDocs(collection(db, "categorias"));
-    container.innerHTML = "";
-    snap.forEach(d => {
-      const c = d.data();
-      if (!c.activa) return;
-      container.innerHTML += `<li><a href="index_${c.slug}.html">${c.nombre.toUpperCase()}</a></li>`;
+    // Cargar datos del usuario desde Firestore
+    async function cargarDatosUsuario(email) {
+        const docRef = doc(db, "clientes", email);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('profile-nombre').value = data.nombre || '';
+            document.getElementById('profile-apellido').value = data.apellido || '';
+            document.getElementById('profile-direccion').value = data.direccion || '';
+            document.getElementById('profile-localidad').value = data.localidad || '';
+            document.getElementById('profile-cp').value = data.cp || '';
+            document.getElementById('profile-telefono').value = data.telefono || '';
+            
+            // Si la provincia guardada existe, la seleccionamos
+            if (data.provincia) {
+                provinciaSelect.value = data.provincia;
+            }
+        }
+    }
+
+    // Listener para cambios de autenticación
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUserEmail = user.email;
+            await cargarDatosUsuario(user.email);
+        } else {
+            // Si no hay usuario, redirigir al inicio
+            window.location.href = 'index.html';
+        }
     });
-  }
-  document.addEventListener("DOMContentLoaded", loadMenuCategories);
-</script>
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="mi-perfil.js"></script>
-<!-- ÚNICO SCRIPT PARA MENÚ + CARRITO -->
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="carrito-autenticacion.js"></script>
-<script type="module">
-  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { db, collection, getDocs } from "./firebase-config.js";
-  async function loadMenuCategories() {
-    const container = document.getElementById("menu-categorias");
-    if (!container) return;
-    const snap = await getDocs(collection(db, "categorias"));
-    container.innerHTML = "";
-    snap.forEach(d => {
-      const c = d.data();
-      if (!c.activa) return;
-      container.innerHTML += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+
+    // Guardar datos del formulario en Firestore
+    profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentUserEmail) {
+            showNotification('Error: No se ha identificado al usuario.', 'error');
+            return;
+        }
+
+        const datos = {
+            nombre: document.getElementById('profile-nombre').value,
+            apellido: document.getElementById('profile-apellido').value,
+            direccion: document.getElementById('profile-direccion').value,
+            localidad: document.getElementById('profile-localidad').value,
+            cp: document.getElementById('profile-cp').value,
+            provincia: provinciaSelect.value,
+            telefono: document.getElementById('profile-telefono').value,
+        };
+
+        try {
+            await setDoc(doc(db, "clientes", currentUserEmail), datos);
+            showNotification('¡Datos guardados con éxito!', 'success');
+        } catch (error) {
+            console.error("Error al guardar los datos:", error);
+            showNotification('Error al guardar. Inténtalo de nuevo.', 'error');
+        }
     });
-  }
-  document.addEventListener("DOMContentLoaded", loadMenuCategories);
+    
+    // Función para mostrar notificaciones
+    function showNotification(message, type) {
+        notificationDiv.textContent = message;
+        notificationDiv.className = type;
+        notificationDiv.style.display = 'block';
+        setTimeout(() => {
+            notificationDiv.style.display = 'none';
+        }, 3000);
+    }
+    
+    // Iniciar la carga de provincias al cargar la página
+    document.addEventListener('DOMContentLoaded', cargarProvincias);
+
 </script>
-
-
 
 </body>
 </html>
+
