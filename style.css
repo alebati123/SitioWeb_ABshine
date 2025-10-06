@@ -14,39 +14,31 @@ body {
     color: #ffffff;
     padding: 1rem 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky; /* Opcional: para que el header se quede fijo arriba */
+    top: 0;
+    z-index: 100;
 }
 
 .header-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Espacio entre logo, nav y acciones */
     align-items: center;
     padding: 0 1rem;
+    flex-wrap: wrap; /* Permite que los elementos pasen a la siguiente línea en pantallas pequeñas */
 }
 
-.site-title {
-    font-size: 2rem;
-    margin: 0;
-    color: #cc117b;
-    font-weight: 600;
-}
+/* ELIMINADO: La regla para .site-title ya que quitamos el texto */
 
 .logo img {
-    max-height: 100px;
+    /* Ajustamos la altura para un mejor balance visual */
+    max-height: 80px; 
+    width: auto; /* Mantiene la proporción */
 }
-h1{
-    font-size: 30px;
-    color: rgb(204, 17, 123);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-nav{
-    max-width: 900px;
-    margin: auto;
-    background-color: #000000;
-    font-size: 20px;
-    margin-top: 50px;
-}
+
+/* ELIMINADO: La regla `nav` que tenía un `margin-top` que causaba la desalineación */
+
 .main-nav {
     display: flex;
     align-items: center;
@@ -66,9 +58,10 @@ nav{
 
 .menu-horizontal > li > a{
     display: block;
-    padding: 0px 20px;
+    padding: 15px 20px;
     color:rgb(255, 255, 255);
     text-decoration: none; 
+    font-size: 18px; /* Ligeramente más pequeño para mejor encaje */
 }
 
 .menu-horizontal > li > a:hover {
@@ -104,6 +97,57 @@ nav{
     background-color: #f0f0f0;
 }
 
+/* User Actions */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  /* Se elimina margin-left: auto para que flex-wrap funcione mejor en móvil */
+}
+
+/* === REGLAS PARA RESPONSIVIDAD === */
+
+/* Para tablets y móviles */
+@media (max-width: 992px) {
+    .header-container {
+        justify-content: center; /* Centramos todo cuando no hay espacio */
+        gap: 1rem; /* Añadimos espacio entre los elementos que se apilan */
+    }
+
+    .main-nav {
+        order: 3; /* Hacemos que la navegación aparezca al final */
+        width: 100%; /* Ocupa todo el ancho para centrarse bien */
+        justify-content: center;
+    }
+    
+    .menu-horizontal {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .user-actions {
+        order: 2; /* Las acciones de usuario después del logo */
+    }
+
+    .logo {
+        order: 1; /* El logo siempre primero */
+    }
+}
+
+
+/* Para móviles muy pequeños */
+@media (max-width: 480px) {
+    .menu-horizontal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menu-horizontal > li {
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
 
 /*INTRODUCCION A ABSHIN HOME*/
 .introduccion-container {
@@ -137,7 +181,7 @@ nav{
 }
 
 /*CARRUSEL DE IMAGENES HOME*/
-carousel-container {
+.carousel-container {
     max-width: 800px;
     margin: 2rem auto;
     border: 4px solid #cc117b;
@@ -311,33 +355,8 @@ carousel-container {
     color: #cc117b;
   }
   
-  /* Responsive */
+  /* Responsive Footer */
   @media (max-width: 768px) {
-    .header-container {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .main-nav {
-      margin-top: 1rem;
-    }
-  
-    .menu-horizontal {
-      flex-direction: column;
-  }
-    .menu-horizontal > li {
-      margin: 0.5rem 0;
-    }
-  
-    .menu-vertical {
-      position: static;
-      display: none;
-    }
-  
-    .has-submenu:hover .menu-vertical {
-      display: block;
-    }
-  
     .contact-list {
       flex-direction: column;
     }
@@ -356,14 +375,6 @@ carousel-container {
 
 .btn.btn-primary:hover {
   background-color: #36a4f9; /* Cambia el color al pasar el ratón por encima */
-}
-
-/* User Actions */
-.user-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-left: auto;
 }
 
 .cart-icon {
@@ -910,34 +921,6 @@ carousel-container {
 @keyframes slideInRight {
   from { transform: translateX(100%); opacity: 0; }
   to   { transform: translateX(0);   opacity: 1; }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .header-container {
-    position: relative;
-  }
-
-  .user-actions {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-  }
-
-  .auth-buttons {
-    display: none;
-  }
-
-  .cart-container,
-  .auth-container {
-    width: 95%;
-    max-width: none;
-  }
-
-  .user-dropdown {
-    right: -50px;
-    width: 180px;
-  }
 }
 
 @media (max-width: 480px) {
