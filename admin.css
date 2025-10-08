@@ -1,4 +1,236 @@
-/* ---------- ADMIN LISTA COMPACTA ---------- */
+/* =================================================================
+   ESTILOS DEL HEADER (Importados de style_base.css)
+   ================================================================= */
+@import url('https://fonts.googleapis.com/css2?family=AR+One+Sans&display=swap');
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.site-header {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+}
+
+.logo img {
+    max-height: 80px; 
+    width: auto;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+}
+
+.menu-horizontal {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-horizontal > li {
+    position: relative;
+    margin-left: 1.5rem;
+}
+
+.menu-horizontal > li > a{
+    display: block;
+    padding: 15px 20px;
+    color:rgb(255, 255, 255);
+    text-decoration: none; 
+    font-size: 18px;
+}
+
+.menu-horizontal > li > a:hover {
+    color: #cc117b;
+}
+
+.menu-vertical {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #ffffff;
+    min-width: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
+}
+
+.has-submenu:hover .menu-vertical {
+    display: block;
+}
+
+.menu-vertical li a {
+    display: block;
+    color: #333;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.menu-vertical li a:hover {
+    background-color: #f0f0f0;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cart-icon, .profile-link {
+  position: relative;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: color 0.3s ease;
+}
+
+.cart-icon:hover, .profile-link:hover {
+  color: #cc117b;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #cc117b;
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.login-btn,
+.register-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.login-btn {
+  color: #cc117b;
+  background: transparent;
+  border: 1px solid #cc117b;
+}
+
+.login-btn:hover {
+  background-color: rgba(204, 17, 123, 0.1);
+}
+
+.register-btn {
+  background-color: #cc117b;
+  color: white;
+}
+
+.register-btn:hover {
+  background-color: #a80f67;
+}
+
+.user-profile {
+  position: relative;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  z-index: 100;
+  display: none;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-info {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.user-info .user-name {
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.user-info .user-email {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  color: #333;
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.logout {
+  color: #cc117b;
+  border-top: 1px solid #eee;
+}
+
+/* =================================================================
+   ESTILOS ESPECÍFICOS DEL PANEL DE ADMINISTRACIÓN
+   ================================================================= */
+
 .admin-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -6,6 +238,7 @@
   background: #f4f4f4;
   min-height: 100vh;
 }
+
 .admin-header {
   background: linear-gradient(135deg, #cc117b, #a00e62);
   color: white;
@@ -14,11 +247,13 @@
   margin-bottom: 2rem;
   box-shadow: 0 4px 15px rgba(204, 17, 123, 0.3);
 }
+
 .admin-header h1 {
   margin: 0;
   font-size: 2.5rem;
   color: white;
 }
+
 .admin-header p {
   margin: 0.5rem 0 0;
   opacity: 0.9;
@@ -60,7 +295,6 @@
   display: block;
 }
 
-/* ---------- HEADER PRODUCTOS Y VENTAS ---------- */
 .products-header {
   display: flex;
   justify-content: space-between;
@@ -90,7 +324,6 @@
   box-shadow: 0 4px 12px rgba(204, 17, 123, 0.3);
 }
 
-/* ---------- GRID DE PRODUCTOS ---------- */
 .products-grid-admin {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -116,7 +349,7 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Para que ocupe el espacio y empuje las acciones hacia abajo */
+    flex-grow: 1;
 }
 
 .product-category {
@@ -154,7 +387,7 @@
 .product-actions {
     display: flex;
     gap: 0.5rem;
-    margin-top: auto; /* Empuja los botones al final de la tarjeta */
+    margin-top: auto;
 }
 
 .edit-btn,
@@ -173,7 +406,6 @@
 .delete-btn { background: #dc3545; color: #fff; }
 .delete-btn:hover { background: #c82333; }
 
-/* ---------- MODAL ---------- */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); }
 .modal.show { display: flex; align-items: center; justify-content: center; }
 .modal-content { background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
@@ -193,14 +425,12 @@
 .btn-save { background: #cc117b; color: white; }
 .btn-save:hover { background: #a00e62; }
 
-/* ---------- FILTROS ---------- */
 .filters-container { background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
 .filters-row { display: flex; gap: 1rem; align-items: end; }
 .filter-group { flex: 1; }
 .search-input { width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1rem; }
 .search-input:focus { outline: none; border-color: #cc117b; }
 
-/* --- ESTILOS PARA LA PESTAÑA DE VENTAS (LISTA VERTICAL) --- */
 .sales-list-admin {
     display: flex;
     flex-direction: column;
@@ -217,7 +447,6 @@
 .estado.finalizado { color: #28a745; font-weight: bold; }
 .estado.finalizado i { margin-right: 0.3rem; }
 
-/* --- NUEVO: ESTILOS PARA DATOS DE ENVÍO EN VENTAS --- */
 .datos-envio-container {
     margin: 0.5rem 0;
 }
@@ -253,20 +482,20 @@
 }
 
 .datos-envio-detalles {
-    display: none; /* Hidden by default */
+    display: none;
     background-color: #fdf6fa;
     border: 1px solid #f3e7ee;
     border-top: none;
     padding: 1rem;
     border-radius: 0 0 8px 8px;
-    margin-top: -6px; /* Adjust to connect with button */
+    margin-top: -6px;
     padding-top: 1.2rem;
     position: relative;
     z-index: 1;
 }
 
 .datos-envio-detalles.show {
-    display: block; /* Shown when toggled */
+    display: block;
 }
 
 .datos-envio-detalles p {
@@ -278,10 +507,7 @@
 .datos-envio-detalles p strong {
     color: #333;
 }
-/* --- FIN de nuevos estilos --- */
 
-
-/* ---------- PAGINACIÓN ---------- */
 .pagination-container {
     display: flex;
     justify-content: center;
@@ -317,8 +543,6 @@
     border-color: #eee;
 }
 
-
-/* ---------- RESPONSIVE ---------- */
 @media (max-width: 992px) {
     .products-grid-admin {
         grid-template-columns: repeat(2, 1fr);
@@ -337,10 +561,9 @@
         grid-template-columns: 1fr;
     }
 }
-/* ----- Satisfacción en panel admin ----- */
 .satisfaccion-badge {
   margin-left: auto;
   font-size: 1.2rem;
-  color: #ffc107; /* amarillo estrella */
+  color: #ffc107;
   letter-spacing: 1px;
 }

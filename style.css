@@ -14,7 +14,7 @@ body {
     color: #ffffff;
     padding: 1rem 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky; /* Opcional: para que el header se quede fijo arriba */
+    position: sticky;
     top: 0;
     z-index: 100;
 }
@@ -23,21 +23,16 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between; /* Espacio entre logo, nav y acciones */
+    justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
-    flex-wrap: wrap; /* Permite que los elementos pasen a la siguiente línea en pantallas pequeñas */
+    flex-wrap: wrap;
 }
-
-/* ELIMINADO: La regla para .site-title ya que quitamos el texto */
 
 .logo img {
-    /* Ajustamos la altura para un mejor balance visual */
     max-height: 80px; 
-    width: auto; /* Mantiene la proporción */
+    width: auto;
 }
-
-/* ELIMINADO: La regla `nav` que tenía un `margin-top` que causaba la desalineación */
 
 .main-nav {
     display: flex;
@@ -61,7 +56,7 @@ body {
     padding: 15px 20px;
     color:rgb(255, 255, 255);
     text-decoration: none; 
-    font-size: 18px; /* Ligeramente más pequeño para mejor encaje */
+    font-size: 18px;
 }
 
 .menu-horizontal > li > a:hover {
@@ -97,26 +92,21 @@ body {
     background-color: #f0f0f0;
 }
 
-/* User Actions */
 .user-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
-  /* Se elimina margin-left: auto para que flex-wrap funcione mejor en móvil */
 }
 
-/* === REGLAS PARA RESPONSIVIDAD === */
-
-/* Para tablets y móviles */
 @media (max-width: 992px) {
     .header-container {
-        justify-content: center; /* Centramos todo cuando no hay espacio */
-        gap: 1rem; /* Añadimos espacio entre los elementos que se apilan */
+        justify-content: center;
+        gap: 1rem;
     }
 
     .main-nav {
-        order: 3; /* Hacemos que la navegación aparezca al final */
-        width: 100%; /* Ocupa todo el ancho para centrarse bien */
+        order: 3;
+        width: 100%;
         justify-content: center;
     }
     
@@ -126,16 +116,15 @@ body {
     }
 
     .user-actions {
-        order: 2; /* Las acciones de usuario después del logo */
+        order: 2;
     }
 
     .logo {
-        order: 1; /* El logo siempre primero */
+        order: 1;
     }
 }
 
 
-/* Para móviles muy pequeños */
 @media (max-width: 480px) {
     .menu-horizontal {
         flex-direction: column;
@@ -148,8 +137,6 @@ body {
     }
 }
 
-
-/*INTRODUCCION A ABSHIN HOME*/
 .introduccion-container {
     background-color: #f0f0f0;
     padding: 40px 0;
@@ -180,7 +167,6 @@ body {
     margin-bottom: 15px;
 }
 
-/*CARRUSEL DE IMAGENES HOME*/
 .carousel-container {
     max-width: 800px;
     margin: 2rem auto;
@@ -231,7 +217,6 @@ body {
     margin-bottom: 2rem;
   }
 
-  /*IMAGENES DE MAS VENDIDOS Y NOVEDADES*/
   .productos-novedades {
     background-color: #f0f0f0;
     padding: 40px 0;
@@ -301,7 +286,6 @@ body {
     }
   }
 
-/*link de imagen a pagina*/
   .producto-link {
     display: block;
     width: 100%;
@@ -314,8 +298,7 @@ body {
     opacity: 0.8;
     transition: opacity 0.3s ease;
   }
-/*PIE DE PAGINA*/
-/* Estilos del footer */
+
 .site-footer {
     background-color: #000000;
     color: #ffffff;
@@ -355,27 +338,11 @@ body {
     color: #cc117b;
   }
   
-  /* Responsive Footer */
   @media (max-width: 768px) {
     .contact-list {
       flex-direction: column;
     }
   }
-/*FIN DE PIE DE PAGINA*/
-
-
-.btn.btn-primary {
-  background-color: #36a4f9; /* Cambia el color a verde */
-  color: #000000; /* Cambia el color del texto */
-  font-size: 20px; /* Cambia el tamaño del texto */
-  border-radius: 10px; /* Redondea las esquinas */
-  border: none; /* Quita el borde */
-  padding: 10px 20px; /* Ajusta el espacio interno */
-}
-
-.btn.btn-primary:hover {
-  background-color: #36a4f9; /* Cambia el color al pasar el ratón por encima */
-}
 
 .cart-icon {
   position: relative;
@@ -444,7 +411,6 @@ body {
   background-color: #a80f67;
 }
 
-/* User Profile */
 .user-profile {
   position: relative;
 }
@@ -460,6 +426,7 @@ body {
   padding: 0.5rem;
   border-radius: 4px;
   transition: color 0.3s ease;
+  font-size: 1.2rem; /* <-- REGLA AÑADIDA PARA CONSISTENCIA */
 }
 
 .profile-link:hover {
@@ -521,7 +488,6 @@ body {
   border-top: 1px solid #eee;
 }
 
-/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -543,7 +509,6 @@ body {
   visibility: visible;
 }
 
-/* Cart Modal */
 .cart-container {
   background-color: white;
   border-radius: 8px;
@@ -729,7 +694,6 @@ body {
   background-color: #f5f5f5;
 }
 
-/* Auth Modal */
 .auth-container {
   background-color: white;
   border-radius: 8px;
@@ -865,7 +829,6 @@ body {
   color: #ddd;
 }
 
-/* Add to Cart Button */
 .add-to-cart-btn {
   display: inline-block;
   background-color: #cc117b;
@@ -887,10 +850,9 @@ body {
 }
 
 
-/* =====  NOTIFICACIONES  ===== */
 .notification {
   position: fixed !important;
-  top: 100px !important;   /* <-- forzado más abajo */
+  top: 100px !important;
   right: 20px !important;
   background: #cc117b !important;
   color: white !important;
@@ -917,7 +879,6 @@ body {
 }
 
 
-/* animación suave */
 @keyframes slideInRight {
   from { transform: translateX(100%); opacity: 0; }
   to   { transform: translateX(0);   opacity: 1; }
@@ -941,3 +902,60 @@ body {
     margin-top: 0.5rem;
   }
 }
+
+.informacion-compra {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.informacion-compra h2 {
+    color: #cc117b;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #cc117b;
+    padding-bottom: 0.5rem;
+}
+
+.informacion-compra h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.informacion-compra p {
+    margin-bottom: 1rem;
+}
+
+.informacion-compra ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.informacion-compra ul li {
+    margin-bottom: 1rem;
+}
+
+.informacion-compra ul li strong {
+    color: #cc117b;
+}
+
+.informacion-compra ul p strong {
+    color: #cc117b;
+}
+
+.informacion-compra a {
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.informacion-compra a:hover {
+    color: #004080;
+    text-decoration: underline;
+}
+
