@@ -1,14 +1,12 @@
-function muestra_oculta(id) {
-    let div = document.getElementById(id)
-    let boton = document.getElementById('toggleBoton');
+document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.querySelector('.menu-toggle');
+  // Apuntamos al nuevo contenedor .nav-wrapper
+  const navWrapper = document.querySelector('.nav-wrapper');
 
-    if (div.style.display == "none") {
-        div.style.display = "flex";
-        boton.innerText = "-";  
-    }
-    else {
-        div.style.display = "none";
-        boton.innerText = "+";
-    }
-}
-
+  if (menuToggle && navWrapper) {
+    menuToggle.addEventListener('click', () => {
+      // Aplicamos la clase 'active' al contenedor
+      navWrapper.classList.toggle('active');
+    });
+  }
+});

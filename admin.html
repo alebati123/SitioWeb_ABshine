@@ -6,6 +6,7 @@
     <title>Panel de Administración - ABshine</title>
     <!-- CSS Unificado para el panel de Admin -->
     <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -17,19 +18,27 @@
             <div class="logo">
                 <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
             </div>
-            <nav class="main-nav">
-                <ul class="menu-horizontal">
-                    <li><a href="index.html">HOME</a></li>
-                    <li class="has-submenu">
-                      <a href="#">PRODUCTOS</a>
-                      <ul class="menu-vertical" id="menu-categorias">
-                        <!-- Las categorías se cargarán aquí -->
-                      </ul>
-                    </li>
-                    <li><a href="admin.html">ADMIN</a></li>
+            <div class="nav-wrapper">
+          <nav class="main-nav">
+            <ul class="menu-horizontal">
+              <li><a href="index.html">HOME</a></li>
+              <li class="has-submenu">
+                <a href="#">PRODUCTOS</a>
+                <ul class="menu-vertical" id="menu-categorias"></ul>
+              </li>
+              <li class="has-submenu">
+                <a href="#">CONTACTOS</a>
+                <ul class="menu-vertical">
+                  <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+                  <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+                  <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
                 </ul>
-            </nav>
-            <div class="user-actions">
+              </li>
+              <li><a href="index_informacion.html">INFORMACIÓN</a></li>
+            </ul>
+          </nav>
+
+          <div class="user-actions">
                 <button id="cart-toggle" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cart-count" class="cart-count">0</span>
@@ -45,24 +54,31 @@
                         <i class="fas fa-user"></i>
                         <span id="user-name">Usuario</span>
                     </button>
-                    <div id="user-dropdown" class="user-dropdown">
-                        <div class="user-info">
-                            <p id="display-name" class="user-name">Usuario</p>
-                            <p id="display-email" class="user-email">user@test.com</p>
-                        </div>
-                        <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
-                        <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
-                        <a href="admin.html" class="dropdown-item" id="admin-link">
-                           <i class="fas fa-cogs"></i> Panel Admin
-                        </a>                        
-                        <button id="logout-btn" class="dropdown-item logout">
-                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                        </button>
+                  <div id="user-dropdown" class="user-dropdown">
+                    <div class="user-info">
+                      <p id="display-name" class="user-name">Usuario</p>
+                      <p id="display-email" class="user-email">user@test.com</p>
                     </div>
+                    <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
+                    <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
+                    <a href="admin.html" class="dropdown-item" id="admin-link">
+                      <i class="fas fa-cogs"></i> Panel Admin
+                    </a>
+                    <button id="logout-btn" class="dropdown-item logout">
+                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                  </div>
                 </div>
             </div>
-        </div>
+      </div>
+      
+      <!-- El botón toggle ahora está al final para un mejor control del layout -->
+      <button class="menu-toggle" aria-label="Abrir menú">
+            <i class="fas fa-bars"></i>
+      </button>
     </header>
+
+    
 
     <!-- Admin Container -->
     <div class="admin-container">
@@ -207,19 +223,31 @@
             <input type="password" id="admin-password" value="admin123" required />
           </div>
           <button type="submit" class="auth-btn">Ingresar</button>
-           <div class="test-credentials">
+           <div class="test-credentials">a
                 <p>Credenciales de admin:</p>
                 <p>admin@abshine.com / admin123</p>
             </div>
         </form>
       </div>
     </div>
-
+    <footer class="site-footer">
+        <div class="footer-container">
+        <h2>CONTACTOS</h2>
+        <ul class="contact-list">
+            <li><a href="httpswa.me/3464566408"><i class="fab fa-whatsapp"></i> 3464-566408</a></li>
+            <li><a href="mailto:alejandrobatistoni08@gmail.com"><i class="far fa-envelope"></i> alejandrobatistoni08@gmail.com</a></li>
+            <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
+            <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
+            <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
+            <p>©Copyright Alejandro Batistoni - Denis Leandro Borri - 2024. Todos los derechos reservados.</p>
+        </ul>
+        </div>
+    </footer>
     <!-- SCRIPTS -->
     <script type="module" src="firebase-config.js"></script>
     <script type="module" src="admin.js"></script>
     <script type="module" src="carrito-autenticacion.js"></script>
-
+    <script src="main.js" defer></script>
     <!-- Script unificado para Header (menú de categorías y dropdown de perfil) -->
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
