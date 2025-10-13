@@ -217,17 +217,20 @@
                     <div class="productos-grid">
                     ${filtrados.map(p => `
                         <div class="caja">
-                        <div class="imagen-marco">
-                            <img src="${p.image}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
-                            <div class="producto-info">
-                            <h3>${p.name}</h3>
-                            <p class="producto-detalles">${p.details || ''}</p>
-                            <p class="producto-precio">$${p.price.toLocaleString()}</p>
-                            <button class="add-to-cart-btn" onclick="addProductToCart('${p.id}')">
-                                Agregar al Carrito
-                            </button>
+                          <div class="imagen-marco">
+                              <img src="${p.image}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
+                          </div>
+                          <div class="producto-info">
+                            <div>
+                              <h3>${p.name}</h3>
+                              <p class="producto-detalles">${p.details || ''}</p>
+                              <p class="producto-precio">$${p.price.toLocaleString()}</p>
                             </div>
-                        </div>
+                            <button class="add-to-cart-btn" onclick="addProductToCart('${p.id}')">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Agregar al Carrito</span>
+                            </button>
+                          </div>
                         </div>
                     `).join("")}
                     </div>

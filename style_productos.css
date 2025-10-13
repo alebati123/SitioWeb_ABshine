@@ -1,11 +1,12 @@
 /* =================================================================
-   ESTILOS ESPECÍFICOS PARA LAS PÁGINAS DE PRODUCTOS
+   ESTILOS ESPECÍFICOS PARA LAS PÁGINAS DE PRODUCTOS (VERSIÓN MEJORADA)
    ================================================================= */
 
 .productos-novedades {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+    background-color: #f9f9f9; /* Un fondo ligeramente más suave */
 }
 
 .contenedor {
@@ -14,72 +15,123 @@
 
 .contenedor h2 {
     text-align: center;
-    font-size: 2.5rem;
-    color: #cc117b;
-    margin-bottom: 2rem;
+    font-size: 2.8rem; /* Título un poco más grande */
+    color: #333; /* Un color más sobrio para el título */
+    margin-bottom: 3rem;
+    font-weight: 700;
 }
 
 .productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    /* FIX: Se cambia 1fr por un valor máximo para evitar que las tarjetas se estiren. */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 340px));
+    gap: 2.5rem;
+    /* FIX: Esta propiedad centrará el conjunto de tarjetas en la página. */
+    justify-content: center;
 }
 
 .caja {
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 15px; /* Bordes más redondeados */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08); /* Sombra más suave y difusa */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
+    display: flex;
+    flex-direction: column; /* Alineación vertical del contenido */
+    text-align: center; /* Centrar texto */
 }
 
 .caja:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-10px); /* Efecto de elevación más pronunciado */
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12); /* Sombra más notoria al pasar el cursor */
 }
 
 .imagen-marco {
-    border-radius: 8px 8px 0 0;
     overflow: hidden;
+    height: 280px; /* Altura fija para la imagen */
 }
 
 .imagen-marco img {
     width: 100%;
-    height: 250px;
-    object-fit: cover;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse */
     display: block;
+    transition: transform 0.4s ease;
+}
+
+.caja:hover .imagen-marco img {
+    transform: scale(1.05); /* Efecto de zoom suave en la imagen */
 }
 
 .producto-info {
-    padding: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Permite que esta sección crezca para alinear los botones */
+    justify-content: space-between; /* Espacio entre los elementos */
 }
 
 .producto-info h3 {
     margin: 0 0 0.5rem;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     color: #333;
+    font-weight: 600;
 }
 
 .producto-detalles {
     font-size: 0.9rem;
     color: #666;
-    margin-bottom: 0.5rem;
-    min-height: 40px; /* Para alinear botones */
+    margin-bottom: 1rem;
+    min-height: 40px; /* Para alinear elementos */
+    flex-grow: 1;
 }
 
 .producto-precio {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #cc117b;
-    margin-bottom: 1rem;
+    font-size: 1.6rem; /* Precio más grande y llamativo */
+    font-weight: 700;
+    color: #333; /* Color oscuro para el precio, más elegante */
+    margin-bottom: 1.5rem;
 }
+
+/* Estilos para el nuevo botón de "Agregar al carrito" */
+.add-to-cart-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem; /* Espacio entre el ícono y el texto */
+    background: linear-gradient(45deg, #d12288, #a80f67); /* Gradiente moderno */
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px; /* Forma de píldora */
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(204, 17, 123, 0.3); /* Sombra para el botón */
+    margin-top: auto; /* Empuja el botón al fondo */
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(204, 17, 123, 0.4);
+    background: linear-gradient(45deg, #e23aa0, #b91071);
+}
+
+.add-to-cart-btn i {
+    font-size: 1.1rem;
+}
+
 
 @media (max-width: 768px) {
     .productos-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
 
-    .imagen-marco img {
-        height: 200px;
+    .imagen-marco {
+        height: 250px;
     }
 }
+
