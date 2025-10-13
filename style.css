@@ -177,7 +177,7 @@ body {
   }
   
   .carousel-inner {
-    border-radius: 2%;
+    /* border-radius: 2%; <-- ESTA ES LA LÍNEA ELIMINADA */
   }
   
   .carousel-item img {
@@ -957,5 +957,98 @@ body {
 .informacion-compra a:hover {
     color: #004080;
     text-decoration: underline;
+}
+
+/* ========= ESTILOS MOVIDOS DESDE INDEX.HTML ========= */
+
+/* Estilos para la nueva sección "hero" con el carrusel de fondo */
+.hero-section {
+    position: relative; /* Necesario para posicionar elementos hijos de forma absoluta */
+    height: 70vh; /* Altura de la sección. Puedes ajustarla (ej. 80vh, 500px) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Oculta cualquier parte del carrusel que se desborde */
+    color: white; /* Color de texto por defecto para esta sección */
+}
+
+/* Ajustes para que el carrusel ocupe todo el fondo de la sección hero */
+.hero-section .carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Se asegura que el carrusel esté detrás del texto */
+}
+
+/* Asegura que las imágenes del carrusel cubran todo el espacio sin deformarse */
+.hero-section .carousel-item,
+.hero-section .carousel-item img {
+    height: 100%;
+    object-fit: cover; /* Recorta y escala la imagen para llenar el contenedor */
+}
+
+/* Capa oscura semitransparente sobre las imágenes para mejorar la legibilidad del texto */
+.hero-section .carousel-inner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Negro con 60% de opacidad. Ajustado para mayor contraste. */
+    z-index: 2;
+}
+
+/* Contenedor para el texto superpuesto */
+.hero-text-overlay {
+    position: relative;
+    z-index: 3; /* Coloca el texto por encima del carrusel y la capa oscura */
+    text-align: center;
+    padding: 20px;
+    max-width: 900px; /* Limita el ancho del texto para mejor lectura en pantallas grandes */
+}
+
+/* Ajuste para eliminar el fondo blanco del contenedor de introducción original */
+.hero-text-overlay .introduccion {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+/* Estilos para el texto de bienvenida */
+.hero-text-overlay .introduccion h1 {
+    color: white; /* Aseguramos que el H1 sea blanco */
+    font-size: 2.8rem; /* Tamaño de fuente más grande para el título */
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombra para que el texto resalte */
+}
+
+.hero-text-overlay .introduccion p {
+    color: white; /* Aseguramos que el párrafo sea blanco */
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Sombra ligera */
+}
+
+/* Opcional: Ocultamos el segundo párrafo en esta vista para un diseño más limpio */
+.hero-text-overlay .introduccion p + p {
+   display: none;
+}
+
+/* Media query para ajustar tamaños en pantallas más pequeñas (móviles) */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 60vh; /* Un poco menos de altura en móviles */
+    }
+    .hero-text-overlay .introduccion h1 {
+        font-size: 2rem; /* Título más pequeño */
+    }
+    .hero-text-overlay .introduccion p {
+        font-size: 1rem; /* Párrafo más pequeño */
+    }
 }
 
