@@ -7,7 +7,7 @@
     <!-- Se actualizó Font Awesome a la versión más reciente para los íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    
+
     <title>ABSHINE</title>
 </head>
 <body>
@@ -44,12 +44,12 @@
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cart-count" class="cart-count">0</span>
                 </button>
-                
+
                 <div id="auth-buttons" class="auth-buttons">
                     <button id="login-btn" class="login-btn">Iniciar Sesión</button>
                     <button id="register-btn" class="register-btn">Registrarse</button>
                 </div>
-                
+
                 <div id="user-profile" class="user-profile" style="display: none;">
                     <button id="profile-toggle" class="profile-link">
                         <i class="fas fa-user"></i>
@@ -72,7 +72,7 @@
                 </div>
             </div>
       </div>
-      
+
       <!-- El botón toggle ahora está al final para un mejor control del layout -->
       <button class="menu-toggle" aria-label="Abrir menú">
             <i class="fas fa-bars"></i>
@@ -80,7 +80,7 @@
     </div>
 </header>
 
-    <!-- ========= SECCIÓN MODIFICADA ========= -->
+    <!-- ========= SECCIÓN HERO ========= -->
     <section class="hero-section">
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -95,80 +95,24 @@
               </div>
             </div>
         </div>
-    
+
         <div class="hero-text-overlay">
             <div class="introduccion">
                 <!-- TEXTO SIMPLIFICADO Y BOTÓN AÑADIDO -->
                 <h1>ABshine: Calidad para tu Vehículo</h1>
                 <p>Los mejores productos de limpieza y accesorios premium.</p>
-                <a href="#mas-vendidos" class="hero-btn">Explorar Productos</a>
+                <!-- El botón ahora apunta a la nueva sección de categorías -->
+                <a href="#productos-categorias" class="hero-btn">Explorar Productos</a>
             </div>
         </div>
     </section>
-
-    <!-- ID AÑADIDO PARA EL ANCLA DEL BOTÓN -->
-    <section id="mas-vendidos" class="productos-novedades">
-      <div class="contenedor mas-vendidos">
-        <h2>Más Vendidos</h2>
-        <div class="productos-grid">
-          <div class="caja">
-            <div class="imagen-marco">
-              <a href="index_shampoo.html" class="producto-link">
-                <img src="./imagenes/PaginaHome/Shampoo.webp" alt="Shampoo">
-              </a>
-            </div>
-          </div>
-          <div class="caja">
-            <div class="imagen-marco">
-              <a href="index_cera.html" class="producto-link">
-                <img src="./imagenes/PaginaHome/Cera.webp" alt="Cera">
-              </a>
-            </div>
-          </div>
-          <div class="caja">
-            <div class="imagen-marco">
-              <a href="index_Silicona.html" class="producto-link">
-                <img src="./imagenes/PaginaHome/Silicona.webp" alt="Silicona">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  
-    <!-- INICIO: SECCIÓN ELIMINADA (ANTERIORMENTE "Novedades") -->
-    <!--
-    <section class="productos-novedades">
-      <div class="contenedor novedades">
-        <h2>Novedades</h2>
-        <div class="productos-grid">
-          <div class="caja">
-            <div class="imagen-marco">
-              <img src="./imagenes/PaginaHome/Escape.png" alt="Escape 1">
-            </div>
-          </div>
-          <div class="caja">
-            <div class="imagen-marco">
-              <img src="./imagenes/PaginaHome/Escape_2.png" alt="Escape 2">
-            </div>
-          </div>
-          <div class="caja">
-            <div class="imagen-marco">
-              <img src="./imagenes/PaginaHome/Escape_3.png" alt="Escape 3">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    -->
-    <!-- FIN: SECCIÓN ELIMINADA -->
 
     <!-- INICIO: NUEVA SECCIÓN "¿POR QUÉ ELEGIRNOS?" -->
     <section class="why-choose-us">
       <div class="contenedor why-choose-us-container">
         <h2>¿Por qué elegirnos?</h2>
         <div class="features-grid">
-          
+
           <div class="feature-item">
             <!-- Ícono de Font Awesome para camión/envío -->
             <i class="fa-solid fa-truck-fast icon-truck"></i>
@@ -194,6 +138,66 @@
       </div>
     </section>
     <!-- FIN: NUEVA SECCIÓN "¿POR QUÉ ELEGIRNOS?" -->
+
+    <!-- INICIO: NUEVA SECCIÓN DE CATEGORÍAS -->
+    <!-- Mantenemos la clase productos-novedades para heredar el padding y el fondo gris claro -->
+    <section id="productos-categorias" class="productos-novedades">
+      <div class="contenedor categorias-section">
+        <!-- Título de la sección centrado -->
+        <h2>Categorías de Productos</h2>
+
+        <!-- Contenedor para la grilla de categorías -->
+        <div class="categorias-grid">
+
+          <!-- Tarjeta 1: Shampoo - ENLACE AÑADIDO -->
+          <a href="index_shampoo.html" class="categoria-card">
+            <div class="card-icon">
+              <i class="fa-solid fa-soap"></i>
+            </div>
+            <h3>Shampoo</h3>
+            <p>Limpieza profunda para una carrocería brillante y radiante.</p>
+          </a>
+
+          <!-- Tarjeta 2: Cera - ENLACE AÑADIDO -->
+          <a href="index_cera.html" class="categoria-card">
+            <div class="card-icon">
+              <i class="fa-solid fa-spray-can-sparkles"></i>
+            </div>
+            <h3>Cera</h3>
+            <p>Protección y brillo duradero para la pintura de tu auto.</p>
+          </a>
+
+          <!-- Tarjeta 3: Desengrasante - ENLACE AÑADIDO -->
+          <a href="index_desengrasante.html" class="categoria-card">
+            <div class="card-icon">
+              <i class="fa-solid fa-oil-can"></i>
+            </div>
+            <h3>Desengrasante</h3>
+            <p>Remueve grasa y suciedad difícil en motor y llantas.</p>
+          </a>
+
+          <!-- Tarjeta 4: Silicona - ENLACE AÑADIDO -->
+          <a href="index_silicona.html" class="categoria-card">
+            <div class="card-icon">
+              <i class="fa-solid fa-droplet"></i>
+            </div>
+            <h3>Silicona</h3>
+            <p>Ideal para plásticos y gomas, devuelve el brillo original.</p>
+          </a>
+
+          <!-- Tarjeta 5: Accesorios - ENLACE AÑADIDO -->
+          <a href="index_microfibra.html" class="categoria-card">
+            <div class="card-icon">
+              <i class="fa-solid fa-toolbox"></i>
+            </div>
+            <h3>Microfibra</h3>
+            <p>Todo lo que necesitás para un lavado profesional.</p>
+          </a>
+
+        </div>
+      </div>
+    </section>
+    <!-- FIN: NUEVA SECCIÓN DE CATEGORÍAS -->
 
     <div id="cart-modal" class="modal-overlay">
         <div class="cart-container">
