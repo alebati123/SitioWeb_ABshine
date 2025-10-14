@@ -25,7 +25,7 @@
             <ul class="menu-horizontal">
               <li><a href="index.html">HOME</a></li>
               <li class="has-submenu">
-                <a href="#">PRODUCTOS</a>
+                <a href="index_categoria.html">PRODUCTOS</a>
                 <ul class="menu-vertical" id="menu-categorias"></ul>
               </li>
               <li class="has-submenu">
@@ -219,22 +219,34 @@
       const slug = params.get("cat");
       const contenedor = document.getElementById("productos-dinamicos");
 
-      if (!slug) {
-          contenedor.innerHTML = `<p style="text-align:center; color:#888;">Categoría no especificada.</p>`;
-          return;
-      }
-
       try {
-          const snap = await getDocs(collection(db, "productos"));
-          const productos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-          const filtrados = productos.filter(p => p.category?.toLowerCase() === slug.toLowerCase());
+          // Fetch products and categories in parallel
+          const [productosSnap, categoriasSnap] = await Promise.all([
+              getDocs(collection(db, "productos")),
+              getDocs(collection(db, "categorias"))
+          ]);
+
+          const productos = productosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const categorias = categoriasSnap.docs.map(doc => doc.data());
+
+          const filtrados = slug ? productos.filter(p => p.category?.toLowerCase() === slug.toLowerCase()) : productos;
+          
+          let nombreCategoria;
+          if (slug) {
+              const categoriaActual = categorias.find(c => c.slug === slug);
+              nombreCategoria = categoriaActual ? categoriaActual.nombre : slug.charAt(0).toUpperCase() + slug.slice(1);
+          } else {
+              nombreCategoria = "Todos los Productos";
+          }
+
 
           if (filtrados.length === 0) {
-              contenedor.innerHTML = `<p style="text-align:center; color:#888;">No hay productos en la categoría «${slug}».</p>`;
+              contenedor.innerHTML = `<div class="contenedor" style="text-align: center; padding: 4rem 1rem;"><h2 style="color:#666; font-size: 1.5rem;">No hay productos ${slug ? `en la categoría "${nombreCategoria}"` : 'disponibles'}.</h2></div>`;
+              document.title = `No hay productos - ABshine`;
               return;
           }
 
-          const nombreCategoria = slug.charAt(0).toUpperCase() + slug.slice(1);
+          document.title = `${nombreCategoria} - ABshine`;
           contenedor.innerHTML = `
             <div class="contenedor mas-vendidos">
               <h2>${nombreCategoria}</h2>
@@ -242,13 +254,13 @@
                 ${filtrados.map(p => `
                   <div class="caja">
                     <div class="imagen-marco">
-                      <img src="${p.image}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
+                      <img src="${p.image || './imagenes/placeholder.jpg'}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
                     </div>
                     <div class="producto-info">
                       <div>
                         <h3>${p.name}</h3>
                         <p class="producto-detalles">${p.details || ''}</p>
-                        <p class="producto-precio">$${p.price.toLocaleString()}</p>
+                        <p class="producto-precio">$${(p.price || 0).toLocaleString()}</p>
                       </div>
                       <button class="add-to-cart-btn" onclick="addProductToCart('${p.id}')">
                         <i class="fas fa-shopping-cart"></i>
