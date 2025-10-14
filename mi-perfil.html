@@ -182,7 +182,12 @@
         <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
         <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
         <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
-        <p>©Copyright Alejandro Batistoni - Denis Leandro Borri - 2024. Todos los derechos reservados.</p>
+      <p class="footer-text">
+        &copy; <span id="year"></span> Alejandro Batistoni - Denis Leandro Borri. Todos los derechos reservados.
+        </p>
+        <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+        </script>
       </ul>
     </div>
   </footer>
