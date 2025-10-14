@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
+    body {
+        position: relative;
+    }
     .pedidos-container {
       max-width: 800px;
       margin: 3rem auto;
@@ -62,7 +65,7 @@
       font-size: 0.85rem;
       color: #666;
     }
-    .estado.finalizado { color: #28a745; } /* verde */
+    .estado.finalizado { color: #28a745; }
     .estado.finalizado i { margin-right: .3rem; }
 
     .satisfaccion-badge {
@@ -70,6 +73,45 @@
       font-size: 1.3rem;
       color: #ffc107;
       letter-spacing: 2px;
+    }
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #25D366;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      border: none;
+      cursor: pointer;
+    }
+    .whatsapp-btn:hover {
+        background: #128C7E;
+    }
+    .toast-notification {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background-color: #28a745;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 1001;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        animation: slideInRight 0.5s ease-out;
+    }
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    .toast-notification.retiro {
+        background-color: #17a2b8;
     }
   </style>
 </head>
@@ -134,7 +176,6 @@
             </div>
       </div>
       
-      <!-- El botón toggle ahora está al final para un mejor control del layout -->
       <button class="menu-toggle" aria-label="Abrir menú">
             <i class="fas fa-bars"></i>
       </button>
@@ -169,6 +210,24 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { collection, getDocs, doc, getDoc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { auth, db } from "./firebase-config.js";
+
+    function showToast(newOrder) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        
+        let message = `¡Tu pedido #${newOrder.id} fue confirmado!`;
+        if (newOrder.type === 'retiro') {
+            toast.classList.add('retiro');
+            message += ' Contáctanos por WhatsApp para coordinar el retiro.';
+        }
+        
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 8000); 
+    }
 
     async function loadMenuCategories() {
         const container = document.getElementById("menu-categorias");
@@ -209,8 +268,10 @@
                 const p = doc.data();
                 const stars = '★'.repeat(p.satisfaccion || 0) + '☆'.repeat(5 - (p.satisfaccion || 0));
                 const satHtml = p.satisfaccion ? `<span class="satisfaccion-badge" title="Satisfacción">${stars}</span>` : '';
+                const orderIdentifier = p.orderId || doc.id.substring(0,6);
                 return `
                 <div class="pedido-card">
+                    <p><strong>Pedido:</strong> #${orderIdentifier}</p>
                     <p><strong>Fecha:</strong> ${p.fecha?.toDate().toLocaleString() || 'N/A'}</p>
                     <p><strong>Total:</strong> $${p.totalFinal.toLocaleString()}</p>
                     <p><strong>Entrega:</strong> ${p.tipoEntrega === "retiro" ? "Retiro en Arequito" : "Envío a domicilio"}</p>
@@ -231,6 +292,9 @@
                         </div>
                     </div>
                     `).join('')}
+                    <a href="https://wa.me/3464566408?text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23${orderIdentifier}" class="whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Consultar sobre este pedido
+                    </a>
                 </div>`;
             }).join("");
             listaPedidos.innerHTML = html;
@@ -262,7 +326,21 @@
         }
     });
 
-    document.addEventListener("DOMContentLoaded", loadMenuCategories);
+    document.addEventListener("DOMContentLoaded", () => {
+        loadMenuCategories();
+        
+        const newOrderData = sessionStorage.getItem('newOrder');
+        if (newOrderData) {
+            try {
+                const newOrder = JSON.parse(newOrderData);
+                showToast(newOrder);
+                sessionStorage.removeItem('newOrder');
+            } catch (e) {
+                console.error("Error parsing new order data", e);
+                sessionStorage.removeItem('newOrder');
+            }
+        }
+    });
 </script>
 
 </body>

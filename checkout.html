@@ -258,7 +258,6 @@
             </div>
       </div>
       
-      <!-- El botón toggle ahora está al final para un mejor control del layout -->
       <button class="menu-toggle" aria-label="Abrir menú">
             <i class="fas fa-bars"></i>
       </button>
@@ -290,10 +289,7 @@
       <h4>Retirá por nuestra dirección:</h4>
       <p><strong>Dirección:</strong> Lisandro de la torre 1555, Arequito (Santa Fe)</p>
       <p><strong>Horario:</strong> Lunes a Viernes 8:30-22:00hs</p>
-      <a href="https://wa.me/3464566408?text=Hola,%20quiero%20retirar%20mi%20pedido%20de%20$..."
-         target="_blank" style="display:inline-flex; align-items:center; gap:.5rem; background:#25D366;color:#fff;padding:.75rem 1rem;border-radius:6px;text-decoration:none;">
-        <i class="fab fa-whatsapp"></i> Enviar WhatsApp
-      </a>
+      <p>Luego de confirmar la compra, te daremos tu número de pedido para que nos contactes por WhatsApp y coordinar el retiro.</p>
     </div>
 
     <div id="datos-envio" style="display:none; margin-top:1.5rem;">
@@ -328,7 +324,8 @@
 <div id="encuesta-modal" class="modal-overlay">
   <div class="modal-box">
     <button class="close-btn" onclick="cerrarEncuesta()">✖</button>
-    <h3>¿Qué tan feliz estás con tu compra?</h3>
+    <h3>¡Gracias por tu compra!</h3>
+    <p>¿Qué tan feliz estás con tu experiencia?</p>
     <div id="estrellas" class="estrellas">
       <span data-val="1">😡</span><span data-val="2">😕</span><span data-val="3">😐</span><span data-val="4">😊</span><span data-val="5">😍</span>
     </div>
@@ -349,7 +346,7 @@
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="carrito-autenticacion.js"></script>
 <script type="module">
-  import { collection, addDoc, serverTimestamp, updateDoc, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { collection, addDoc, serverTimestamp, updateDoc, doc, getDoc, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   import { db, auth } from "./firebase-config.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -357,6 +354,27 @@
   let usuarioLogueado = null;
   let satisfaccion = 0;
   let idPedidoActual = null;
+
+  async function getNextOrderId() {
+      const counterRef = doc(db, "counters", "pedidos");
+      try {
+          const newOrderId = await runTransaction(db, async (transaction) => {
+              const counterDoc = await transaction.get(counterRef);
+              let newCount;
+              if (!counterDoc.exists() || !counterDoc.data().lastId) {
+                  newCount = 1;
+              } else {
+                  newCount = counterDoc.data().lastId + 1;
+              }
+              transaction.set(counterRef, { lastId: newCount });
+              return newCount;
+          });
+          return String(newOrderId).padStart(3, '0');
+      } catch (error) {
+          console.error("Error generating order ID: ", error);
+          return Math.random().toString(36).substr(2, 6).toUpperCase();
+      }
+  }
 
   async function loadMenuCategories() {
         const container = document.getElementById("menu-categorias");
@@ -413,6 +431,7 @@
     const tipoEntrega = document.querySelector('input[name="entrega"]:checked')?.value;
     if (!tipoEntrega) return mostrarAlerta("Elige cómo quieres recibir el pedido.");
 
+    const orderId = await getNextOrderId();
     const totalCarrito = cart.reduce((s, i) => s + i.price * i.quantity, 0);
     const envio = 5000;
     const totalFinal = totalCarrito + (tipoEntrega === "envio" ? envio : 0);
@@ -428,6 +447,7 @@
     }
 
     const pedido = {
+      orderId: orderId,
       uid: usuarioLogueado.uid,
       usuario: usuarioLogueado.email.toLowerCase(), 
       items: cart, 
@@ -449,6 +469,8 @@
       localStorage.removeItem("abshine_cart");
       idPedidoActual = nuevoPedidoRef.id;
       
+      sessionStorage.setItem('newOrder', JSON.stringify({id: orderId, type: tipoEntrega}));
+
       document.getElementById('encuesta-modal').classList.add('show');
       document.body.style.overflow = "hidden";
 
@@ -465,15 +487,17 @@
   };
 
   window.guardarEncuesta = async () => {
-    if (satisfaccion === 0) return mostrarAlerta('Por favor, califica tu experiencia.');
     if (!idPedidoActual) return mostrarAlerta('Error: No se encontró el ID del pedido.');
-    try {
-      await updateDoc(doc(db, 'pedidos', idPedidoActual), { satisfaccion });
-      window.cerrarEncuesta();
-    } catch (e) {
-      console.error("Error al guardar encuesta:", e);
-      mostrarAlerta('Error al guardar tu calificación.');
+    
+    // Guardar la encuesta solo si se seleccionó una calificación
+    if (satisfaccion > 0) {
+        try {
+            await updateDoc(doc(db, 'pedidos', idPedidoActual), { satisfaccion });
+        } catch (e) {
+            console.error("Error al guardar encuesta:", e);
+        }
     }
+    window.cerrarEncuesta();
   };
   
   window.mostrarRetiro = () => {

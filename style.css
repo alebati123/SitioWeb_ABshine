@@ -1142,7 +1142,7 @@ body {
     color: white;
     font-size: 2.8rem;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 1rem; /* Reducido para acercar el subtítulo */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
@@ -1151,31 +1151,51 @@ body {
     font-size: 1.2rem;
     line-height: 1.6;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    margin: 0;
 }
 
-.hero-text-overlay .introduccion p + p {
-   display: none;
+/* --- ESTILOS PARA EL NUEVO BOTÓN --- */
+.hero-btn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.8rem 2.5rem;
+    background-color: #cc117b;
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid #cc117b;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* --- AJUSTES HERO PARA MÓVIL --- */
+.hero-btn:hover {
+    background-color: transparent;
+    border-color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+/* --- AJUSTES HERO PARA MÓVIL (CORREGIDO) --- */
 @media (max-width: 768px) {
     .hero-section {
-        /* Aumenta la altura en móviles para que quepa el texto */
-        height: auto;
-        min-height: 90vh;
-        padding: 2rem 0;
+        height: 80vh; /* Altura fija para un mejor control visual */
+        min-height: 500px; /* Altura mínima para pantallas muy cortas */
+        padding: 1rem; /* Padding para que el texto no toque los bordes */
     }
 
     .hero-text-overlay {
-        padding: 0 1rem;
+        padding: 0;
     }
 
     .hero-text-overlay .introduccion h1 {
-        /* Reduce el tamaño del título */
-        font-size: 1.8rem;
+        font-size: 2.2rem;
     }
+
     .hero-text-overlay .introduccion p {
-        /* Reduce el tamaño del párrafo */
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 }
+

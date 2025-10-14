@@ -178,7 +178,7 @@ async function cargarVentas() {
 
             return `
             <div class="pedido-card">
-                <p><strong>ID Pedido:</strong> ${doc.id}</p>
+                <p><strong>ID Pedido:</strong> ${pedido.orderId ? `#${pedido.orderId}` : doc.id}</p>
                 <p><strong>Fecha:</strong> ${fecha}</p>
                 <p><strong>Cliente:</strong> ${pedido.usuario || 'No especificado'}</p>
                 <p><strong>Total:</strong> $${(pedido.totalFinal || 0).toLocaleString()}</p>
@@ -359,4 +359,3 @@ function setupProductModal() {
         }
     };
 }
-
