@@ -2,12 +2,7 @@
 # Esta carpeta se regenera automáticamente al ejecutar "npm install"
 /node_modules
 
-# Ignorar archivos de configuración con información sensible
-# Este archivo probablemente contiene tus claves de API de Firebase.
-# Es una mala práctica subirlo a un repositorio.
-# Se recomienda crear un archivo de ejemplo (ej: firebase-config.js.example)
-# con la estructura necesaria, pero sin las claves reales.
-firebase-config.js
+
 
 # Ignorar archivos del sistema operativo
 .DS_Store
