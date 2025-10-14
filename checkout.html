@@ -487,9 +487,11 @@
   };
 
   window.guardarEncuesta = async () => {
-    if (!idPedidoActual) return mostrarAlerta('Error: No se encontró el ID del pedido.');
+    if (!idPedidoActual) {
+        // Si no hay ID de pedido, simplemente cierra el modal y redirige
+        return window.cerrarEncuesta();
+    }
     
-    // Guardar la encuesta solo si se seleccionó una calificación
     if (satisfaccion > 0) {
         try {
             await updateDoc(doc(db, 'pedidos', idPedidoActual), { satisfaccion });

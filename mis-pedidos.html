@@ -104,14 +104,22 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        animation: slideInRight 0.5s ease-out;
+        animation: slideInRight 0.5s ease-out forwards;
+        max-width: 350px;
+    }
+    .toast-notification div {
+        text-align: left;
     }
     @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
+        from { transform: translateX(110%); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
     }
     .toast-notification.retiro {
-        background-color: #17a2b8;
+        background-color: #007bff;
+    }
+    .toast-notification.envio {
+        background-color: #ffc107;
+        color: #333;
     }
   </style>
 </head>
@@ -214,19 +222,25 @@
     function showToast(newOrder) {
         const toast = document.createElement('div');
         toast.className = 'toast-notification';
-        
-        let message = `¡Tu pedido #${newOrder.id} fue confirmado!`;
+        let message = `<strong>¡Pedido #${newOrder.id} confirmado!</strong>`;
+        let icon = 'fa-check-circle';
+
         if (newOrder.type === 'retiro') {
             toast.classList.add('retiro');
-            message += ' Contáctanos por WhatsApp para coordinar el retiro.';
+            icon = 'fa-store';
+            message += '<br>Contáctanos por WhatsApp para coordinar el retiro.';
+        } else if (newOrder.type === 'envio') {
+            toast.classList.add('envio');
+            icon = 'fa-receipt';
+            message += '<br>¡Envíanos el comprobante de pago por WhatsApp para despachar tu compra!';
         }
         
-        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        toast.innerHTML = `<i class="fas ${icon}"></i> <div>${message}</div>`;
         document.body.appendChild(toast);
 
         setTimeout(() => {
             toast.remove();
-        }, 8000); 
+        }, 10000); 
     }
 
     async function loadMenuCategories() {
@@ -269,6 +283,10 @@
                 const stars = '★'.repeat(p.satisfaccion || 0) + '☆'.repeat(5 - (p.satisfaccion || 0));
                 const satHtml = p.satisfaccion ? `<span class="satisfaccion-badge" title="Satisfacción">${stars}</span>` : '';
                 const orderIdentifier = p.orderId || doc.id.substring(0,6);
+                const whatsappMessage = p.tipoEntrega === 'envio' 
+                    ? `Hola, quiero enviarte el comprobante de mi pedido #${orderIdentifier}`
+                    : `Hola, tengo una consulta sobre mi pedido #${orderIdentifier}`;
+
                 return `
                 <div class="pedido-card">
                     <p><strong>Pedido:</strong> #${orderIdentifier}</p>
@@ -292,8 +310,8 @@
                         </div>
                     </div>
                     `).join('')}
-                    <a href="https://wa.me/3464566408?text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20pedido%20%23${orderIdentifier}" class="whatsapp-btn" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Consultar sobre este pedido
+                    <a href="https://wa.me/3464566408?text=${encodeURIComponent(whatsappMessage)}" class="whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> ${p.tipoEntrega === 'envio' ? 'Enviar Comprobante' : 'Consultar sobre este pedido'}
                     </a>
                 </div>`;
             }).join("");
