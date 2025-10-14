@@ -278,17 +278,20 @@ body {
   }
 
   .productos-novedades {
+    /* Mantenemos este estilo para la sección "Más Vendidos" */
     background-color: #f0f0f0;
     padding: 40px 0;
   }
   
   .contenedor.novedades {
+    /* Este contenedor se elimina del HTML, pero mantenemos la clase por si se reutiliza */
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
   }
   
   .contenedor.novedades h2 {
+    /* Este estilo se mantiene */
     text-align: center;
     font-size: 2.5rem;
     color: #cc117b;
@@ -358,6 +361,72 @@ body {
     opacity: 0.8;
     transition: opacity 0.3s ease;
   }
+
+/* INICIO: ESTILOS PARA LA NUEVA SECCIÓN "¿POR QUÉ ELEGIRNOS?" */
+.why-choose-us {
+    background-color: #f7f7f7; /* Fondo gris muy claro */
+    padding: 3rem 1rem;
+}
+
+.why-choose-us-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.why-choose-us h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #cc117b; /* Color principal del sitio */
+    margin-bottom: 3rem;
+}
+
+.features-grid {
+    display: grid;
+    /* 3 columnas en pantallas grandes, se adaptan a 1 en móvil */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-item i {
+    /* Íconos grandes centrados en color negro */
+    font-size: 3.5rem; 
+    color: #000000;
+    margin-bottom: 1rem;
+    display: block; /* Asegura que el ícono esté centrado en su espacio */
+}
+
+.feature-item h3 {
+    /* Títulos en negrita y color principal del sitio */
+    font-size: 1.3rem;
+    color: #e4007c; 
+    margin-bottom: 0.75rem;
+    font-weight: bold;
+}
+
+.feature-item p {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* FIN: ESTILOS PARA LA NUEVA SECCIÓN "¿POR QUÉ ELEGIRNOS?" */
+
 
 .site-footer {
     background-color: #000000;
@@ -1113,4 +1182,3 @@ body {
         font-size: 1rem;
     }
 }
-
