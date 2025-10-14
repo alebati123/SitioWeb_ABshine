@@ -11,7 +11,8 @@ import {
     doc,
     query,
     orderBy,
-    onSnapshot
+    onSnapshot,
+    serverTimestamp // Import serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import {
     onAuthStateChanged,
@@ -22,15 +23,14 @@ import {
 // Global variables
 let productos = [];
 let editandoId = null;
+let primeraCargaVentas = true; // Variable para controlar la primera carga de ventas
 
 // --- AUTHENTICATION ---
-// Check user auth state to grant or deny access to the admin panel
 onAuthStateChanged(auth, user => {
     const accessDenied = document.getElementById("access-denied");
     const adminContent = document.getElementById("admin-content");
     const adminLoginModal = document.getElementById("admin-login-modal");
 
-    // For this project, we check for a specific admin email.
     if (user && user.email === 'admin@abshine.com') {
         adminLoginModal.classList.remove("show");
         accessDenied.style.display = "none";
@@ -50,24 +50,74 @@ document.getElementById("admin-login-form").onsubmit = async (e) => {
     const password = document.getElementById("admin-password").value;
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        // onAuthStateChanged will automatically handle the UI changes after successful login.
     } catch (err) {
         alert("Credenciales de administrador incorrectas: " + err.message);
     }
 };
 
 // --- INITIALIZATION ---
-// This function runs once the admin is authenticated
 function initializeAdminPanel() {
     loadCategories();
     cargarProductos();
     setupTabs();
     setupProductModal();
+    escucharNuevasVentas(); // Inicia el listener de nuevas ventas
 
-    // Setup filter listeners
     document.getElementById("search-products").addEventListener("input", renderizarProductos);
     document.getElementById("filter-category").addEventListener("change", renderizarProductos);
 }
+
+// --- NEW SALE NOTIFICATION ---
+function escucharNuevasVentas() {
+    const q = query(collection(db, "pedidos"), orderBy("fecha", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+        if (primeraCargaVentas) {
+            primeraCargaVentas = false;
+            return; // No hacer nada en la carga inicial de datos
+        }
+
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const nuevaVenta = change.doc.data();
+                mostrarNotificacionVenta(nuevaVenta);
+            }
+        });
+    });
+}
+
+function mostrarNotificacionVenta(venta) {
+    const container = document.body;
+    const notification = document.createElement("div");
+    notification.className = 'toast-notification venta';
+    notification.innerHTML = `
+        <i class="fas fa-dollar-sign"></i>
+        <div>
+            <strong>¡Nueva Venta!</strong><br>
+            Pedido #${venta.orderId} de ${venta.usuario} por $${venta.totalFinal.toLocaleString()}
+        </div>
+    `;
+    
+    const audio = new Audio('https://cdn.pixabay.com/download/audio/2021/08/04/audio_92080a471c.mp3?filename=notification-for-game-app-112128.mp3');
+    audio.play();
+
+    container.appendChild(notification);
+    
+    // Añadir botón para ir a ventas
+    const goToSalesBtn = document.createElement('button');
+    goToSalesBtn.textContent = 'Ver Ventas';
+    goToSalesBtn.onclick = () => {
+        showTab('ventas');
+        notification.remove();
+    };
+    notification.appendChild(goToSalesBtn);
+
+
+    setTimeout(() => {
+        notification.remove();
+    }, 15000);
+}
+
 
 // --- TAB MANAGEMENT ---
 function setupTabs() {
@@ -81,7 +131,6 @@ function setupTabs() {
 }
 
 function showTab(tabName) {
-    // Hide all tab contents and deactivate all tab buttons
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
     });
@@ -89,11 +138,9 @@ function showTab(tabName) {
         tab.classList.remove('active');
     });
 
-    // Show the selected tab content and activate its button
     document.getElementById(tabName + '-tab').classList.add('active');
     document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
 
-    // Load data for the 'ventas' tab when it's selected
     if (tabName === 'ventas') {
         cargarVentas();
     }
@@ -110,7 +157,7 @@ async function cargarVentas() {
 
     const q = query(
         collection(db, "pedidos"),
-        orderBy("fecha", "desc") // Order by most recent sales
+        orderBy("fecha", "desc")
     );
 
     onSnapshot(q, (snapshot) => {
@@ -122,8 +169,6 @@ async function cargarVentas() {
         const ventasHtml = snapshot.docs.map(doc => {
             const pedido = doc.data();
             const fecha = pedido.fecha ? pedido.fecha.toDate().toLocaleString('es-AR') : 'Fecha no disponible';
-
-            // ----- ⭐ Encuesta de satisfacción -----
             const satisfaccion = pedido.satisfaccion || 0;
             const starsHtml = satisfaccion ?
                 `<span class="satisfaccion-badge" title="Satisfacción del cliente">
@@ -141,14 +186,11 @@ async function cargarVentas() {
             </div>
         `).join('');
 
-            // --- LÓGICA FINAL CORREGIDA ---
             let entregaHtml = '';
             if (pedido.tipoEntrega === 'retiro') {
                 entregaHtml = `<p><strong>Entrega:</strong> Retiro en local</p>`;
             } else {
                 let datosEnvioContent = '<p>Datos de envío no disponibles.</p>';
-                
-                // La información de envío está en el objeto 'direccion' dentro del pedido
                 const datosFuente = pedido.direccion;
 
                 if (datosFuente && typeof datosFuente === 'object') {
@@ -174,7 +216,6 @@ async function cargarVentas() {
                     </div>
                 `;
             }
-            // --- FIN de la corrección ---
 
             return `
             <div class="pedido-card">
@@ -195,7 +236,6 @@ async function cargarVentas() {
 
         lista.innerHTML = ventasHtml;
 
-        // --- Event listeners para los botones de envío ---
         document.querySelectorAll('.btn-ver-envio').forEach(button => {
             button.addEventListener('click', () => {
                 const targetId = button.getAttribute('data-target');
@@ -359,3 +399,4 @@ function setupProductModal() {
         }
     };
 }
+

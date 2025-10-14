@@ -567,3 +567,43 @@ body {
   color: #ffc107;
   letter-spacing: 1px;
 }
+
+/* ... (todo tu código CSS existente) ... */
+
+/* --- ESTILOS PARA NOTIFICACIÓN DE NUEVA VENTA --- */
+.toast-notification.venta {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: slideInUp 0.5s ease-out forwards;
+    max-width: 400px;
+}
+
+.toast-notification.venta div {
+    text-align: left;
+}
+
+.toast-notification.venta button {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid white;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(110%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
