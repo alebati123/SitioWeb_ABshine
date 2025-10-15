@@ -1230,10 +1230,7 @@ body {
 /* --- HERO SECTION --- */
 .hero-section {
     position: relative;
-    height: 70vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 90vh;
     overflow: hidden;
     color: white;
     z-index: 1; /* Z-index más bajo que el header */
@@ -1248,6 +1245,7 @@ body {
     z-index: 2;
 }
 
+.hero-section .carousel-inner,
 .hero-section .carousel-item,
 .hero-section .carousel-item img {
     height: 100%;
@@ -1266,7 +1264,11 @@ body {
 }
 
 .hero-text-overlay {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
     z-index: 4;
     text-align: center;
     padding: 20px;
@@ -1325,7 +1327,6 @@ body {
     .hero-section {
         height: 80vh; /* Altura fija para un mejor control visual */
         min-height: 500px; /* Altura mínima para pantallas muy cortas */
-        padding: 1rem; /* Padding para que el texto no toque los bordes */
     }
 
     .hero-text-overlay {
