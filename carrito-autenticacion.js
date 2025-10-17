@@ -397,15 +397,25 @@ function addProductToCart(productId) {
 
 function togglePassword(inputId) {
   const input = document.getElementById(inputId);
-  const icon = input.nextElementSibling.querySelector("i");
+  if (!input) return; // Si no encuentra el input, no hace nada
+
+  // Busca el ícono dentro del elemento hermano (el botón)
+  const icon = input.parentElement.querySelector(".toggle-password i");
+  if (!icon) return; // Si no encuentra el ícono, no hace nada
+
   if (input.type === "password") {
     input.type = "text";
-    icon.className = "fas fa-eye-slash";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
   } else {
     input.type = "password";
-    icon.className = "fas fa-eye";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
   }
 }
+
+// Hacemos la función global para que se pueda llamar desde el HTML
+window.togglePassword = togglePassword;
 
 function switchToRegister() {
   abshineSystem.closeModal("login-modal");
