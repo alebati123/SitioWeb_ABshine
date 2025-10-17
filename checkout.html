@@ -450,8 +450,20 @@
 
     const orderId = await getNextOrderId();
     const totalCarrito = cart.reduce((s, i) => s + i.price * i.quantity, 0);
-    const envio = 5000;
-    const totalFinal = totalCarrito + (tipoEntrega === "envio" ? envio : 0);
+    
+    let costoEnvio = 0;
+    if (tipoEntrega === "envio") {
+        const costoEnvioTexto = document.getElementById("envio-costo").textContent;
+        const costoNumerico = parseFloat(costoEnvioTexto.replace(/[^0-9,-]+/g,"").replace(",", "."));
+        if (!isNaN(costoNumerico)) {
+            costoEnvio = costoNumerico;
+        } else {
+            mostrarAlerta("No se pudo obtener el costo de envío. Inténtalo de nuevo.");
+            return;
+        }
+    }
+    
+    const totalFinal = totalCarrito + costoEnvio;
 
     let direccion = null;
     if (tipoEntrega === "envio") {
@@ -469,7 +481,7 @@
       usuario: usuarioLogueado.email.toLowerCase(), 
       items: cart, 
       totalCarrito,
-      envio: tipoEntrega === "envio" ? envio : 0, 
+      envio: costoEnvio, 
       totalFinal, 
       tipoEntrega, 
       direccion,
@@ -505,7 +517,6 @@
 
   window.guardarEncuesta = async () => {
     if (!idPedidoActual) {
-        // Si no hay ID de pedido, simplemente cierra el modal y redirige
         return window.cerrarEncuesta();
     }
     
@@ -522,28 +533,76 @@
   window.mostrarRetiro = () => {
     document.getElementById("datos-retiro").style.display = "block";
     document.getElementById("datos-envio").style.display = "none";
+    
+    const totalActual = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    document.getElementById("envio-costo").textContent = "$0";
+    document.getElementById("total-final").textContent = "$" + totalActual.toLocaleString();
   };
 
+  // =================================================================
+  // FUNCIÓN CON LÓGICA DE ZONAS SIMPLIFICADA Y CORREGIDA
+  // =================================================================
   window.mostrarEnvio = async () => {
     document.getElementById("datos-retiro").style.display = "none";
     document.getElementById("datos-envio").style.display = "block";
     if (!usuarioLogueado) return mostrarAlerta("Debes iniciar sesión para solicitar envío.");
-    
+
+    const envioDatosUsuarioEl = document.getElementById("envio-datos-usuario");
+    const envioCostoEl = document.getElementById("envio-costo");
+    const totalFinalEl = document.getElementById("total-final");
+    const totalActual = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
     const snap = await getDoc(doc(db, "clientes", usuarioLogueado.email));
-    if (!snap.exists()) {
-      mostrarAlerta('Completa tus datos de envío en "Mi Perfil" antes de continuar.');
+    if (!snap.exists() || !snap.data().provincia) {
+      mostrarAlerta('Completa tu provincia en "Mi Perfil" para calcular el envío.');
       return location.href = "mi-perfil.html";
     }
     const datos = snap.data();
-    document.getElementById("envio-datos-usuario").innerHTML = `
+    
+    // CORRECCIÓN: Limpiar el ID de la provincia de posibles espacios en blanco
+    const provinciaID = datos.provincia ? datos.provincia.trim() : '';
+
+    const provinciasRef = await getDoc(doc(db, "provincias", provinciaID));
+    const nombreProvincia = provinciasRef.exists() ? provinciasRef.data().nombre : provinciaID;
+
+    envioDatosUsuarioEl.innerHTML = `
       <p><strong>${datos.nombre} ${datos.apellido}</strong></p>
       <p>${datos.direccion}, ${datos.localidad} (${datos.cp})</p>
-      <p>${datos.provincia}</p>
+      <p>${nombreProvincia}</p>
       <p>Tel: ${datos.telefono}</p>`;
-    const costo = 5000;
-    const totalActual = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    document.getElementById("envio-costo").textContent = "$" + costo.toLocaleString();
-    document.getElementById("total-final").textContent = "$" + (totalActual + costo).toLocaleString();
+
+    // --- LÓGICA DE COSTOS POR ZONA (SIMPLIFICADA) ---
+    const costoPorProvincia = {
+        'santa-fe': 8000,
+        'buenos-aires': 12000,
+        'cordoba': 11000,
+        'entre-rios': 12000,
+        'la-pampa': 15000,
+        'mendoza': 15000,
+        'san-juan': 15000,
+        'san-luis': 15000,
+        'jujuy': 16000,
+        'salta': 16000,
+        'tucuman': 16000,
+        'catamarca': 16000,
+        'la-rioja': 16000,
+        'santiago-del-estero': 15000,
+        'formosa': 15000,
+        'chaco': 15000,
+        'corrientes': 15000,
+        'misiones': 16000,
+        'neuquen': 16000,
+        'rio-negro': 15000,
+        'chubut': 15000,
+        'santa-cruz': 16000,
+        'tierra-del-fuego': 20000
+    };
+
+    // CORRECCIÓN: Usar la variable limpia (provinciaID) para buscar el costo
+    const costoDeEnvio = costoPorProvincia[provinciaID] || 15000;
+
+    envioCostoEl.textContent = "$" + costoDeEnvio.toLocaleString();
+    totalFinalEl.textContent = "$" + (totalActual + costoDeEnvio).toLocaleString();
   };
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -551,29 +610,6 @@
 
     onAuthStateChanged(auth, async (user) => {
         usuarioLogueado = user;
-        const adminLink = document.getElementById("admin-link");
-        const perfilLink = document.getElementById("mi-perfil-link");
-        const pedidosLink = document.getElementById("mis-pedidos-link");
-
-        if(adminLink) adminLink.style.display = "none";
-        if(perfilLink) perfilLink.style.display = "none";
-        if(pedidosLink) pedidosLink.style.display = "none";
-
-        if (user) {
-            try {
-                const docSnap = await getDoc(doc(db, "usuarios", user.email));
-                if (docSnap.exists() && docSnap.data().role === "admin") {
-                    if(adminLink) adminLink.style.display = "block";
-                } else {
-                    if(perfilLink) perfilLink.style.display = "block";
-                    if(pedidosLink) pedidosLink.style.display = "block";
-                }
-            } catch (error) {
-                console.error("Error al verificar el rol del usuario:", error);
-                if(perfilLink) perfilLink.style.display = "block";
-                if(pedidosLink) pedidosLink.style.display = "block";
-            }
-        }
     });
 
     document.getElementById('confirm-purchase').addEventListener('click', finalizarCompra);
@@ -594,3 +630,4 @@
 </script>
 </body>
 </html>
+
