@@ -80,8 +80,10 @@ body {
     border-radius: 4px;
 }
 
-.has-submenu:hover .menu-vertical {
-    display: block;
+@media (min-width: 993px) {
+    .has-submenu:hover .menu-vertical {
+        display: block;
+    }
 }
 
 .menu-vertical li a {
@@ -129,6 +131,7 @@ body {
         align-items: center;
         padding: 1rem 0;
         border-top: 1px solid #333;
+        z-index: 999; /* Asegura que el menú esté por encima de todo */
     }
 
     .nav-wrapper.active {
@@ -150,16 +153,16 @@ body {
         margin-left: 0;
         width: 100%;
         text-align: center;
+        border-bottom: 1px solid #333;
     }
 
     .menu-horizontal > li > a {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #333;
-        width: 100%;
+        padding: 0.75rem 1rem;
+        border-bottom: none;
     }
 
     .menu-vertical {
-        position: static;
+        position: relative; /* SOLUCIÓN: Corrige el error de renderizado */
         box-shadow: none;
         background-color: #1a1a1a;
         border-radius: 0;
@@ -1231,9 +1234,6 @@ body {
 .hero-section {
     position: relative;
     height: 70vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     overflow: hidden;
     color: white;
     z-index: 1; /* Z-index más bajo que el header */
@@ -1248,6 +1248,7 @@ body {
     z-index: 2;
 }
 
+.hero-section .carousel-inner,
 .hero-section .carousel-item,
 .hero-section .carousel-item img {
     height: 100%;
@@ -1266,7 +1267,11 @@ body {
 }
 
 .hero-text-overlay {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
     z-index: 4;
     text-align: center;
     padding: 20px;
@@ -1325,7 +1330,6 @@ body {
     .hero-section {
         height: 80vh; /* Altura fija para un mejor control visual */
         min-height: 500px; /* Altura mínima para pantallas muy cortas */
-        padding: 1rem; /* Padding para que el texto no toque los bordes */
     }
 
     .hero-text-overlay {
@@ -1340,3 +1344,66 @@ body {
         font-size: 1.1rem;
     }
 }
+
+/* --- NUEVOS ESTILOS PARA SUBMENU EN MOVIL --- */
+.submenu-toggle {
+    display: none; /* Oculto por defecto en escritorio */
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem; /* Asegura un buen área de toque */
+}
+.submenu-toggle i {
+    transition: transform 0.3s ease;
+}
+
+/* Modificaciones solo para móvil */
+@media (max-width: 992px) {
+    /* Convertir el <li> en un contenedor flex */
+    .menu-horizontal > li.has-submenu {
+        display: flex;
+        flex-wrap: wrap; /* Para que el submenú vaya abajo */
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* El enlace principal ocupa el espacio restante */
+    .menu-horizontal > li.has-submenu > a {
+        flex-grow: 1; /* El enlace ocupa el espacio disponible */
+        text-align: left;
+        padding-left: 1rem;
+        width: auto; /* Anulación clave para que flex-grow funcione */
+    }
+
+    /* Mostrar el botón de despliegue */
+    .submenu-toggle {
+        display: block; 
+    }
+    
+    /* Ocultar el submenú por defecto en móvil con transición */
+    .menu-vertical {
+        flex-basis: 100%; /* El submenú ocupa todo el ancho */
+        display: block; /* Cambiado de none a block */
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out; /* Animación suave */
+    }
+    
+    /* Clase que se activará con JS para mostrar el submenú */
+    .has-submenu.submenu-active .menu-vertical {
+        max-height: 20rem; /* Un valor suficientemente grande para el contenido */
+    }
+    
+    /* Rotar la flecha cuando el submenú está activo */
+    .has-submenu.submenu-active .submenu-toggle i {
+        transform: rotate(180deg);
+    }
+
+    /* MUY IMPORTANTE: Desactivar el :hover en móvil */
+    li.has-submenu:hover > ul.menu-vertical {
+        display: none;
+    }
+}
+
