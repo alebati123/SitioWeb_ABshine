@@ -337,8 +337,9 @@
         const container = document.getElementById("menu-categorias");
         if (!container) return;
         try {
+            let html = `<li><a class="dropdown-item" href="index_categoria.html">TODOS LOS PRODUCTOS</a></li>`;
+            html += `<li><hr class="dropdown-divider"></li>`;
             const snap = await getDocs(collection(db, "categorias"));
-            let html = "";
             snap.forEach(d => {
                 const c = d.data();
                 if (c.activa) {
@@ -381,3 +382,4 @@
 </script>
 </body>
 </html>
+
