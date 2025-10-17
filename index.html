@@ -13,75 +13,77 @@
 <body>
 
  <header class="site-header">
-    <div class="header-container">
-      <div class="logo">
-        <img src="./imagenes/Logotipo.png" alt="Logo de ABshine">
-      </div>
-
-      <!-- El wrapper agrupa todo lo que se colapsará en el menú móvil -->
-      <div class="nav-wrapper">
-          <nav class="main-nav">
-            <ul class="menu-horizontal">
-              <li><a href="index.html">HOME</a></li>
-              <li class="has-submenu">
-                <a href="index_categoria.html">PRODUCTOS</a>
-                <button class="submenu-toggle" aria-label="Desplegar submenú"><i class="fas fa-chevron-down"></i></button>
-                <ul class="menu-vertical" id="menu-categorias"></ul>
-              </li>
-              <li class="has-submenu">
-                <a href="#">CONTACTOS</a>
-                <button class="submenu-toggle" aria-label="Desplegar submenú"><i class="fas fa-chevron-down"></i></button>
-                <ul class="menu-vertical">
-                  <li><a href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
-                  <li><a href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
-                  <li><a href="https://wa.me/3464566408">WHATSAPP</a></li>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="./imagenes/Logotipo.png" alt="Logo de ABshine" style="max-height: 80px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">HOME</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="index_categoria.html" id="navbarDropdownProductos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            PRODUCTOS
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownProductos" id="menu-categorias">
+                            <!-- Las categorías se cargarán aquí dinámicamente -->
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownContactos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            CONTACTOS
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownContactos">
+                            <li><a class="dropdown-item" href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+                            <li><a class="dropdown-item" href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+                            <li><a class="dropdown-item" href="https://wa.me/3464566408">WHATSAPP</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index_informacion.html">INFORMACIÓN</a>
+                    </li>
                 </ul>
-              </li>
-              <li><a href="index_informacion.html">INFORMACIÓN</a></li>
-            </ul>
-          </nav>
-
-          <div class="user-actions">
-                <button id="cart-toggle" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count" class="cart-count">0</span>
-                </button>
-
-                <div id="auth-buttons" class="auth-buttons">
-                    <button id="login-btn" class="login-btn">Iniciar Sesión</button>
-                    <button id="register-btn" class="register-btn">Registrarse</button>
-                </div>
-
-                <div id="user-profile" class="user-profile" style="display: none;">
-                    <button id="profile-toggle" class="profile-link">
-                        <i class="fas fa-user"></i>
-                        <span id="user-name">Usuario</span>
+                <div class="user-actions d-flex align-items-center">
+                    <button id="cart-toggle" class="cart-icon btn btn-dark position-relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
                     </button>
-                  <div id="user-dropdown" class="user-dropdown">
-                    <div class="user-info">
-                      <p id="display-name" class="user-name">Usuario</p>
-                      <p id="display-email" class="user-email">user@test.com</p>
+
+                    <div id="auth-buttons" class="auth-buttons ms-3">
+                        <button id="login-btn" class="btn btn-outline-light me-2">Iniciar Sesión</button>
+                        <button id="register-btn" class="btn btn-primary">Registrarse</button>
                     </div>
-                    <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
-                    <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
-                    <a href="admin.html" class="dropdown-item" id="admin-link">
-                      <i class="fas fa-cogs"></i> Panel Admin
-                    </a>
-                    <button id="logout-btn" class="dropdown-item logout">
-                      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </button>
-                  </div>
+
+                    <div id="user-profile" class="user-profile dropdown ms-3" style="display: none;">
+                        <button id="profile-toggle" class="btn btn-dark dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-2"></i>
+                            <span id="user-name">Usuario</span>
+                        </button>
+                        <div id="user-dropdown" class="dropdown-menu dropdown-menu-end">
+                            <div class="user-info px-3 py-2">
+                                <p id="display-name" class="user-name fw-bold mb-0">Usuario</p>
+                                <p id="display-email" class="user-email text-muted small">user@test.com</p>
+                            </div>
+                            <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
+                            <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
+                            <a href="admin.html" class="dropdown-item" id="admin-link">
+                                <i class="fas fa-cogs"></i> Panel Admin
+                            </a>
+                            <button id="logout-btn" class="dropdown-item logout">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-      </div>
-
-      <!-- El botón toggle ahora está al final para un mejor control del layout -->
-      <button class="menu-toggle" aria-label="Abrir menú">
-            <i class="fas fa-bars"></i>
-      </button>
-    </div>
+        </div>
+    </nav>
 </header>
-
     <!-- ========= SECCIÓN HERO ========= -->
     <section class="hero-section">
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -311,7 +313,7 @@
         <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
         <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
         <p class="footer-text">
-        &copy; <span id="year"></span> Alejandro Batistoni - Denis Leandro Borri. Todos los derechos reservados.
+        © <span id="year"></span> Alejandro Batistoni - Denis Leandro Borri. Todos los derechos reservados.
         </p>
         <script>
         document.getElementById("year").textContent = new Date().getFullYear();
@@ -335,12 +337,14 @@
         const container = document.getElementById("menu-categorias");
         if (!container) return;
         try {
+            let html = `<li><a class="dropdown-item" href="index_categoria.html">TODOS LOS PRODUCTOS</a></li>`;
+            html += `<li><hr class="dropdown-divider"></li>`;
+
             const snap = await getDocs(collection(db, "categorias"));
-            let html = "";
             snap.forEach(d => {
                 const c = d.data();
                 if (c.activa) {
-                    html += `<li><a href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+                    html += `<li><a class="dropdown-item" href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
                 }
             });
             container.innerHTML = html;
