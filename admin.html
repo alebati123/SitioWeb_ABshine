@@ -106,6 +106,9 @@
                 <button class="admin-tab active" data-tab="products">
                 <i class="fas fa-box"></i> Productos
                 </button>
+                <button class="admin-tab" data-tab="categories">
+                <i class="fas fa-tags"></i> Categorías
+                </button>
                 <button class="admin-tab" data-tab="ventas">
                 <i class="fas fa-receipt"></i> Ventas
                 </button>
@@ -150,6 +153,22 @@
                 </div>
             </div>
 
+            <!-- Categories Tab Content -->
+            <div id="categories-tab" class="tab-content">
+                <div class="products-header">
+                    <div>
+                        <h2>Gestión de Categorías</h2>
+                        <p>Crea, edita y elimina las categorías de productos.</p>
+                    </div>
+                    <button class="add-product-btn" id="add-category-btn">
+                        <i class="fas fa-plus"></i> Agregar Categoría
+                    </button>
+                </div>
+                <div id="categories-list">
+                    <!-- Las categorías se cargarán aquí -->
+                </div>
+            </div>
+
             <!-- Ventas Tab Content -->
             <div id="ventas-tab" class="tab-content">
                 <div class="products-header">
@@ -171,7 +190,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="modal-title">Agregar Producto</h2>
-                <button class="close-modal" id="close-modal">
+                <button class="close-modal" id="close-modal-product">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -197,15 +216,48 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">URL de Imagen</label>
-                    <input type="url" id="product-image" class="form-input" placeholder="https://ejemplo.com/imagen.jpg">
+                    <input type="text" id="product-image" class="form-input" placeholder="https://ejemplo.com/imagen.jpg">
                 </div>
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" id="cancel-btn">Cancelar</button>
+                    <button type="button" class="btn-cancel" id="cancel-product-btn">Cancelar</button>
                     <button type="submit" class="btn-save">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Category Modal -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="category-modal-title">Agregar Categoría</h2>
+                <button class="close-modal" id="close-modal-category">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="category-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre de la Categoría *</label>
+                    <input type="text" id="category-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">(identificador ej: "shampoo-premium") *</label>
+                    <input type="text" id="category-slug" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="category-active" checked>
+                        Activa (visible en el menú)
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancel-category-btn">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar Categoría</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- Admin Login Modal -->
     <div id="admin-login-modal" class="modal-overlay">

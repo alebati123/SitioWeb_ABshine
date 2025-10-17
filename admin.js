@@ -22,6 +22,7 @@ import {
 
 // Global variables
 let productos = [];
+let categorias = [];
 let editandoId = null;
 let primeraCargaVentas = true; // Variable para controlar la primera carga de ventas
 
@@ -61,6 +62,7 @@ function initializeAdminPanel() {
     cargarProductos();
     setupTabs();
     setupProductModal();
+    setupCategoryModal();
     escucharNuevasVentas(); // Inicia el listener de nuevas ventas
 
     document.getElementById("search-products").addEventListener("input", renderizarProductos);
@@ -143,6 +145,9 @@ function showTab(tabName) {
 
     if (tabName === 'ventas') {
         cargarVentas();
+    }
+    if (tabName === 'categories') {
+        renderizarCategorias();
     }
 }
 
@@ -256,29 +261,122 @@ async function cargarVentas() {
     });
 }
 
-// --- PRODUCTS TAB ---
+// --- CATEGORIES TAB ---
 async function loadCategories() {
     try {
         const snapshot = await getDocs(collection(db, "categorias"));
+        categorias = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
         const productCategorySelect = document.getElementById("product-category");
         const filterCategorySelect = document.getElementById("filter-category");
 
         productCategorySelect.innerHTML = '<option value="">Seleccionar categoría</option>';
         filterCategorySelect.innerHTML = '<option value="">Todas las categorías</option>';
 
-        snapshot.forEach(doc => {
-            const categoria = doc.data();
+        categorias.forEach(categoria => {
             const opt = document.createElement("option");
             opt.value = categoria.slug;
             opt.textContent = categoria.nombre;
             productCategorySelect.appendChild(opt.cloneNode(true));
             filterCategorySelect.appendChild(opt);
         });
+        
+        renderizarCategorias();
+
     } catch (error) {
         console.error("Error cargando categorías en el panel:", error);
     }
 }
 
+function renderizarCategorias() {
+    const container = document.getElementById("categories-list");
+    container.innerHTML = categorias.map(cat => `
+        <div class="category-item" style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+            <div>
+                <h4>${cat.nombre}</h4>
+                <p>Slug: ${cat.slug} | Activa: ${cat.activa ? 'Sí' : 'No'}</p>
+            </div>
+            <div>
+                <button class="edit-btn" onclick="editarCategoria('${cat.id}')">Editar</button>
+                <button class="delete-btn" onclick="eliminarCategoria('${cat.id}')">Eliminar</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+window.editarCategoria = (id) => {
+    const categoria = categorias.find(c => c.id === id);
+    if (!categoria) return;
+
+    editandoId = id;
+    document.getElementById("category-modal-title").innerText = "Editar Categoría";
+    document.getElementById("category-form").reset();
+    document.getElementById("category-name").value = categoria.nombre;
+    document.getElementById("category-slug").value = categoria.slug;
+    document.getElementById("category-active").checked = categoria.activa;
+    document.getElementById("category-modal").classList.add("show");
+};
+
+window.eliminarCategoria = async (id) => {
+    if (!confirm("¿Estás seguro de que quieres eliminar esta categoría? Esto no se puede deshacer.")) return;
+    try {
+        await deleteDoc(doc(db, "categorias", id));
+        alert("Categoría eliminada correctamente.");
+        await loadCategories(); // Recargar
+    } catch (error) {
+        console.error("Error eliminando categoría: ", error);
+        alert("No se pudo eliminar la categoría.");
+    }
+};
+
+
+function setupCategoryModal() {
+    const modal = document.getElementById("category-modal");
+    const form = document.getElementById("category-form");
+
+    document.getElementById("add-category-btn").onclick = () => {
+        editandoId = null;
+        form.reset();
+        document.getElementById("category-modal-title").innerText = "Agregar Categoría";
+        modal.classList.add("show");
+    };
+
+    const cerrarModal = () => modal.classList.remove("show");
+    document.getElementById("close-modal-category").onclick = cerrarModal;
+    document.getElementById("cancel-category-btn").onclick = cerrarModal;
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+            nombre: document.getElementById("category-name").value,
+            slug: document.getElementById("category-slug").value.toLowerCase().replace(/\s+/g, '-'),
+            activa: document.getElementById("category-active").checked
+        };
+
+        if (!data.nombre || !data.slug) {
+            alert("Por favor, completa Nombre e Identificador.");
+            return;
+        }
+
+        try {
+            if (editandoId) {
+                await updateDoc(doc(db, "categorias", editandoId), data);
+                alert("Categoría actualizada.");
+            } else {
+                await addDoc(collection(db, "categorias"), data);
+                alert("Categoría agregada.");
+            }
+            cerrarModal();
+            await loadCategories();
+        } catch (error) {
+            console.error("Error guardando categoría: ", error);
+            alert("No se pudo guardar la categoría.");
+        }
+    };
+}
+
+
+// --- PRODUCTS TAB ---
 const cargarProductos = async () => {
     try {
         const snapshot = await getDocs(collection(db, "productos"));
@@ -365,8 +463,8 @@ function setupProductModal() {
     };
 
     const cerrarModal = () => modal.classList.remove("show");
-    document.getElementById("close-modal").onclick = cerrarModal;
-    document.getElementById("cancel-btn").onclick = cerrarModal;
+    document.getElementById("close-modal-product").onclick = cerrarModal;
+    document.getElementById("cancel-product-btn").onclick = cerrarModal;
 
     form.onsubmit = async (e) => {
         e.preventDefault();
@@ -399,4 +497,3 @@ function setupProductModal() {
         }
     };
 }
-
