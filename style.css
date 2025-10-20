@@ -1131,7 +1131,7 @@ body {
 /* --- HERO SECTION --- */
 .hero-section {
     position: relative;
-    height: 70vh;
+    height: 85vh;
     overflow: hidden;
     color: white;
     z-index: 1; /* Z-index más bajo que el header */
