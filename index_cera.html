@@ -5,94 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS unificado y Bootstrap -->
     <link rel="stylesheet" href="style.css">
-    <link href="[https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css](https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css)" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
     <link rel="stylesheet" href="style_productos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Carga ÚNICA de Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Carga ÚNICA de Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <title>ABSHINE - Cera</title>
 </head>
 <body>
-  
+
     <!-- =================================================================
      ENCABEZADO ESTANDARIZADO
      ================================================================== -->
     <header class="site-header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">
-                <img src="./imagenes/Logotipo.png" alt="Logo de ABshine" style="max-height: 80px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">HOME</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="index_categoria.html" id="navbarDropdownProductos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            PRODUCTOS
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownProductos" id="menu-categorias">
-                            <!-- Las categorías se cargarán aquí dinámicamente -->
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownContactos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            CONTACTOS
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownContactos">
-                            <li><a class="dropdown-item" href="[https://www.facebook.com/alejandro.batistoni.9](https://www.facebook.com/alejandro.batistoni.9)">FACEBOOK</a></li>
-                            <li><a class="dropdown-item" href="[https://www.instagram.com/abshine_arequito/](https://www.instagram.com/abshine_arequito/)">INSTAGRAM</a></li>
-                            <li><a class="dropdown-item" href="[https://wa.me/3464566408](https://wa.me/3464566408)">WHATSAPP</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index_informacion.html">INFORMACIÓN</a>
-                    </li>
-                </ul>
-                <div class="user-actions d-flex align-items-center">
-                    <button id="cart-toggle" class="cart-icon btn btn-dark position-relative">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count" class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-                    </button>
-
-                    <div id="auth-buttons" class="auth-buttons ms-3">
-                        <button id="login-btn" class="btn btn-outline-light me-2">Iniciar Sesión</button>
-                        <button id="register-btn" class="btn btn-primary">Registrarse</button>
-                    </div>
-
-                    <div id="user-profile" class="user-profile dropdown ms-3" style="display: none;">
-                        <button id="profile-toggle" class="btn btn-dark dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user me-2"></i>
-                            <span id="user-name">Usuario</span>
-                        </button>
-                        <div id="user-dropdown" class="dropdown-menu dropdown-menu-end">
-                            <div class="user-info px-3 py-2">
-                                <p id="display-name" class="user-name fw-bold mb-0">Usuario</p>
-                                <p id="display-email" class="user-email text-muted small">user@test.com</p>
-                            </div>
-                            <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
-                            <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
-                            <a href="admin.html" class="dropdown-item" id="admin-link">
-                                <i class="fas fa-cogs"></i> Panel Admin
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">
+                    <img src="./imagenes/Logotipo.png" alt="Logo de ABshine" style="max-height: 80px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">HOME</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="index_categoria.html" id="navbarDropdownProductos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                PRODUCTOS
                             </a>
-                            <button id="logout-btn" class="dropdown-item logout">
-                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownProductos" id="menu-categorias">
+                                <!-- Las categorías se cargarán aquí dinámicamente -->
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownContactos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                CONTACTOS
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownContactos">
+                                <li><a class="dropdown-item" href="https://www.facebook.com/alejandro.batistoni.9">FACEBOOK</a></li>
+                                <li><a class="dropdown-item" href="https://www.instagram.com/abshine_arequito/">INSTAGRAM</a></li>
+                                <li><a class="dropdown-item" href="https://wa.me/3464566408">WHATSAPP</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index_informacion.html">INFORMACIÓN</a>
+                        </li>
+                    </ul>
+                    <div class="user-actions d-flex align-items-center">
+                        <button id="cart-toggle" class="cart-icon btn btn-dark position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-count" class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                        </button>
+
+                        <div id="auth-buttons" class="auth-buttons ms-3">
+                            <button id="login-btn" class="btn btn-outline-light me-2">Iniciar Sesión</button>
+                            <button id="register-btn" class="btn btn-primary">Registrarse</button>
+                        </div>
+
+                        <div id="user-profile" class="user-profile dropdown ms-3" style="display: none;">
+                            <button id="profile-toggle" class="btn btn-dark dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i>
+                                <span id="user-name">Usuario</span>
                             </button>
+                            <div id="user-dropdown" class="dropdown-menu dropdown-menu-end">
+                                <div class="user-info px-3 py-2">
+                                    <p id="display-name" class="user-name fw-bold mb-0">Usuario</p>
+                                    <p id="display-email" class="user-email text-muted small">user@test.com</p>
+                                </div>
+                                <a href="mi-perfil.html" class="dropdown-item" id="mi-perfil-link">Mi Perfil</a>
+                                <a href="mis-pedidos.html" class="dropdown-item" id="mis-pedidos-link">Mis Pedidos</a>
+                                <a href="admin.html" class="dropdown-item" id="admin-link">
+                                    <i class="fas fa-cogs"></i> Panel Admin
+                                </a>
+                                <button id="logout-btn" class="dropdown-item logout">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
 
-<section class="productos-novedades">
-  <div id="productos-dinamicos"></div>
-</section>
+    <section class="productos-novedades">
+        <div id="productos-dinamicos"></div>
+    </section>
 
     <!-- =================================================================
      MODALES PARA CARRITO Y AUTENTICACIÓN
@@ -131,7 +132,8 @@
     </div>
 
     <div id="notification-container"></div>
-      <footer class="site-footer">
+
+    <footer class="site-footer">
         <div class="footer-container">
           <h2>CONTACTOS</h2>
           <ul class="contact-list">
@@ -140,47 +142,46 @@
             <li><a href="https://www.instagram.com/abshine_arequito/"><i class="fab fa-instagram"></i> INSTAGRAM</a></li>
             <li><a href="https://www.facebook.com/alejandro.batistoni.9"><i class="fab fa-facebook"></i> FACEBOOK</a></li>
             <li><a href="https://maps.app.goo.gl/dNXSGPj3baupEAWS6" target="_blank"><i class="fas fa-map-marker-alt"></i> UBICACIÓN</a></li>
-          <p class="footer-text">
-        &copy; <span id="year"></span> Alejandro Batistoni - Denis Leandro Borri. Todos los derechos reservados.
-        </p>
-        <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-        </script>
+            <p class="footer-text">
+                &copy; <span id="year"></span> Alejandro Batistoni - Denis Leandro Borri. Todos los derechos reservados.
+            </p>
           </ul>
         </div>
       </footer>
       <!-- SCRIPTS -->
+      <!-- Carga ÚNICA de Bootstrap JS -->
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
       <script type="module" src="firebase-config.js"></script>
       <script type="module" src="carrito-autenticacion.js"></script>
-      <script src="[https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js](https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js)" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-      <script src="main.js" defer></script>
+      <script src="main.js" defer></script> <!-- main.js no parece usarse con Bootstrap, revisar si es necesario -->
+
+      <!-- Script de lógica del Header (CARGA CENTRALIZADA - Ver Siguiente Paso) -->
       <script type="module">
           import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
           import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
           import { auth, db } from "./firebase-config.js";
 
           async function loadMenuCategories() {
-    const container = document.getElementById("menu-categorias");
-    if (!container) return;
-    try {
-        // Añade "Todos los productos" y un divisor
-        let html = `<li><a class="dropdown-item" href="index_categoria.html">TODOS LOS PRODUCTOS</a></li>`;
-        html += `<li><hr class="dropdown-divider"></li>`;
+            const container = document.getElementById("menu-categorias");
+            if (!container) return;
+            try {
+                // Añade "Todos los productos" y un divisor
+                let html = `<li><a class="dropdown-item" href="index_categoria.html">TODOS LOS PRODUCTOS</a></li>`;
+                html += `<li><hr class="dropdown-divider"></li>`;
 
-        const snap = await getDocs(collection(db, "categorias"));
-        snap.forEach(d => {
-            const c = d.data();
-            if (c.activa) {
-                // Asegúrate de que los elementos generados también tengan la clase "dropdown-item"
-                html += `<li><a class="dropdown-item" href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+                const snap = await getDocs(collection(db, "categorias"));
+                snap.forEach(d => {
+                    const c = d.data();
+                    if (c.activa) {
+                        // Asegúrate de que los elementos generados también tengan la clase "dropdown-item"
+                        html += `<li><a class="dropdown-item" href="index_categoria.html?cat=${c.slug}">${c.nombre.toUpperCase()}</a></li>`;
+                    }
+                });
+                container.innerHTML = html;
+            } catch (error) {
+                console.error("Error al cargar las categorías del menú:", error);
             }
-        });
-        container.innerHTML = html;
-    } catch (error) {
-        console.error("Error al cargar las categorías del menú:", error);
-    }
-}
+        }
 
           onAuthStateChanged(auth, async (user) => {
               const adminLink = document.getElementById("admin-link");
@@ -205,78 +206,65 @@
                   }
               }
           });
-          document.addEventListener("DOMContentLoaded", loadMenuCategories);
+
+          document.addEventListener("DOMContentLoaded", () => {
+             loadMenuCategories();
+             // Actualizar año en footer
+             const yearSpan = document.getElementById("year");
+             if(yearSpan) yearSpan.textContent = new Date().getFullYear();
+          });
       </script>
 
-<script type="module">
-  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { db } from "./firebase-config.js";
+    <script type="module">
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { db } from "./firebase-config.js";
 
-  async function cargarProductos() {
-    const contenedor = document.getElementById("productos-dinamicos");
-    try {
-        const snapshot = await getDocs(collection(db, "productos"));
-        const productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const filtrados = productos.filter(p => p.category?.toLowerCase() === "cera");
-        if (filtrados.length === 0) {
-        contenedor.innerHTML = `<p style="text-align:center; color:#888;">No hay productos en la categoría "Cera".</p>`;
-        return;
-        }
-        contenedor.innerHTML = `
-        <div class="contenedor mas-vendidos">
-            <h2>Cera</h2>
-            <div class="productos-grid">
-            ${filtrados.map(p => `
-                <div class="caja">
-                  <div class="imagen-marco">
-                      <img src="${p.image}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
-                  </div>
-                  <div class="producto-info">
-                    <div>
-                      <h3>${p.name}</h3>
-                      <p class="producto-detalles">${p.details || ''}</p>
-                      <p class="producto-precio">$${p.price.toLocaleString()}</p>
+        async function cargarProductos() {
+            const contenedor = document.getElementById("productos-dinamicos");
+            try {
+                const snapshot = await getDocs(collection(db, "productos"));
+                const productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const filtrados = productos.filter(p => p.category?.toLowerCase() === "cera");
+                if (filtrados.length === 0) {
+                    contenedor.innerHTML = `<p style="text-align:center; color:#888;">No hay productos en la categoría "Cera".</p>`;
+                    return;
+                }
+                contenedor.innerHTML = `
+                <div class="contenedor mas-vendidos">
+                    <h2>Cera</h2>
+                    <div class="productos-grid">
+                    ${filtrados.map(p => `
+                        <div class="caja">
+                          <div class="imagen-marco">
+                              <img src="${p.image || './imagenes/placeholder.jpg'}" alt="${p.name}" onerror="this.src='./imagenes/placeholder.jpg'" />
+                          </div>
+                          <div class="producto-info">
+                            <div>
+                              <h3>${p.name}</h3>
+                              <p class="producto-detalles">${p.details || ''}</p>
+                              <p class="producto-precio">$${(p.price || 0).toLocaleString()}</p> <!-- Añadido fallback -->
+                            </div>
+                            <!-- La función addProductToCart es global gracias a carrito-autenticacion.js -->
+                            <button class="add-to-cart-btn" onclick="addProductToCart('${p.id}')">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Agregar al Carrito</span>
+                            </button>
+                          </div>
+                        </div>
+                    `).join("")}
                     </div>
-                    <button class="add-to-cart-btn" onclick="addProductToCart('${p.id}')">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Agregar al Carrito</span>
-                    </button>
-                  </div>
                 </div>
-            `).join("")}
-            </div>
-        </div>
-        `;
-    } catch(error) {
-        console.error("Error cargando productos de cera:", error);
-        contenedor.innerHTML = `<p style="text-align:center; color:red;">Error al cargar productos.</p>`;
-    }
-  }
-  document.addEventListener("DOMContentLoaded", cargarProductos);
-</script>
-
-<script>
-  document.addEventListener("click", e => {
-    const cartItem = e.target.closest(".cart-item");
-    if (!cartItem) return;
-    const id = cartItem.dataset.id;
-    const action = e.target.closest("[data-action]")?.dataset.action;
-    if (!action) return;
-    if (window.abshineSystem) {
-        switch (action) {
-          case "plus":
-            abshineSystem.updateQuantity(id, parseInt(cartItem.querySelector(".quantity").textContent) + 1);
-            break;
-          case "minus":
-            const qty = parseInt(cartItem.querySelector(".quantity").textContent);
-            if (qty > 1) abshineSystem.updateQuantity(id, qty - 1);
-            break;
-          case "remove":
-            abshineSystem.removeFromCart(id);
-            break;
+                `;
+            } catch(error) {
+                console.error("Error cargando productos de cera:", error);
+                contenedor.innerHTML = `<p style="text-align:center; color:red;">Error al cargar productos.</p>`;
+            }
         }
-    }
-  });
-</script>
+        document.addEventListener("DOMContentLoaded", cargarProductos);
+    </script>
+
+    <!-- Script para acciones del carrito ELIMINADO -->
+    <!-- Este script ya no es necesario aquí -->
+
 </body>
 </html>
